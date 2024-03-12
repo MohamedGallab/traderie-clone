@@ -1,0 +1,104 @@
+Send Message
+// request
+{
+    "senderId": "user1",
+    "receiverId": "user2",
+    "chatId": "chatX",
+    "content": "Hello, how are you?",
+    "timestamp": "2024-03-11T22:30:00"
+}
+
+// response
+{
+    // just use 200 OK
+}
+
+get_chats
+// request
+{
+    "userId": "myId",
+    "status": "archived / requested / active"
+}
+
+// response
+{
+    // "status": "success", just use 200 OK ?
+    "userId": "myId",
+    "chats": [
+        {
+            "chatId": "chat1",
+            "receiver": "receiver1"
+        },
+        {
+            "chatId": "chat2",
+            "receiver": "receiver2"
+        }
+    ]
+}
+
+get_chat
+// request
+{
+    "chatId": "chat1"
+}
+
+// response
+{
+    // "status": "success", just use 200 OK ?
+    "chatId": "chat1",
+    "messages": [
+        {
+            "messageId": "msg1",
+            "senderId": "user1",
+            "content": "Hello, how are you?",
+            "timestamp": "2024-03-11T15:30:00"
+        },
+        {
+            "messageId": "msg2",
+            "senderId": "user2",
+            "content": "I'm fine, thanks!",
+            "timestamp": "2024-03-11T15:35:00"
+        },
+        {
+            "messageId": "msg3",
+            "senderId": "user3",
+            "content": "Great to hear!",
+            "timestamp": "2024-03-11T15:40:00"
+        }
+    ],
+    "archived": false,
+    "accepted": true
+},
+
+archive_chat
+// request
+{
+    "chatId": "chat1"
+}
+
+// response
+{
+    "message": "Chat archived successfully."
+}
+
+request_chat
+// request
+{
+    "chatId": "chat1"
+}
+
+// response
+{
+    // just leave it empty a 200 OK is enough
+}
+
+accept_chat
+// request
+{
+    "chatId": "chat1"
+}
+
+// response
+{
+    // just leave it empty a 200 OK is enough
+}

@@ -1,0 +1,27 @@
+Get all products by game
+    // request
+    {
+        "gameId": "uuid"
+    }
+
+    // response
+    {
+        "gameId": "uuid",
+        "productId": "uuid",
+        "productName": "string",
+        "productIcon": "string",
+        "gameId": "uuid"
+    }
+
+Game by id
+    // request
+    {
+        "gameId": "uuid"
+    }
+
+    // response
+    {
+        "gameId": "uuid",
+        "gameName": "string",
+        "gameIcon": "string",
+    }
