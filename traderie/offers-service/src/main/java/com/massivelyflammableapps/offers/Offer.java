@@ -1,5 +1,16 @@
 package com.massivelyflammableapps.offers;
 
-public class Offer {
+import lombok.*;
 
+@Data
+@Builder
+public class Offer {
+    private String id;
+    private String listingId;
+    private String buyerId;
+    private String sellerId;
+    
+    // timestamp timestamp,
+    // status string,
+    // offered_products set<frozen<set<frozen<offered_product>>>>
 }
