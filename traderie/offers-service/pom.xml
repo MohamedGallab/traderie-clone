@@ -23,9 +23,34 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-cassandra</artifactId>
+            <version>4.2.5</version>
+        </dependency>
+
+
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.32</version>
         </dependency>
     </dependencies>
+
+
+    <dependencyManagement>
+    
+
+        <dependencies>
+        
+
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>9.2</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
 </project>
