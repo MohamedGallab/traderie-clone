@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.offers;
+package com.massivelyflammableapps.offers.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
