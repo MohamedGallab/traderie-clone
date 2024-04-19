@@ -7,7 +7,7 @@ import com.massivelyflammableapps.messages.model.Chat;
 import java.util.Optional;
 
 public interface ChatRepository extends CassandraRepository<Chat, UUID> {
-    List<Chat> findByUserIdAndStatus(UUID userId, String status);
+    // List<Chat> findByUserIdAndStatus(UUID userId, String status);
 
-    Optional<Chat> findByChatId(UUID chatId);
+    // Optional<Chat> findByChatId(UUID chatId);
 }

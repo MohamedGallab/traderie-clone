@@ -27,4 +27,37 @@ public class Message {
 
     @PrimaryKeyColumn(name = "chat_id", ordinal = 0, type = PrimaryKeyType.CLUSTERED)
     private UUID chatId;
+
+    public Message(UUID messageId, UUID senderId, UUID receiverId, String messageText, UUID chatId) {
+        this.messageId = messageId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.messageText = messageText;
+        this.chatId = chatId;
+    }
+
+    public UUID getMessageId() {
+        return messageId;
+    }
+
+    public UUID getSenderId() {
+        return senderId;
+    }
+
+    public UUID getReceiverId() {
+        return receiverId;
+    }
+
+    public String getMessageText() {
+        return messageText;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public UUID getChatId() {
+        return chatId;
+    }
+
 }
