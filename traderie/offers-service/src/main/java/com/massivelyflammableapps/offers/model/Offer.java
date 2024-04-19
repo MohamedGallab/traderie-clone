@@ -2,8 +2,8 @@ package com.massivelyflammableapps.offers.model;
 
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
@@ -14,11 +14,11 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table
 public class Offer {
     @PrimaryKey
-    private UUID id;
+    final private UUID id= UUID.randomUUID();
     private UUID listingId;
     private UUID buyerId;
     private UUID sellerId;
-    private String timestamp;
+    final private String timestamp = new Date().toString();
     private String status;
     
     private List<OfferedProduct> offeredProducts;
