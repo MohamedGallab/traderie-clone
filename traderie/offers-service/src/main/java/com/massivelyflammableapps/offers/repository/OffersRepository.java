@@ -2,10 +2,11 @@ package com.massivelyflammableapps.offers.repository;
 
 import java.util.UUID;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
 import com.massivelyflammableapps.offers.model.Offer;
 
-public interface OffersRepository extends CrudRepository<Offer, UUID> {
-    Offer findByListingId(String listingId);
+@Repository
+public interface OffersRepository extends CassandraRepository<Offer, UUID> {
 }

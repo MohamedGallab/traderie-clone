@@ -16,22 +16,22 @@ public class OffersApplication {
         SpringApplication.run(OffersApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner clr(VetRepository vetRepository) {
-        return args -> {
-            vetRepository.deleteAll();
+    // @Bean
+    // public CommandLineRunner clr(VetRepository vetRepository) {
+    //     return args -> {
+    //         vetRepository.deleteAll();
 
-            Vet john = new Vet(UUID.randomUUID(), "John", "Doe", new HashSet<>(Arrays.asList("surgery")));
-            Vet jane = new Vet(UUID.randomUUID(), "Jane", "Doe", new HashSet<>(Arrays.asList("radiology, surgery")));
+    //         Vet john = new Vet(UUID.randomUUID(), "John", "Doe", new HashSet<>(Arrays.asList("surgery")));
+    //         Vet jane = new Vet(UUID.randomUUID(), "Jane", "Doe", new HashSet<>(Arrays.asList("radiology, surgery")));
 
-            Vet savedJohn = vetRepository.save(john);
-            Vet savedJane = vetRepository.save(jane);
+    //         Vet savedJohn = vetRepository.save(john);
+    //         Vet savedJane = vetRepository.save(jane);
 
-            vetRepository.findAll()
-                    .forEach(v -> log.info("Vet: {}", v.getFirstName()));
+    //         vetRepository.findAll()
+    //                 .forEach(v -> log.info("Vet: {}", v.getFirstName()));
 
-            vetRepository.findById(savedJohn.getId())
-                    .ifPresent(v -> log.info("Vet by id: {}", v.getFirstName()));
-        };
-    }
+    //         vetRepository.findById(savedJohn.getId())
+    //                 .ifPresent(v -> log.info("Vet by id: {}", v.getFirstName()));
+    //     };
+    // }
 }

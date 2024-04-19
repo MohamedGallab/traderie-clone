@@ -1,22 +1,25 @@
 package com.massivelyflammableapps.offers.model;
 
 import lombok.*;
-import java.util.UUID;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-@Table
 @Data
+@AllArgsConstructor
+@Table
 public class Offer {
     @PrimaryKey
     private UUID id;
-    private String listingId;
-    private String buyerId;
-    private String sellerId;
+    private UUID listingId;
+    private UUID buyerId;
+    private UUID sellerId;
+    private String timestamp;
+    private String status;
     
-    // timestamp timestamp,
-    // status string,
-    // offered_products set<frozen<set<frozen<offered_product>>>>
+    private List<OfferedProduct> offeredProducts;
 }
