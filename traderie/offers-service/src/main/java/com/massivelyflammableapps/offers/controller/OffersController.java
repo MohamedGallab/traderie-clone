@@ -6,7 +6,8 @@ import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.repository.OffersRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class OffersController {
     OffersRepository offersRepository;
 
     @GetMapping
-    public String getMethodName(@RequestParam(required = false) String param) {
-        return "yay you made it";
+    public ResponseEntity<List<Offer>> getMethodName() {
+        return offersRepository.findAll().isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(offersRepository.findAll());
     }
 
     @PostMapping
