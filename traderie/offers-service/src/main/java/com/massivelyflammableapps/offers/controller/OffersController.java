@@ -6,8 +6,10 @@ import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.repository.OffersRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +46,11 @@ public class OffersController {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
+
+    @GetMapping("/getByListing")
+    public List<Offer> getEmployee(@RequestParam UUID listingId)
+    {
+        return offersRepository.findByListingId(listingId);
     }
 }
