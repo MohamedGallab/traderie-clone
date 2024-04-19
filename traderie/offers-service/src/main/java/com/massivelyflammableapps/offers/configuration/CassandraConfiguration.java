@@ -7,7 +7,7 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 
 @Configuration
 @EnableCassandraRepositories(basePackages = "com.massivelyflammableapps")
-public class AppConfig extends AbstractCassandraConfiguration {
+public class CassandraConfiguration extends AbstractCassandraConfiguration {
 	@Override
     public SchemaAction getSchemaAction() {
         return SchemaAction.CREATE_IF_NOT_EXISTS;
