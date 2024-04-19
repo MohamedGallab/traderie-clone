@@ -14,6 +14,6 @@ CREATE TABLE offers (
     buyer_id uuid,
     seller_id uuid,
     timestamp timestamp,
-    status string,
+    status text,
     offered_products set<frozen<set<frozen<offered_product>>>>
 );
