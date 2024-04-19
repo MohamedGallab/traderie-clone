@@ -29,4 +29,13 @@ public class Chat {
 
     @Column("is_archived")
     private boolean isArchived;
+
+    public Chat(UUID initiatorId, UUID receiverId, boolean isAccepted) {
+        this.chatId = UUID.randomUUID();
+        this.initiatorId = initiatorId;
+        this.receiverId = receiverId;
+        this.createdAt = LocalDateTime.now();
+        this.isAccepted = isAccepted;
+        this.isArchived = false;
+    }
 }

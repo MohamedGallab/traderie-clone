@@ -2,7 +2,9 @@ package com.massivelyflammableapps.messages.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.model.Message;
+import com.massivelyflammableapps.messages.repository.ChatRepository;
 import com.massivelyflammableapps.messages.repository.MessageRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +29,18 @@ public class MessagesController {
     MessageRepository messageRepository;
 
     @GetMapping
-    public String getMethodName(@RequestParam(required = false) String param) {
-        return "yay you made it hehe";
+    public List<Message> getChatMessages(@RequestParam(required = true) UUID chatId) {
+        List<Message> chatMessages = messageRepository.findByChatId(chatId);
+        return chatMessages;
     }
 
     @PostMapping
-    public ResponseEntity<Message> postMethodName(@RequestBody Message request) {
+    public ResponseEntity<Message> postMessage(@RequestBody Message request) {
         try {
-            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
-            // HH:mm:ss");
+            Message newMessage = new Message(request.getSenderId(), request.getReceiverId(), request.getMessageText(),
+                    request.getChatId());
 
-            Message newOffer = new Message(
-                    UUID.randomUUID(), request.getSenderId(), request.getReceiverId(), request.getMessageText(),
-                    UUID.randomUUID());
-
-            Message response = messageRepository.save(newOffer);
+            Message response = messageRepository.save(newMessage);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -49,4 +49,5 @@ public class MessagesController {
             return ResponseEntity.status(500).build();
         }
     }
+
 }

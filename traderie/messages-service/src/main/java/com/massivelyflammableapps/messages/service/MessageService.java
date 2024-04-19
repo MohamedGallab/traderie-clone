@@ -1,13 +1,37 @@
 package com.massivelyflammableapps.messages.service;
 
-import com.massivelyflammableapps.messages.model.Chat;
 import java.util.List;
 import java.util.UUID;
 
-public interface MessageService {
-    void sendMessage(UUID senderId, String receiverId, UUID chatId, String content);
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
-    List<Chat> getChats(UUID userId, String status);
+import com.massivelyflammableapps.messages.model.Message;
+import com.massivelyflammableapps.messages.repository.MessageRepository;
 
-    Chat getChat(UUID chatId);
+
+public class MessageService implements IMessageService {
+
+    @Autowired
+    MessageRepository messageRepository;
+
+    public List<Message> getChatMessages(UUID chatId) {
+        List<Message> chatMessages = messageRepository.findByChatId(chatId);
+        return chatMessages;
+    }
+
+    public ResponseEntity<Message> postMessage(Message request) {
+        try {
+            Message newMessage = new Message(request.getSenderId(), request.getReceiverId(), request.getMessageText(),
+                    request.getChatId());
+
+            Message response = messageRepository.save(newMessage);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Return an error response entity
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
