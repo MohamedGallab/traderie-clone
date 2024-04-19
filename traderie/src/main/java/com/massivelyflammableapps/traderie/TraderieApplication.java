@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TraderieApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TraderieApplication.class, args);
+		System.out.println("Hello not offers!");
+		//SpringApplication.run(TraderieApplication.class, args);
 	}
-
 }
