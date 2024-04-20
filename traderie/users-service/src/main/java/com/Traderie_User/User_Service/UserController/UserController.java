@@ -1,25 +1,13 @@
 package com.Traderie_User.User_Service.UserController;
 
 
-import com.Traderie_User.User_Service.Responses.LoginResponse;
-import com.Traderie_User.User_Service.Responses.ResponseMessage;
 import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserService.UserService;
-import com.Traderie_User.User_Service.dto.LoginRequestDto;
-import com.Traderie_User.User_Service.dto.UserRegisterDto;
-import jakarta.annotation.security.PermitAll;
-import jakarta.validation.Valid;
+import com.Traderie_User.User_Service.dto.UserRegister;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -32,20 +20,14 @@ public class UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
 
-    public ResponseEntity<ResponseMessage> registerUser(
-            @Valid @RequestBody UserRegisterDto user
-    ) {
-
-        ResponseMessage response = new ResponseMessage();
-        response.setMessage("user registered successfully");
-
-        return ResponseEntity.ok(response);
-
-
+    public UserRegister registerUser(@RequestBody UserRegister userRegister) {
+        // You can also extract the fields from the request body and pass them individually to the service
+        // For simplicity, this example assumes the entire UserRegister object is passed in the request body
+        return userService.registerUser(userRegister.getUser_name(), userRegister.getPassword(), userRegister.getEmail(), userRegister.getDate_of_birth());
     }
 
 
-    @GetMapping
+        @GetMapping
     public ResponseEntity<User> getUserInfo(
             @RequestParam String token
     ) {

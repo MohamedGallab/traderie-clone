@@ -1,9 +1,9 @@
 package com.Traderie_User.User_Service.dto;
 
-import com.Traderie_User.User_Service.User.UserStatus;
+import com.Traderie_User.User_Service.Validators.StrongPassword;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -31,6 +31,7 @@ public class UserRegister
 
     @NotNull
     @NotEmpty
+    @StrongPassword
     private String password;
 
     @NotNull
