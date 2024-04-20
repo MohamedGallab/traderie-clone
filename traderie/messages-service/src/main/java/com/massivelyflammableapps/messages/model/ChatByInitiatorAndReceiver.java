@@ -14,11 +14,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Table
-public class ChatByReceiver {
-    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
+public class ChatByInitiatorAndReceiver {
     @NonNull
     private UUID chatId;
 
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     @NonNull
     private UUID initiatorId;
 
@@ -31,10 +31,5 @@ public class ChatByReceiver {
     @NonNull
     private boolean isAccepted;
 
-    private boolean isArchived = false;
-
-    public Chat getChat() {
-        return new Chat(chatId, initiatorId, receiverId, createdAt, isAccepted,
-                isArchived);
-    }
+    private boolean isArchived;
 }

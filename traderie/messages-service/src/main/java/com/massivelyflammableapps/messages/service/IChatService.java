@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import com.massivelyflammableapps.messages.model.Chat;
-import com.massivelyflammableapps.messages.model.ChatByInitiator;
 
 public interface IChatService {
     public List<Chat> getChatMessages(UUID initiatorId, UUID receiverId);

@@ -5,8 +5,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-import org.springframework.data.cassandra.core.mapping.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

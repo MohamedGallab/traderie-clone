@@ -4,14 +4,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +28,6 @@ public class ChatByInitiator {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @NonNull
     private boolean isAccepted;
 
     private boolean isArchived = false;

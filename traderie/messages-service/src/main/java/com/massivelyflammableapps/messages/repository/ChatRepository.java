@@ -3,9 +3,7 @@ package com.massivelyflammableapps.messages.repository;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.cassandra.repository.CassandraRepository;
-import org.springframework.data.cassandra.repository.Query;
 
 import com.massivelyflammableapps.messages.model.Chat;
 
@@ -14,8 +12,8 @@ public interface ChatRepository extends CassandraRepository<Chat, UUID> {
     Chat findByChatId(UUID chatId);
 
     // @AllowFiltering
-    // List<Chat> findByInitiatorIdAndReceiverId(UUID initiatorId, UUID receiverId);
-    
+    List<Chat> findByInitiatorIdAndReceiverId(UUID initiatorId, UUID receiverId);
+
     // Request Chat
 }
 
