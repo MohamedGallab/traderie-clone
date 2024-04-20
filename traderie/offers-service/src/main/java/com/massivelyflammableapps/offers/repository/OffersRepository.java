@@ -11,6 +11,4 @@ import com.massivelyflammableapps.offers.model.Offer;
 
 @Repository
 public interface OffersRepository extends CassandraRepository<Offer, UUID> {
-    @AllowFiltering
-    List<Offer> findByListingId(UUID listingId);
 }

@@ -3,6 +3,14 @@ package com.massivelyflammableapps.offers.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.massivelyflammableapps.offers.model.Offer;
+import com.massivelyflammableapps.offers.model.OfferByListing;
+import com.massivelyflammableapps.offers.model.OfferBySeller;
+import com.massivelyflammableapps.offers.model.OfferByBuyer;
+import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
+import com.massivelyflammableapps.offers.repository.OffersByBuyerRepository;
+import com.massivelyflammableapps.offers.repository.OffersByListingRepository;
+import com.massivelyflammableapps.offers.repository.OffersBySellerAndBuyerRepository;
+import com.massivelyflammableapps.offers.repository.OffersBySellerRepository;
 import com.massivelyflammableapps.offers.repository.OffersRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +31,14 @@ public class OffersController {
 
     @Autowired
     OffersRepository offersRepository;
+    @Autowired
+    OffersByListingRepository offersByListingRepository;
+    @Autowired
+    OffersBySellerRepository offersBySellerRepository;
+    @Autowired
+    OffersByBuyerRepository offersByBuyerRepository;
+    @Autowired
+    OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
 
     @GetMapping
     public ResponseEntity<List<Offer>> getMethodName() {
@@ -39,7 +55,47 @@ public class OffersController {
                     request.getStatus(),
                     request.getOfferedProducts());
 
+            OfferByListing newOfferByListing = new OfferByListing(
+                newOffer.getId(),
+                request.getListingId(),
+                request.getBuyerId(),
+                request.getSellerId(),
+                newOffer.getTimestamp(),
+                request.getStatus(),
+                request.getOfferedProducts());
+
+            OfferBySeller newOfferBySeller = new OfferBySeller(
+                newOffer.getId(),
+                request.getListingId(),
+                request.getBuyerId(),
+                request.getSellerId(),
+                newOffer.getTimestamp(),
+                request.getStatus(),
+                request.getOfferedProducts());
+
+            OfferByBuyer newOfferByBuyer = new OfferByBuyer(
+                newOffer.getId(),
+                request.getListingId(),
+                request.getBuyerId(),
+                request.getSellerId(),
+                newOffer.getTimestamp(),
+                request.getStatus(),
+                request.getOfferedProducts());
+
+            OfferBySellerAndBuyer newOfferBySellerAndBuyer = new OfferBySellerAndBuyer(
+                newOffer.getId(),
+                request.getListingId(),
+                request.getBuyerId(),
+                request.getSellerId(),
+                newOffer.getTimestamp(),
+                request.getStatus(),
+                request.getOfferedProducts());
+
             Offer response = offersRepository.save(newOffer);
+            offersByListingRepository.save(newOfferByListing);
+            offersBySellerRepository.save(newOfferBySeller);
+            offersByBuyerRepository.save(newOfferByBuyer);
+            offersBySellerAndBuyerRepository.save(newOfferBySellerAndBuyer);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -49,8 +105,26 @@ public class OffersController {
     }
 
     @GetMapping("/getByListing")
-    public List<Offer> getEmployee(@RequestParam UUID listingId)
+    public List<OfferByListing> getOfferByListing(@RequestParam UUID listingId)
     {
-        return offersRepository.findByListingId(listingId);
+        return offersByListingRepository.findByListingId(listingId);
+    }
+
+    @GetMapping("/getBySeller")
+    public List<OfferBySeller> getOfferBySeller(@RequestParam UUID sellerId)
+    {
+        return offersBySellerRepository.findBySellerId(sellerId);
+    }
+
+    @GetMapping("/getByBuyer")
+    public List<OfferByBuyer> getOfferByBuyer(@RequestParam UUID buyerId)
+    {
+        return offersByBuyerRepository.findByBuyerId(buyerId);
+    }
+
+    @GetMapping("/getBySellerAndBuyer")
+    public List<OfferBySellerAndBuyer> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,@RequestParam UUID buyerId)
+    {
+        return offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId,buyerId);
     }
 }
