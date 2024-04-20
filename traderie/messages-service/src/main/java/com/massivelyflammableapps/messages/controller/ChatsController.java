@@ -31,14 +31,15 @@ public class ChatsController {
     @Autowired
     ChatService chatService;
 
-    @GetMapping
-    public List<Chat> getChatMessages(@RequestParam(required = true) UUID initiatorId,
-            @RequestParam(required = true) UUID receiverId) {
-        return chatService.getChatMessages(initiatorId, receiverId);
-    }
+    // @GetMapping
+    // public List<Chat> getChatMessages(@RequestParam(required = true) UUID
+    // initiatorId,
+    // @RequestParam(required = true) UUID receiverId) {
+    // return chatService.getChatMessages(initiatorId, receiverId);
+    // }
 
     @GetMapping("/getUserChats")
-    public List<Chat> getUserChats(@RequestParam(required = true) UUID userId) {
+    public List<Chat> getUserChats(@RequestParam UUID userId) {
         return chatService.getUserChats(userId);
     }
 
@@ -48,12 +49,12 @@ public class ChatsController {
     }
 
     @PutMapping("/changeArchiveStatus")
-    public ResponseEntity<Chat> changeArchiveStatus(@RequestParam(required = true) UUID chatId) {
+    public ResponseEntity<Chat> changeArchiveStatus(@RequestParam UUID chatId) {
         return chatService.changeArchiveStatus(chatId);
     }
 
     @PutMapping("/changeAcceptStatus")
-    public ResponseEntity<Chat> changeAcceptStatus(@RequestParam(required = true) UUID chatId) {
+    public ResponseEntity<Chat> changeAcceptStatus(@RequestParam UUID chatId) {
         return chatService.changeAcceptStatus(chatId);
     }
 }

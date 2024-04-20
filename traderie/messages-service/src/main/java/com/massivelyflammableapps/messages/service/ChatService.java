@@ -1,5 +1,6 @@
 package com.massivelyflammableapps.messages.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,31 +11,73 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.massivelyflammableapps.messages.model.Chat;
+import com.massivelyflammableapps.messages.model.ChatByInitiator;
+import com.massivelyflammableapps.messages.model.ChatByReceiver;
+import com.massivelyflammableapps.messages.repository.ChatByInitiatorRepository;
+import com.massivelyflammableapps.messages.repository.ChatByReceiverRepository;
 import com.massivelyflammableapps.messages.repository.ChatRepository;
 
 @Service
-public class ChatService implements IChatService {
+public class ChatService {
     @Autowired
     ChatRepository chatRepository;
 
-    public List<Chat> getChatMessages(@RequestParam(required = true) UUID initiatorId,
-            @RequestParam(required = true) UUID receiverId) {
-        List<Chat> userChats = chatRepository.findByInitiatorIdAndReceiverId(initiatorId, receiverId);
+    @Autowired
+    ChatByInitiatorRepository chatByInitiatorRepository;
+
+    @Autowired
+    ChatByReceiverRepository chatByReceiverRepository;
+
+    // public List<Chat> getChatMessages(@RequestParam(required = true) UUID
+    // initiatorId,
+    // @RequestParam(required = true) UUID receiverId) {
+    // List<Chat> userChats =
+    // chatRepository.findByInitiatorIdAndReceiverId(initiatorId, receiverId);
+    // return userChats;
+    // }
+
+    public List<Chat> getUserChats(UUID userId) {
+        List<Chat> chatsInitiator = new ArrayList<>();
+        List<ChatByInitiator> chatByInitiators = chatByInitiatorRepository.findByInitiatorId(userId);
+        chatByInitiators.forEach(chatByInitiator -> chatsInitiator.add(chatByInitiator.getChat()));
+
+        List<Chat> chatsReceiver = new ArrayList<>();
+        List<ChatByReceiver> chatByReceivers = chatByReceiverRepository.findByReceiverId(userId);
+        chatByReceivers.forEach(chatByReceiver -> chatsReceiver.add(chatByReceiver.getChat()));
+
+        List<Chat> userChats = new ArrayList<>(chatsInitiator);
+        userChats.addAll(chatsReceiver);
+
         return userChats;
     }
 
-    public List<Chat> getUserChats(@RequestParam(required = true) UUID userId) {
-        List<Chat> chatsInitiator = chatRepository.findByInitiatorId(userId);
-        List<Chat> chatsReceiver = chatRepository.findByReceiverId(userId);
-        chatsInitiator.addAll(chatsReceiver);
-        return chatsInitiator;
-    }
-
-    public ResponseEntity<Chat> postChat(@RequestBody Chat request) {
+    public ResponseEntity<Chat> postChat(Chat request) {
         try {
-            Chat newChat = new Chat(request.getInitiatorId(), request.getReceiverId(), false);
+            Chat newChat = new Chat(
+                    request.getInitiatorId(),
+                    request.getReceiverId(),
+                    request.isAccepted());
+
+            ChatByInitiator newChatByInitiator = new ChatByInitiator(
+                    newChat.getChatId(),
+                    request.getInitiatorId(),
+                    request.getReceiverId(),
+                    newChat.getCreatedAt(),
+                    request.isAccepted(),
+                    request.isArchived());
+
+            ChatByReceiver newChatByReceiver = new ChatByReceiver(
+                    newChat.getChatId(),
+                    request.getInitiatorId(),
+                    request.getReceiverId(),
+                    newChat.getCreatedAt(),
+                    request.isAccepted(),
+                    request.isArchived());
 
             Chat response = chatRepository.save(newChat);
+            chatRepository.save(newChat);
+            chatByInitiatorRepository.save(newChatByInitiator);
+            chatByReceiverRepository.save(newChatByReceiver);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -43,27 +86,40 @@ public class ChatService implements IChatService {
         }
     }
 
-    public ResponseEntity<Chat> changeArchiveStatus(@RequestParam(required = true) UUID chatId) {
+    public ResponseEntity<Chat> changeArchiveStatus(UUID chatId) {
         Chat chatData = chatRepository.findByChatId(chatId);
-
-        if (chatData == null) {
-            return ResponseEntity.notFound().build();
-        }
+        ChatByInitiator chatByInitiatorData = chatByInitiatorRepository
+                .findByInitiatorIdAndChatId(chatData.getInitiatorId(), chatId);
+        ChatByReceiver chatByReceiverData = chatByReceiverRepository.findByReceiverIdAndChatId(chatData.getReceiverId(),
+                chatId);
 
         chatData.setArchived(!chatData.isArchived());
+        chatByInitiatorData.setArchived(chatData.isArchived());
+        chatByReceiverData.setArchived(chatData.isArchived());
+
         chatRepository.save(chatData);
+        chatByInitiatorRepository.save(chatByInitiatorData);
+        chatByReceiverRepository.save(chatByReceiverData);
+
         return ResponseEntity.ok(chatData);
     }
 
-    public ResponseEntity<Chat> changeAcceptStatus(@RequestParam(required = true) UUID chatId) {
-        Chat chatData = chatRepository.findByChatId(chatId);
+    public ResponseEntity<Chat> changeAcceptStatus(UUID chatId) {
 
-        if (chatData == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Chat chatData = chatRepository.findByChatId(chatId);
+        ChatByInitiator chatByInitiatorData = chatByInitiatorRepository
+                .findByInitiatorIdAndChatId(chatData.getInitiatorId(), chatId);
+        ChatByReceiver chatByReceiverData = chatByReceiverRepository.findByReceiverIdAndChatId(chatData.getReceiverId(),
+                chatId);
 
         chatData.setAccepted(!chatData.isAccepted());
+        chatByInitiatorData.setAccepted(chatData.isAccepted());
+        chatByReceiverData.setAccepted(chatData.isAccepted());
+
         chatRepository.save(chatData);
+        chatByInitiatorRepository.save(chatByInitiatorData);
+        chatByReceiverRepository.save(chatByReceiverData);
+
         return ResponseEntity.ok(chatData);
     }
 }

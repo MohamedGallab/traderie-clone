@@ -2,40 +2,38 @@ package com.massivelyflammableapps.messages.model;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import org.springframework.data.cassandra.core.mapping.Column;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Table("chats")
+@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
+@Table
 public class Chat {
+    @PrimaryKey
+    private UUID chatId = UUID.randomUUID();
 
-    @PrimaryKey("chat_id")
-    private UUID chatId;
-
-    @Column("initiator_id")
+    @NonNull
     private UUID initiatorId;
 
-    @Column("receiver_id")
+    @NonNull
     private UUID receiverId;
 
-    @Column("created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column("is_accepted")
+    @NonNull
     private boolean isAccepted;
 
-    @Column("is_archived")
-    private boolean isArchived;
-
-    public Chat(UUID initiatorId, UUID receiverId, boolean isAccepted) {
-        this.chatId = UUID.randomUUID();
-        this.initiatorId = initiatorId;
-        this.receiverId = receiverId;
-        this.createdAt = LocalDateTime.now();
-        this.isAccepted = isAccepted;
-        this.isArchived = false;
-    }
+    private boolean isArchived = false;
 }

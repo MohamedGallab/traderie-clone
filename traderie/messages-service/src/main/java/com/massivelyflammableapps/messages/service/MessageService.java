@@ -11,7 +11,7 @@ import com.massivelyflammableapps.messages.model.Message;
 import com.massivelyflammableapps.messages.repository.MessageRepository;
 
 @Service
-public class MessageService implements IMessageService {
+public class MessageService {
 
     @Autowired
     MessageRepository messageRepository;
