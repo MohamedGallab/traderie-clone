@@ -1,0 +1,108 @@
+Get all offers by listing
+// request
+{
+  "listingId": "uuid"
+}
+
+Get all offers by buyer // (used to display all my offers buyer made)
+// request
+{
+  "buyerId": "uuid"
+}
+
+Get all offers by seller
+// request
+{
+  "sellerId": "uuid"
+}
+
+Get offers by seller and buyer
+// request
+{
+  "sellerId": "uuid",
+  "buyerId": "uuid"
+}
+
+// response
+{
+  "offerId": "uuid",
+  "listingId": "uuid",
+  "buyerId": "uuid",
+  "sellerId": "uuid",
+  "timestamp": "timestamp",
+  "status": "accepted", // open, accept, declined, cancelled, completed
+  "offeredProducts": [
+    [
+      {
+        "productId": "uuid",
+        "quantity": "int",
+        "productName": "string",
+        "productIcon": "string",
+        "gameId": "uuid"
+      }, 
+      // and
+      {
+        "productId": "uuid",
+        "quantity": "int",
+        "productName": "string",
+        "productIcon": "string",
+        "gameId": "uuid"
+      }
+    ], 
+    // or
+    [
+        {
+            "productId": "uuid",
+            "quantity": "int",
+            "productName": "string",
+            "productIcon": "string",
+            "gameId": "uuid"
+        }
+    ]
+  ]
+}
+
+
+Make an offer
+// request
+{
+  "listingId": "uuid",
+  "buyerId": "uuid",
+  "sellerId": "uuid", // remove?
+  "offeredProducts": [
+    [
+      {
+        "productId": "uuid",
+        "quantity": "int",
+        "productName": "string",
+        "productIcon": "string",
+        "gameId": "uuid"
+      }, 
+      // and
+      {
+        "productId": "uuid",
+        "quantity": "int",
+        "productName": "string",
+        "productIcon": "string",
+        "gameId": "uuid"
+      }
+    ], 
+    // or
+    [
+        {
+            "productId": "uuid",
+            "quantity": "int",
+            "productName": "string",
+            "productIcon": "string",
+            "gameId": "uuid"
+        }
+    ]
+  ]
+}
+
+Mark an offer as open, accept, declined, cancelled, completed 
+// request
+{
+  "offerId": "uuid",
+  "status": "accepted"
+} 
