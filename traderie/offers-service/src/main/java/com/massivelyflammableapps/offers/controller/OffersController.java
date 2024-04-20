@@ -7,11 +7,7 @@ import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
 import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
-import com.massivelyflammableapps.offers.repository.OffersByBuyerRepository;
-import com.massivelyflammableapps.offers.repository.OffersByListingRepository;
-import com.massivelyflammableapps.offers.repository.OffersBySellerAndBuyerRepository;
-import com.massivelyflammableapps.offers.repository.OffersBySellerRepository;
-import com.massivelyflammableapps.offers.repository.OffersRepository;
+import com.massivelyflammableapps.offers.service.OffersService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,73 +26,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class OffersController {
 
     @Autowired
-    OffersRepository offersRepository;
-    @Autowired
-    OffersByListingRepository offersByListingRepository;
-    @Autowired
-    OffersBySellerRepository offersBySellerRepository;
-    @Autowired
-    OffersByBuyerRepository offersByBuyerRepository;
-    @Autowired
-    OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
+    private OffersService offersService;
 
     @GetMapping
-    public ResponseEntity<List<Offer>> getMethodName() {
-        return offersRepository.findAll().isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(offersRepository.findAll());
+    public ResponseEntity<List<Offer>> getAllOffers() {
+        List<Offer> offers = offersService.getAllOffers();
+        return ResponseEntity.ok(offers);
     }
 
     @PostMapping
-    public ResponseEntity<Offer> postMethodName(@RequestBody Offer request) {
+    public ResponseEntity<Offer> createOffer(@RequestBody Offer request) {
         try {
-            Offer newOffer = new Offer(
-                    request.getListingId(),
-                    request.getBuyerId(),
-                    request.getSellerId(),
-                    request.getStatus(),
-                    request.getOfferedProducts());
-
-            OfferByListing newOfferByListing = new OfferByListing(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                request.getOfferedProducts());
-
-            OfferBySeller newOfferBySeller = new OfferBySeller(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                request.getOfferedProducts());
-
-            OfferByBuyer newOfferByBuyer = new OfferByBuyer(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                request.getOfferedProducts());
-
-            OfferBySellerAndBuyer newOfferBySellerAndBuyer = new OfferBySellerAndBuyer(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                request.getOfferedProducts());
-
-            Offer response = offersRepository.save(newOffer);
-            offersByListingRepository.save(newOfferByListing);
-            offersBySellerRepository.save(newOfferBySeller);
-            offersByBuyerRepository.save(newOfferByBuyer);
-            offersBySellerAndBuyerRepository.save(newOfferBySellerAndBuyer);
-
+            Offer response = offersService.createOffer(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,27 +45,48 @@ public class OffersController {
         }
     }
 
-    @GetMapping("/getByListing")
-    public List<OfferByListing> getOfferByListing(@RequestParam UUID listingId)
-    {
-        return offersByListingRepository.findByListingId(listingId);
+    @GetMapping
+    public ResponseEntity<List<OfferByListing>> getOfferByListing(@RequestParam UUID listingId) {
+        try {
+            List<OfferByListing> offers = offersService.getOfferByListing(listingId);
+            return ResponseEntity.ok(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
-    @GetMapping("/getBySeller")
-    public List<OfferBySeller> getOfferBySeller(@RequestParam UUID sellerId)
-    {
-        return offersBySellerRepository.findBySellerId(sellerId);
+    @GetMapping
+    public ResponseEntity<List<OfferBySeller>> getOfferBySeller(@RequestParam UUID sellerId) {
+        try {
+            List<OfferBySeller> offers = offersService.getOfferBySeller(sellerId);
+            return ResponseEntity.ok(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
-    @GetMapping("/getByBuyer")
-    public List<OfferByBuyer> getOfferByBuyer(@RequestParam UUID buyerId)
-    {
-        return offersByBuyerRepository.findByBuyerId(buyerId);
+    @GetMapping
+    public ResponseEntity<List<OfferByBuyer>> getOfferByBuyer(@RequestParam UUID buyerId) {
+        try {
+            List<OfferByBuyer> offers = offersService.getOfferByBuyer(buyerId);
+            return ResponseEntity.ok(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
-    @GetMapping("/getBySellerAndBuyer")
-    public List<OfferBySellerAndBuyer> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,@RequestParam UUID buyerId)
-    {
-        return offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId,buyerId);
+    @GetMapping
+    public ResponseEntity<List<OfferBySellerAndBuyer>> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,
+            @RequestParam UUID buyerId) {
+        try {
+            List<OfferBySellerAndBuyer> offers = offersService.getOfferBySellerAndBuyer(sellerId, buyerId);
+            return ResponseEntity.ok(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }
