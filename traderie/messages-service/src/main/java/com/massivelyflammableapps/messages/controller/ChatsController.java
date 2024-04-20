@@ -6,6 +6,7 @@ import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.model.Message;
 import com.massivelyflammableapps.messages.repository.ChatRepository;
 import com.massivelyflammableapps.messages.repository.MessageRepository;
+import com.massivelyflammableapps.messages.service.ChatService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,60 +29,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ChatsController {
 
     @Autowired
-    ChatRepository chatRepository;
+    ChatService chatService;
 
     @GetMapping
     public List<Chat> getChatMessages(@RequestParam(required = true) UUID initiatorId,
             @RequestParam(required = true) UUID receiverId) {
-        List<Chat> userChats = chatRepository.findByInitiatorIdAndReceiverId(initiatorId, receiverId);
-        return userChats;
+        return chatService.getChatMessages(initiatorId, receiverId);
     }
 
     @GetMapping("/getUserChats")
     public List<Chat> getUserChats(@RequestParam(required = true) UUID userId) {
-        List<Chat> chatsInitiator = chatRepository.findByInitiatorId(userId);
-        List<Chat> chatsReceiver = chatRepository.findByReceiverId(userId);
-        chatsInitiator.addAll(chatsReceiver);
-        return chatsInitiator;
+        return chatService.getUserChats(userId);
     }
 
     @PostMapping
     public ResponseEntity<Chat> postChat(@RequestBody Chat request) {
-        try {
-            Chat newChat = new Chat(request.getInitiatorId(), request.getReceiverId(), false);
-
-            Chat response = chatRepository.save(newChat);
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
-        }
+        return chatService.postChat(request);
     }
 
     @PutMapping("/changeArchiveStatus")
     public ResponseEntity<Chat> changeArchiveStatus(@RequestParam(required = true) UUID chatId) {
-        Chat chatData = chatRepository.findByChatId(chatId);
-
-        if (chatData == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        chatData.setArchived(!chatData.isArchived());
-        chatRepository.save(chatData);
-        return ResponseEntity.ok(chatData);
+        return chatService.changeArchiveStatus(chatId);
     }
 
     @PutMapping("/changeAcceptStatus")
     public ResponseEntity<Chat> changeAcceptStatus(@RequestParam(required = true) UUID chatId) {
-        Chat chatData = chatRepository.findByChatId(chatId);
-
-        if (chatData == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        chatData.setAccepted(!chatData.isAccepted());
-        chatRepository.save(chatData);
-        return ResponseEntity.ok(chatData);
+        return chatService.changeAcceptStatus(chatId);
     }
 }
