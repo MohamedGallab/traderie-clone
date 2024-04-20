@@ -1,9 +1,13 @@
 package com.Traderie_User.User_Service.UserController;
 
 
+import com.Traderie_User.User_Service.Responses.LoginResponse;
+import com.Traderie_User.User_Service.Responses.ResponseMessage;
 import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserService.UserService;
-import com.Traderie_User.User_Service.dto.LoginRequest;
+import com.Traderie_User.User_Service.dto.LoginRequestDto;
+import com.Traderie_User.User_Service.dto.UserRegisterDto;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,23 +32,16 @@ public class UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
 
-    public void registerUser(
-            @Valid @RequestBody int user
+    public ResponseEntity<ResponseMessage> registerUser(
+            @Valid @RequestBody UserRegisterDto user
     ) {
-    }
+
+        ResponseMessage response = new ResponseMessage();
+        response.setMessage("user registered successfully");
+
+        return ResponseEntity.ok(response);
 
 
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.CREATED)
-
-    public ResponseEntity<Map<String, String>> login(
-            @Valid @RequestBody LoginRequest loginRequest
-    ) {
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("message", "Login Successfully");
-        responseBody.put("token", "token");
-
-        return ResponseEntity.ok(responseBody);
     }
 
 

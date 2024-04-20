@@ -1,12 +1,14 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 server:
   port: 8080
+
 spring:
   application:
     name: traderie_user
-  security:
-    user:
-      name: user
-      password: password
 
   datasource:
     password: password
@@ -20,3 +22,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+

@@ -1,6 +1,5 @@
 package com.Traderie_User.User_Service.dto;
 
-import com.Traderie_User.User_Service.User.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Email;
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "\"user\"")
 
-public class UserRegister
+public class UserRegisterDto
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
