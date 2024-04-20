@@ -30,6 +30,7 @@ public class OfferBySeller {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID sellerId;
 
+    @NonNull
     private String timestamp;
 
     @NonNull

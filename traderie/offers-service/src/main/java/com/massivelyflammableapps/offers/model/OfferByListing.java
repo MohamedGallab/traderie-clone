@@ -30,6 +30,7 @@ public class OfferByListing {
     @NonNull
     private UUID sellerId;
 
+    @NonNull
     private String timestamp;
 
     @NonNull
