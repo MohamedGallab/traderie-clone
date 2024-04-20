@@ -1,0 +1,22 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: traderie_user
+  security:
+    user:
+      name: user
+      password: password
+
+  datasource:
+    password: password
+    url: jdbc:postgresql://localhost:5432/traderie_user
+    username: traderie_user
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
