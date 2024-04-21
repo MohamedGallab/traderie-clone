@@ -8,6 +8,7 @@ import com.Traderie_User.User_Service.UserService.UserService;
 import com.Traderie_User.User_Service.dto.UserRegisterDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 
 public class UserController {
+    @Autowired
     private UserService userService;
 
 
@@ -50,7 +52,7 @@ public class UserController {
 
         return ResponseEntity.ok("logout successfully");
     }
-
+    //send request for offers and listings to delete the offers/listings
     @DeleteMapping
     public ResponseEntity<String> deleteUser(
             @RequestParam String token

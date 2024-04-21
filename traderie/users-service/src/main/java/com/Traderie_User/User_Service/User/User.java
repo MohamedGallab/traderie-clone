@@ -36,7 +36,6 @@ public class User
     private String email;
 
     @NotNull
-    @NotEmpty
     private Date date_of_birth;
 
     private String timezone;

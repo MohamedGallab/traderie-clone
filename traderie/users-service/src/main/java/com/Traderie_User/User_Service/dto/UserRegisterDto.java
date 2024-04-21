@@ -36,7 +36,6 @@ public class UserRegisterDto
     private String email;
 
     @NotNull(message = "Password shouldn't be null")
-    @NotEmpty(message = "Password shouldn't be empty")
     private Date date_of_birth;
 
     private LocalDateTime created_at = LocalDateTime.now();
