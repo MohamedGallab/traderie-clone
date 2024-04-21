@@ -8,14 +8,6 @@
 5. Then run app.
 6. Do this only first time to run docker.
 
-##### If you want to bring container down run
-```bash
-docker-compose down
-```
-##### To bring it up again run this command before running app and make sure pgadmin as accessible (localhost:5050) so thant all data you have is not lost
-```bash
-docker-compose down
-```
 ```sql
 -- Create the "uuid-ossp" extension if not already enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -32,4 +24,13 @@ CREATE TABLE IF NOT EXISTS "user" (
     created_at TIMESTAMP,
     biography TEXT
 );
+```
+
+##### If you want to bring container down run
+```bash
+docker-compose down
+```
+##### To bring it up again run this command before running app and make sure pgadmin as accessible (localhost:5050) so thant all data you have is not lost
+```bash
+docker-compose down
 ```
