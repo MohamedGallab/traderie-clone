@@ -1,8 +1,11 @@
 package com.Traderie_User.User_Service.UserService;
 
+import com.Traderie_User.User_Service.Responses.ResponseMessage;
+import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserRegistery.UserRepository;
 import com.Traderie_User.User_Service.Validators.ObjectsValidator;
-import com.Traderie_User.User_Service.dto.UserRegister;
+import com.Traderie_User.User_Service.Validators.StrongPasswordValidator;
+import com.Traderie_User.User_Service.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,27 +21,41 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final ObjectsValidator<UserRegister> validator;
+    private final ObjectsValidator<UserRegisterDto> uservalidator;
     private final UserRepository userRepository;
 
-    public Object registerUser(String userName, String password, String email, Date dateOfBirth) {
+    public Object registerUser(UserRegisterDto user) {
 
+        var violations  = uservalidator.validate(user);
+        if(!violations.isEmpty()){
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setMessage(String.join("|",violations));
+            responseMessage.setStatus("400");
+            return responseMessage;
+        }
         // Create a new UserRegister instance
-        UserRegister newUser = UserRegister.builder()
-                .user_name(userName)
-                .password(passwordEncoder.encode(password))
-                .email(email)
-                .date_of_birth(dateOfBirth)
+        boolean email = userRepository.findByEmail(user.getEmail()).isPresent();
+        boolean userName = userRepository.findByUsername(user.getUsername()).isPresent();
+        if(email){
+           throw new IllegalStateException("email already exists");
+
+        }
+        if(userName){
+            throw new IllegalStateException("email already exists");
+        }
+        User newUser = User.builder()
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .email(user.getEmail())
+                .date_of_birth(user.getDate_of_birth())
                 .build();
 
         // Set the created_at field
         newUser.setCreated_at(LocalDateTime.now());
 
-        var violations  = validator.validate(newUser);
-        if(!violations.isEmpty()){
-            return String.join("|",violations);
-        }
+
         // Save the new user to the database
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+        return new ResponseMessage("User created successfully","201");
     }
 }

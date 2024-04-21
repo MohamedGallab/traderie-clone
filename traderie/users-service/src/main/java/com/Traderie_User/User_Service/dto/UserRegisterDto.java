@@ -1,5 +1,6 @@
 package com.Traderie_User.User_Service.dto;
 
+import com.Traderie_User.User_Service.Validators.StrongPassword;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Email;
@@ -9,36 +10,33 @@ import lombok.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
-@Data
-@Entity
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "\"user\"")
 
 public class UserRegisterDto
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
 
-    @NotNull
-    @NotEmpty
-    private String user_name;
+    @NotNull(message = "User name shouldn't be null")
+    @NotEmpty(message = "User name shouldn't be empty")
+    private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Password shouldn't be null")
+    @NotEmpty(message = "Password shouldn't be empty")
+    @StrongPassword(message = "The password should be at least 8 characters," +
+            " contains uppercase letter,lowercase letters, digits, special character")
     private String password;
 
-    @NotNull
-    @NotEmpty
-    @Email
+    @NotNull(message = "Email shouldn't be null")
+    @NotEmpty(message = "Email shouldn't be empty")
+    @Email(message = "Incorrect format of email")
     private String email;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Password shouldn't be null")
+    @NotEmpty(message = "Password shouldn't be empty")
     private Date date_of_birth;
 
     private LocalDateTime created_at = LocalDateTime.now();

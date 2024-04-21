@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.UUID; // Import UUID
 
 @Data
 @Entity
@@ -20,12 +21,11 @@ import java.time.LocalDateTime;
 public class User
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID user_id; // Use UUID for user_id
 
     @NotNull
-    @NotEmpty
-    private String user_name;
+    private String username;
 
     @NotNull
     @NotEmpty
@@ -40,7 +40,10 @@ public class User
     private Date date_of_birth;
 
     private String timezone;
-    private UserStatus status = UserStatus.ONLINE;
+
+    @Enumerated(EnumType.STRING) // Map enum as a String
+    private UserStatus status = UserStatus.ONLINE; // Default value is ONLINE
+
     private LocalDateTime created_at = LocalDateTime.now();
     private String biography;
 

@@ -12,5 +12,6 @@ import lombok.Setter;
 public class ResponseMessage {
 
     String message;
+    String status;
 
 }

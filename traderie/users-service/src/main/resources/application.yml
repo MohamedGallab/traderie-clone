@@ -16,11 +16,14 @@ spring:
     username: traderie_user
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        id:
+          new_generator_mappings: false
+          type: uuid-char
     show-sql: true
 
 

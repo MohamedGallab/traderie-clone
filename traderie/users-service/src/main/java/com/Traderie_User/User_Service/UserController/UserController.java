@@ -1,9 +1,12 @@
 package com.Traderie_User.User_Service.UserController;
 
 
+import com.Traderie_User.User_Service.Responses.LoginResponse;
+import com.Traderie_User.User_Service.Responses.ResponseMessage;
 import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserService.UserService;
-import com.Traderie_User.User_Service.dto.UserRegister;
+import com.Traderie_User.User_Service.dto.UserRegisterDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +23,14 @@ public class UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
 
-    public UserRegister registerUser(@RequestBody UserRegister userRegister) {
-        // You can also extract the fields from the request body and pass them individually to the service
-        // For simplicity, this example assumes the entire UserRegister object is passed in the request body
-        return userService.registerUser(userRegister.getUser_name(), userRegister.getPassword(), userRegister.getEmail(), userRegister.getDate_of_birth());
+    public ResponseEntity<ResponseMessage> registerUser(
+           @RequestBody UserRegisterDto userRegister) {
+
+        ResponseMessage responseMessage = (ResponseMessage) userService.registerUser(userRegister);
+        if(responseMessage.getStatus().equals("400"))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+        else
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
 
