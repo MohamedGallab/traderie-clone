@@ -24,8 +24,8 @@ public class MessagesController {
     MessageService messageService;
 
     @GetMapping
-    public List<Message> getChatMessages(@RequestParam(required = true) UUID chatId) {
-        return messageService.getChatMessages(chatId);
+    public List<Message> getChatMessages(@RequestBody Message request) {
+        return messageService.getChatMessages(request);
     }
 
     @PostMapping

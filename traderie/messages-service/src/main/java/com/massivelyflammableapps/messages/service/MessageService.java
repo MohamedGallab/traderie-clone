@@ -16,8 +16,10 @@ public class MessageService {
     @Autowired
     MessageRepository messageRepository;
 
-    public List<Message> getChatMessages(UUID chatId) {
-        List<Message> chatMessages = messageRepository.findByChatId(chatId);
+    public List<Message> getChatMessages(Message request) {
+        List<Message> chatMessages = messageRepository.findByChatIdAndSenderIdAndReceiverId(request.getChatId(),
+                request.getSenderId(),
+                request.getReceiverId());
         return chatMessages;
     }
 

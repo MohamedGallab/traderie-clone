@@ -11,24 +11,24 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import lombok.Data;
 
 @Data
-@Table("messages")
+@Table
 public class Message {
-    @PrimaryKeyColumn(name = "message_id", ordinal = 2, type = PrimaryKeyType.PARTITIONED)
+
     private UUID messageId;
 
-    @Column("sender_id")
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID senderId;
 
-    @Column("receiver_id")
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID receiverId;
 
-    @Column("message_text")
+    @Column
     private String messageText;
 
-    @PrimaryKeyColumn(name = "created_at", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
     private LocalDateTime createdAt;
 
-    @PrimaryKeyColumn(name = "chat_id", ordinal = 0, type = PrimaryKeyType.CLUSTERED)
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID chatId;
 
     public Message(UUID senderId, UUID receiverId, String messageText, UUID chatId) {
