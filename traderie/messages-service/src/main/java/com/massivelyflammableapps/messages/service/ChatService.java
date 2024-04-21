@@ -94,7 +94,6 @@ public class ChatService {
                 chatByInitiatorAndReceiverRepository.save(newChatByInitiatorAndReceiver);
 
                 return savedChat;
-
         }
 
         public Chat changeArchiveStatus(UUID chatId) {
@@ -104,14 +103,18 @@ public class ChatService {
                 ChatByReceiver chatByReceiverData = chatByReceiverRepository.findByReceiverIdAndChatId(
                                 chatData.getReceiverId(),
                                 chatId);
+                ChatByInitiatorAndReceiver chatByInitiatorAndReceiverData = chatByInitiatorAndReceiverRepository
+                                .findByInitiatorIdAndReceiverId(chatData.getInitiatorId(), chatData.getReceiverId());
 
                 chatData.setArchived(!chatData.isArchived());
                 chatByInitiatorData.setArchived(chatData.isArchived());
                 chatByReceiverData.setArchived(chatData.isArchived());
+                chatByInitiatorAndReceiverData.setArchived(chatData.isArchived());
 
                 chatRepository.save(chatData);
                 chatByInitiatorRepository.save(chatByInitiatorData);
                 chatByReceiverRepository.save(chatByReceiverData);
+                chatByInitiatorAndReceiverRepository.save(chatByInitiatorAndReceiverData);
 
                 return chatData;
         }
@@ -124,30 +127,36 @@ public class ChatService {
                 ChatByReceiver chatByReceiverData = chatByReceiverRepository.findByReceiverIdAndChatId(
                                 chatData.getReceiverId(),
                                 chatId);
+                ChatByInitiatorAndReceiver chatByInitiatorAndReceiverData = chatByInitiatorAndReceiverRepository
+                                .findByInitiatorIdAndReceiverId(chatData.getInitiatorId(), chatData.getReceiverId());
 
                 chatData.setAccepted(!chatData.isAccepted());
                 chatByInitiatorData.setAccepted(chatData.isAccepted());
                 chatByReceiverData.setAccepted(chatData.isAccepted());
+                chatByInitiatorAndReceiverData.setAccepted(chatData.isAccepted());
 
                 chatRepository.save(chatData);
                 chatByInitiatorRepository.save(chatByInitiatorData);
                 chatByReceiverRepository.save(chatByReceiverData);
+                chatByInitiatorAndReceiverRepository.save(chatByInitiatorAndReceiverData);
 
                 return chatData;
         }
 
         public ChatByInitiatorAndReceiver requestChat(ChatRequest request) {
-                ChatByInitiatorAndReceiver foundedChat = chatByInitiatorAndReceiverRepository
+                ChatByInitiatorAndReceiver foundedChatByInitiatorAndReceiver = chatByInitiatorAndReceiverRepository
                                 .findByInitiatorIdAndReceiverId(
                                                 request.getInitiatorId(),
                                                 request.getReceiverId());
-                if (foundedChat == null) {
-                        foundedChat = chatByInitiatorAndReceiverRepository.findByInitiatorIdAndReceiverId(
-                                        request.getReceiverId(),
-                                        request.getInitiatorId());
-                }
 
-                if (foundedChat == null) {
+                if (foundedChatByInitiatorAndReceiver == null) {
+                        foundedChatByInitiatorAndReceiver = chatByInitiatorAndReceiverRepository
+                                        .findByInitiatorIdAndReceiverId(
+                                                        request.getReceiverId(),
+                                                        request.getInitiatorId());
+                }
+                // first interaction, first offer, no existing records
+                if (foundedChatByInitiatorAndReceiver == null) {
                         Chat newChat = postChat(request);
                         if (request.getMessageContent() != null & request.getMessageContent() != "") {
                                 messageService.postMessage(new Message(
@@ -156,9 +165,27 @@ public class ChatService {
                                                 request.getMessageContent(),
                                                 newChat.getChatId()));
                         }
-                }
-                System.out.println("foundedChat: " + foundedChat);
+                } else {
+                        // not the first interaction
+                        foundedChatByInitiatorAndReceiver.setArchived(false);
+                        chatByInitiatorAndReceiverRepository.save(foundedChatByInitiatorAndReceiver);
 
-                return foundedChat;
+                        ChatByInitiator foundedChatByInitiator = chatByInitiatorRepository
+                                        .findByInitiatorIdAndChatId(
+                                                        foundedChatByInitiatorAndReceiver.getInitiatorId(),
+                                                        foundedChatByInitiatorAndReceiver.getChatId());
+                        chatByInitiatorRepository.save(foundedChatByInitiator);
+
+                        ChatByReceiver foundedChatByReceiver = chatByReceiverRepository
+                                        .findByReceiverIdAndChatId(
+                                                        foundedChatByInitiatorAndReceiver.getReceiverId(),
+                                                        foundedChatByInitiatorAndReceiver.getChatId());
+                        chatByReceiverRepository.save(foundedChatByReceiver);
+
+                        Chat foundedChat = chatRepository.findByChatId(foundedChatByInitiatorAndReceiver.getChatId());
+                        chatRepository.save(foundedChat);
+                }
+
+                return foundedChatByInitiatorAndReceiver;
         }
 }

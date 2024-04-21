@@ -35,3 +35,7 @@ public class Chat {
 
     private boolean isArchived = false;
 }
+
+// Not accepted & not archived: Requested
+// Accepted & Not archived: On going chat
+// Not accepted & archived: Denied/Archived
