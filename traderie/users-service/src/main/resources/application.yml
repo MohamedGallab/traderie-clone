@@ -9,6 +9,9 @@ server:
 spring:
   application:
     name: traderie_user
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
 
   datasource:
     password: password

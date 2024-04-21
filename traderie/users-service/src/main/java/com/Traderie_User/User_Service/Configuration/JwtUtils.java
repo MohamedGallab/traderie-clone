@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
-
+@Component
 public class JwtUtils {
 
     private String jwtSigningKey ="secret";

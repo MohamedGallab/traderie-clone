@@ -8,7 +8,7 @@ import com.Traderie_User.User_Service.Validators.StrongPasswordValidator;
 import com.Traderie_User.User_Service.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class UserService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     private final ObjectsValidator<UserRegisterDto> uservalidator;
     private final UserRepository userRepository;
