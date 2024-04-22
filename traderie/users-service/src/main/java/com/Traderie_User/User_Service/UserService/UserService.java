@@ -2,9 +2,11 @@ package com.Traderie_User.User_Service.UserService;
 
 import com.Traderie_User.User_Service.Responses.ResponseMessage;
 import com.Traderie_User.User_Service.User.User;
+import com.Traderie_User.User_Service.User.UserStatus;
 import com.Traderie_User.User_Service.UserRegistery.UserRepository;
 import com.Traderie_User.User_Service.Validators.ObjectsValidator;
 import com.Traderie_User.User_Service.Validators.StrongPasswordValidator;
+import com.Traderie_User.User_Service.dto.LoginRequestDto;
 import com.Traderie_User.User_Service.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +61,37 @@ public class UserService {
         // Save the new user to the database
         userRepository.save(newUser);
         return new ResponseMessage("User created successfully","201");
+    }
+
+
+    public Object login(LoginRequestDto loginRequestDto) {
+        Optional<User> user = userRepository.findByUsername(loginRequestDto.getUsername());
+        if(user.isEmpty()){
+            return new ResponseMessage("User not found, Try Sign Up","404");
+        }
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.get().getPassword())){
+            return new ResponseMessage("Wrong password","401");
+        }
+        return new ResponseMessage("Login successfully","200");
+    }
+
+    public Object logout(String token) {
+        token = "";
+        return new ResponseMessage("Logout successfully","200");
+    }
+
+    public  Object deleteUser(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        return new ResponseMessage("User deleted successfully","200");
+    }
+
+    public UserStatus getUserStatus(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(User::getStatus).orElse(null);
+    }
+
+    public User getUserInfo(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.orElse(null);
     }
 }

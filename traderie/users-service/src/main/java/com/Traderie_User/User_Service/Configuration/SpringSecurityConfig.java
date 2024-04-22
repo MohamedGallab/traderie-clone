@@ -37,8 +37,8 @@ public class SpringSecurityConfig{
 
     private final static List<UserDetails> APPLICATION_USERS = Arrays.asList(
             new User(
-                    "test2@gmail.com",
-                    "Test123*",
+                    "test@gmail.com",
+                    "$2a$10$C7vhoEi131lKuA.aYEcQa.sG339DfXKbEd3g0l1ejSpKRmxf9IBJW",
                     Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
             )
     );

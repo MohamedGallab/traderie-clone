@@ -33,6 +33,7 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.5.12</version> <!-- Update the version here -->
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
