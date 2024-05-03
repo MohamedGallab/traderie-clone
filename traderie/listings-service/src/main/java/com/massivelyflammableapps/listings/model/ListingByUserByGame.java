@@ -15,33 +15,33 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Table
-public class Listing_by_user_by_game {
+public class ListingByUserByGame {
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private UUID user_id;
+        private UUID userId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private UUID game_id;
+        private UUID gameId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private boolean listing_type;
+        private boolean listingType;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        private String time_stamp = new Date().toString();
+        private String timestamp = new Date().toString();
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        private UUID listing_id;
+        private UUID listingId;
 
         @NonNull
-        private String product_name ;
+        private String productName ;
 
         @NonNull
-        private String product_icon ;
+        private String productIcon ;
 
         @NonNull
         private int quantity ;
 
         @NonNull
         @Frozen
-        private List<@Frozen List<Product_amount>> desired_offer;
+        private List<@Frozen List<ProductAmount>> desiredOffer;
 
 }

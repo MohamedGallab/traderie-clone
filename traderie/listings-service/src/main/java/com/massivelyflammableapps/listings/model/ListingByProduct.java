@@ -16,34 +16,34 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Table
-public class Listing_by_product {
+public class ListingByProduct {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    private UUID product_id= UUID.randomUUID();
+    private UUID productId= UUID.randomUUID();
 
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    private boolean listing_type;
+    private boolean listingType;
 
     @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-    private UUID listing_id;
+    private UUID listingId;
 
     @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-    private String time_stamp = new Date().toString();
+    private String timestamp = new Date().toString();
 
     @NonNull
-    private String product_name ;
+    private String productName ;
 
     @NonNull
-    private String product_icon ;
+    private String productIcon ;
 
     @NonNull
     private int quantity ;
 
     @NonNull
-    private UUID user_id ;
+    private UUID userId ;
 
     @NonNull
     @Frozen
-    private List<@Frozen List<Product_amount>> desired_offer;
+    private List<@Frozen List<ProductAmount>> desiredOffer;
 
 
 }
