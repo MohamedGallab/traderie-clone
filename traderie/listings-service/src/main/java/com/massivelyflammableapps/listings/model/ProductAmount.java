@@ -10,10 +10,10 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @UserDefinedType("offered_product")
-public class Product_amount {
+public class ProductAmount {
     private int amount;
-    private int game_id;
-    private int item_id;
-    private String item_name;
-    private String item_img;
+    private int gameId;
+    private int itemId;
+    private String itemName;
+    private String itemImg;
 }
