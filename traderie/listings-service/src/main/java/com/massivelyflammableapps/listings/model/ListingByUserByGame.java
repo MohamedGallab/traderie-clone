@@ -12,38 +12,32 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Table
 public class ListingByUserByGame {
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        @NonNull
-        private final UUID userId;
+        private UUID userId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        @NonNull
-        private final UUID gameId;
+        private UUID gameId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        @NonNull
-        private boolean buying;
+        private boolean listingType;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        @NonNull
-        private final String timestamp = new Date().toString();
+        private String timestamp = new Date().toString();
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        @NonNull
-        private final UUID listingId;
+        private UUID listingId;
 
         @NonNull
-        private String productName;
+        private String productName ;
 
         @NonNull
-        private String productIcon;
+        private String productIcon ;
 
         @NonNull
-        private int quantity;
+        private int quantity ;
 
         @NonNull
         @Frozen
@@ -51,5 +45,4 @@ public class ListingByUserByGame {
 
         @NonNull
         private STATE state = STATE.ACTIVE;
-
 }

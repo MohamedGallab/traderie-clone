@@ -10,12 +10,16 @@ import org.springframework.data.cassandra.repository.MapIdCassandraRepository;
 
 @Repository
 public interface ListingsByUserByGameRepository extends MapIdCassandraRepository<ListingByUserByGame>{
+<<<<<<< HEAD
 
     ListingByUserByGame findByUserIdAndGameIdAndBuyingAndTimestampAndListingId (UUID userId, UUID gameId, boolean buying, String timestamp, UUID listingId);
 
     List<ListingByUserByGame> findByUserIdAndGameIdAndBuying(UUID userId, UUID gameId, boolean buying);
 
 
+=======
+    List<ListingByUserByGame> findByUserIdAndGameIdAndListingType(UUID userId, UUID gameId, boolean listingType);
+>>>>>>> 07852ab (Modified models and added repositories)
 }
 
 
