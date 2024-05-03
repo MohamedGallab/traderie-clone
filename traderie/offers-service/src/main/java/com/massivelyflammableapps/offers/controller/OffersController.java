@@ -45,10 +45,11 @@ public class OffersController {
         }
     }
 
-    @GetMapping
+    @GetMapping(params = { "listingId" })
     public ResponseEntity<List<OfferByListing>> getOfferByListing(@RequestParam UUID listingId) {
         try {
             List<OfferByListing> offers = offersService.getOfferByListing(listingId);
+            System.err.println(listingId);
             return ResponseEntity.ok(offers);
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class OffersController {
         }
     }
 
-    @GetMapping
+    @GetMapping(params = { "sellerId" })
     public ResponseEntity<List<OfferBySeller>> getOfferBySeller(@RequestParam UUID sellerId) {
         try {
             List<OfferBySeller> offers = offersService.getOfferBySeller(sellerId);
@@ -67,7 +68,7 @@ public class OffersController {
         }
     }
 
-    @GetMapping
+    @GetMapping(params = { "buyerId" })
     public ResponseEntity<List<OfferByBuyer>> getOfferByBuyer(@RequestParam UUID buyerId) {
         try {
             List<OfferByBuyer> offers = offersService.getOfferByBuyer(buyerId);
@@ -78,7 +79,7 @@ public class OffersController {
         }
     }
 
-    @GetMapping
+    @GetMapping(params = { "sellerId", "buyerId" })
     public ResponseEntity<List<OfferBySellerAndBuyer>> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,
             @RequestParam UUID buyerId) {
         try {
