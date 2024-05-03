@@ -2,6 +2,9 @@ package com.massivelyflammableapps.offers.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.massivelyflammableapps.offers.commands.AbstractCommand;
+import com.massivelyflammableapps.offers.commands.CreateOfferCommand;
+import com.massivelyflammableapps.offers.commands.GetAllOffersCommand;
 import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,17 +32,31 @@ public class OffersController {
 
     @Autowired
     private OffersService offersService;
+    
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @GetMapping
     public ResponseEntity<List<Offer>> getAllOffers() {
-        List<Offer> offers = offersService.getAllOffers();
-        return ResponseEntity.ok(offers);
+        try {
+            AbstractCommand command = new GetAllOffersCommand();
+            List<Offer> offers = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<List<Offer>>() {
+                    });
+            return ResponseEntity.ok(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<Offer> createOffer(@RequestBody Offer request) {
         try {
-            Offer response = offersService.createOffer(request);
+            AbstractCommand command = new CreateOfferCommand(request);
+            Offer response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<Offer>() {
+                    });
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
