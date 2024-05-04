@@ -1,5 +1,6 @@
 package com.massivelyflammableapps.listings.model;
 
+import com.massivelyflammableapps.listings.resources.STATE;
 import lombok.*;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Frozen;
@@ -13,35 +14,42 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Table
 public class ListingByUserByGame {
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private UUID userId;
+        @NonNull
+        private final UUID userId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private UUID gameId;
+        @NonNull
+        private final UUID gameId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private boolean listingType;
+        @NonNull
+        private boolean buying;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        private String timestamp = new Date().toString();
+        @NonNull
+        private final String timestamp = new Date().toString();
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-        private UUID listingId;
+        @NonNull
+        private final UUID listingId;
 
         @NonNull
-        private String productName ;
+        private String productName;
 
         @NonNull
-        private String productIcon ;
+        private String productIcon;
 
         @NonNull
-        private int quantity ;
+        private int quantity;
 
         @NonNull
         @Frozen
         private List<@Frozen List<ProductAmount>> desiredOffer;
+
+        @NonNull
+        private STATE state = STATE.ACTIVE;
 
 }
