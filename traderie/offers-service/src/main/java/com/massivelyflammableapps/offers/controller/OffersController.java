@@ -5,12 +5,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.massivelyflammableapps.offers.commands.AbstractCommand;
 import com.massivelyflammableapps.offers.commands.CreateOfferCommand;
 import com.massivelyflammableapps.offers.commands.GetAllOffersCommand;
+import com.massivelyflammableapps.offers.commands.GetOffersByBuyerCommand;
+import com.massivelyflammableapps.offers.commands.GetOffersByListingCommand;
+import com.massivelyflammableapps.offers.commands.GetOffersBySellerCommand;
 import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
 import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
 import com.massivelyflammableapps.offers.service.OffersService;
+
+import lombok.Value;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,9 +72,11 @@ public class OffersController {
     @GetMapping(params = { "listingId" })
     public ResponseEntity<List<OfferByListing>> getOfferByListing(@RequestParam UUID listingId) {
         try {
-            List<OfferByListing> offers = offersService.getOfferByListing(listingId);
-            System.err.println(listingId);
-            return ResponseEntity.ok(offers);
+            AbstractCommand command = new GetOffersByListingCommand(listingId);
+            List<OfferByListing> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference< List<OfferByListing>>() {
+                    });
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
@@ -79,8 +86,11 @@ public class OffersController {
     @GetMapping(params = { "sellerId" })
     public ResponseEntity<List<OfferBySeller>> getOfferBySeller(@RequestParam UUID sellerId) {
         try {
-            List<OfferBySeller> offers = offersService.getOfferBySeller(sellerId);
-            return ResponseEntity.ok(offers);
+            AbstractCommand command = new GetOffersBySellerCommand(sellerId);
+            List<OfferBySeller> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference< List<OfferBySeller>>() {
+                    });
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
@@ -90,8 +100,11 @@ public class OffersController {
     @GetMapping(params = { "buyerId" })
     public ResponseEntity<List<OfferByBuyer>> getOfferByBuyer(@RequestParam UUID buyerId) {
         try {
-            List<OfferByBuyer> offers = offersService.getOfferByBuyer(buyerId);
-            return ResponseEntity.ok(offers);
+            AbstractCommand command = new GetOffersByBuyerCommand(buyerId);
+            List<OfferByBuyer> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference< List<OfferByBuyer>>() {
+                    });
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
