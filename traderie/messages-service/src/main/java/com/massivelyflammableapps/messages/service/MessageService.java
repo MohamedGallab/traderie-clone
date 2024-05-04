@@ -22,18 +22,11 @@ public class MessageService {
         return chatMessages;
     }
 
-    public ResponseEntity<Message> postMessage(Message request) {
-        try {
-            Message newMessage = new Message(request.getSenderId(), request.getReceiverId(), request.getMessageText(),
-                    request.getChatId());
+    public Message postMessage(Message request) {
+        Message newMessage = new Message(request.getSenderId(), request.getReceiverId(), request.getMessageText(),
+                request.getChatId());
 
-            Message response = messageRepository.save(newMessage);
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Return an error response entity
-            return ResponseEntity.status(500).build();
-        }
+        Message response = messageRepository.save(newMessage);
+        return response;
     }
 }

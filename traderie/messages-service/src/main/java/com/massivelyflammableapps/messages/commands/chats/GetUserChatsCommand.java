@@ -1,5 +1,6 @@
-package com.massivelyflammableapps.messages.commands;
+package com.massivelyflammableapps.messages.commands.chats;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.massivelyflammableapps.messages.model.Chat;
@@ -15,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class ChangeAcceptStatusCommand extends ChatsAbstractCommand {
+public class GetUserChatsCommand extends ChatsAbstractCommand {
     private ChatService chatService;
 
     @NonNull
-    private UUID chatId;
+    private UUID userId;
 
-    public Chat execute() {
-        return chatService.changeAcceptStatus(chatId);
+    public List<Chat> execute() {
+        return chatService.getUserChats(userId);
     }
 }

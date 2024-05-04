@@ -2,12 +2,12 @@ package com.massivelyflammableapps.messages.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.massivelyflammableapps.messages.commands.ChangeAcceptStatusCommand;
-import com.massivelyflammableapps.messages.commands.ChangeArchiveStatusCommand;
-import com.massivelyflammableapps.messages.commands.ChatsAbstractCommand;
-import com.massivelyflammableapps.messages.commands.GetUserChatsCommand;
-import com.massivelyflammableapps.messages.commands.PostChatCommand;
-import com.massivelyflammableapps.messages.commands.RequestChatCommand;
+import com.massivelyflammableapps.messages.commands.chats.ChangeAcceptStatusCommand;
+import com.massivelyflammableapps.messages.commands.chats.ChangeArchiveStatusCommand;
+import com.massivelyflammableapps.messages.commands.chats.ChatsAbstractCommand;
+import com.massivelyflammableapps.messages.commands.chats.GetUserChatsCommand;
+import com.massivelyflammableapps.messages.commands.chats.PostChatCommand;
+import com.massivelyflammableapps.messages.commands.chats.RequestChatCommand;
 import com.massivelyflammableapps.messages.dto.ChatRequest;
 import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.model.ChatByInitiatorAndReceiver;

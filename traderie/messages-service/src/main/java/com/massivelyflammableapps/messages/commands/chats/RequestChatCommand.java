@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.messages.commands;
+package com.massivelyflammableapps.messages.commands.chats;
 
 import com.massivelyflammableapps.messages.dto.ChatRequest;
 import com.massivelyflammableapps.messages.model.ChatByInitiatorAndReceiver;

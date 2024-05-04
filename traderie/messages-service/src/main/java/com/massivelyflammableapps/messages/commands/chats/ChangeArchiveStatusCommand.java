@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.messages.commands;
+package com.massivelyflammableapps.messages.commands.chats;
 
 import java.util.UUID;
 

@@ -27,7 +27,7 @@ public class MessagesController {
     }
 
     @PostMapping
-    public ResponseEntity<Message> postMessage(@RequestBody Message request) {
+    public Message postMessage(@RequestBody Message request) {
         return messageService.postMessage(request);
     }
 
