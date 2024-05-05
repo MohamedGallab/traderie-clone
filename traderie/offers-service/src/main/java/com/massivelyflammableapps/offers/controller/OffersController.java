@@ -7,6 +7,7 @@ import com.massivelyflammableapps.offers.commands.CreateOfferCommand;
 import com.massivelyflammableapps.offers.commands.GetAllOffersCommand;
 import com.massivelyflammableapps.offers.commands.GetOffersByBuyerCommand;
 import com.massivelyflammableapps.offers.commands.GetOffersByListingCommand;
+import com.massivelyflammableapps.offers.commands.GetOffersBySellerAndBuyerCommand;
 import com.massivelyflammableapps.offers.commands.GetOffersBySellerCommand;
 import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.model.OfferByListing;
@@ -115,8 +116,11 @@ public class OffersController {
     public ResponseEntity<List<OfferBySellerAndBuyer>> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,
             @RequestParam UUID buyerId) {
         try {
-            List<OfferBySellerAndBuyer> offers = offersService.getOfferBySellerAndBuyer(sellerId, buyerId);
-            return ResponseEntity.ok(offers);
+            AbstractCommand command = new GetOffersBySellerAndBuyerCommand(sellerId,buyerId);
+            List<OfferBySellerAndBuyer> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello",command,
+            new ParameterizedTypeReference<List<OfferBySellerAndBuyer>>() {
+            });
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
