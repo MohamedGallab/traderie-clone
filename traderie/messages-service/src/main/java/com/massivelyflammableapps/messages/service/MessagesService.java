@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.messages.dto.ChatRequest;
@@ -17,9 +18,13 @@ import com.massivelyflammableapps.messages.repository.ChatByInitiatorAndReceiver
 import com.massivelyflammableapps.messages.repository.ChatByInitiatorRepository;
 import com.massivelyflammableapps.messages.repository.ChatByReceiverRepository;
 import com.massivelyflammableapps.messages.repository.ChatRepository;
+import com.massivelyflammableapps.messages.repository.MessageRepository;
 
 @Service
-public class ChatService {
+public class MessagesService {
+        @Autowired
+        MessageRepository messageRepository;
+
         @Autowired
         ChatRepository chatRepository;
 
@@ -32,16 +37,24 @@ public class ChatService {
         @Autowired
         ChatByInitiatorAndReceiverRepository chatByInitiatorAndReceiverRepository;
 
-        @Autowired
-        MessageService messageService;
-        // public List<Chat> getChatMessages(@RequestParam(required = true) UUID
-        // initiatorId,
-        // @RequestParam(required = true) UUID receiverId) {
-        // List<Chat> userChats =
-        // chatRepository.findByInitiatorIdAndReceiverId(initiatorId, receiverId);
-        // return userChats;
-        // }
+        @Cacheable("messages")
+        public List<Message> getChatMessages(Message request) {
+                List<Message> chatMessages = messageRepository.findByChatIdAndSenderIdAndReceiverId(request.getChatId(),
+                                request.getSenderId(),
+                                request.getReceiverId());
+                return chatMessages;
+        }
 
+        public Message postMessage(Message request) {
+                Message newMessage = new Message(request.getSenderId(), request.getReceiverId(),
+                                request.getMessageText(),
+                                request.getChatId());
+
+                Message response = messageRepository.save(newMessage);
+                return response;
+        }
+
+        @Cacheable("chats")
         public List<Chat> getUserChats(UUID userId) {
                 List<Chat> chatsInitiator = new ArrayList<>();
                 List<ChatByInitiator> chatByInitiators = chatByInitiatorRepository.findByInitiatorId(userId);
@@ -159,7 +172,7 @@ public class ChatService {
                 if (foundedChatByInitiatorAndReceiver == null) {
                         Chat newChat = postChat(request);
                         if (request.getMessageContent() != null & request.getMessageContent() != "") {
-                                messageService.postMessage(new Message(
+                                postMessage(new Message(
                                                 request.getInitiatorId(),
                                                 request.getReceiverId(),
                                                 request.getMessageContent(),

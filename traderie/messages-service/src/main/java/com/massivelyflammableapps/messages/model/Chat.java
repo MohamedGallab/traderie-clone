@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Table
-public class Chat {
+public class Chat implements Serializable {
     @PrimaryKey
     private UUID chatId = UUID.randomUUID();
 

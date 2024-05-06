@@ -11,10 +11,7 @@ public interface ChatRepository extends CassandraRepository<Chat, UUID> {
 
     Chat findByChatId(UUID chatId);
 
-    // @AllowFiltering
     List<Chat> findByInitiatorIdAndReceiverId(UUID initiatorId, UUID receiverId);
-
-    // Request Chat
 }
 
 // archive chat :- changes status (this also includes decline chat as it does

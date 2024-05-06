@@ -8,9 +8,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 import com.massivelyflammableapps.messages.model.ChatByInitiator;
 
 public interface ChatByInitiatorRepository extends CassandraRepository<ChatByInitiator, UUID> {
-    // @AllowFiltering
     List<ChatByInitiator> findByInitiatorId(UUID userId);
 
     ChatByInitiator findByInitiatorIdAndChatId(UUID userId, UUID chatId);
-
 }

@@ -2,8 +2,9 @@ package com.massivelyflammableapps.messages.commands.chats;
 
 import java.util.UUID;
 
+import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
 import com.massivelyflammableapps.messages.model.Chat;
-import com.massivelyflammableapps.messages.service.ChatService;
+import com.massivelyflammableapps.messages.service.MessagesService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
@@ -15,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class ChangeAcceptStatusCommand extends ChatsAbstractCommand {
-    private ChatService chatService;
+public class ChangeAcceptStatusCommand extends MessagesAbstractCommand {
+    private MessagesService messagesService;
 
     @NonNull
     private UUID chatId;
 
     public Chat execute() {
-        return chatService.changeAcceptStatus(chatId);
+        return messagesService.changeAcceptStatus(chatId);
     }
 }

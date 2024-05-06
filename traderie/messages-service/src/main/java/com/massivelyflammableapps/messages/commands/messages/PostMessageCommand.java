@@ -1,7 +1,8 @@
 package com.massivelyflammableapps.messages.commands.messages;
 
+import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
 import com.massivelyflammableapps.messages.model.Message;
-import com.massivelyflammableapps.messages.service.MessageService;
+import com.massivelyflammableapps.messages.service.MessagesService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
@@ -14,12 +15,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class PostMessageCommand extends MessagesAbstractCommand {
-    private MessageService messageService;
+    private MessagesService messagesService;
 
     @NonNull
     private Message request;
 
     public Message execute() {
-        return messageService.postMessage(request);
+        return messagesService.postMessage(request);
     }
 }
