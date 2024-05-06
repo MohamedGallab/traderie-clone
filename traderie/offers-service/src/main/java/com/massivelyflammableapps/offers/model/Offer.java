@@ -2,6 +2,7 @@ package com.massivelyflammableapps.offers.model;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +16,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Table
-public class Offer {
+public class Offer implements Serializable {
     @PrimaryKey
     private UUID id= UUID.randomUUID();
 
