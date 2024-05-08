@@ -1,12 +1,15 @@
 package com.example.review_service.ReviewController;
 
 
+import com.example.review_service.Commands.*;
 import com.example.review_service.Review.ReviewByReceiver;
 import com.example.review_service.Review.ReviewBySender;
 import com.example.review_service.ReviewService.ReviewService;
 import com.example.review_service.dto.EditRequestDto;
 import com.example.review_service.dto.ReviewRequestDto;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,8 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
-
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,7 +33,10 @@ public class ReviewController {
            @RequestBody ReviewRequestDto reviewRequestDto) {
         try {
             System.out.println(reviewRequestDto.getSenderId());
-            Object newReview = reviewService.createReview(reviewRequestDto);
+            AbstractCommand command = new CreateReviewCommand(reviewRequestDto);
+            Object newReview = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<Object>() {
+                    });
             return ResponseEntity.ok(newReview);
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +49,10 @@ public class ReviewController {
     public ResponseEntity<List<ReviewBySender>> getReviewBySenderId(@RequestParam UUID senderId
     ) {
             try {
-                List<ReviewBySender> reviews = reviewService.getReviewBySender(senderId);
+                AbstractCommand command = new GetReviewsBySenderCommand(senderId);
+                List<ReviewBySender> reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                        new ParameterizedTypeReference<List<ReviewBySender>>() {
+                        });
                 return ResponseEntity.ok(reviews);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -54,7 +64,10 @@ public class ReviewController {
     public ResponseEntity<List<ReviewByReceiver>> getReviewByReceiverId(@RequestParam UUID receiverId
     ) {
         try {
-            List<ReviewByReceiver> reviews = reviewService.getReviewByReceiver(receiverId);
+            AbstractCommand command = new GetReviewsByReceiverCommand(receiverId);
+            List<ReviewByReceiver> reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<List<ReviewByReceiver>>() {
+                    });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,7 +79,10 @@ public class ReviewController {
     @PutMapping("/reply")
     public ResponseEntity<Object> addReply(@RequestBody EditRequestDto reviewReq) {
         try {
-            Object reviews = reviewService.editReview(reviewReq);
+            AbstractCommand command = new EditReviewCommand(reviewReq);
+            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<Object>() {
+                    });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +92,10 @@ public class ReviewController {
     @PutMapping("/edit")
     public ResponseEntity<Object> editReview(@RequestBody EditRequestDto reviewReq) {
         try {
-            Object reviews = reviewService.editReview(reviewReq);
+            AbstractCommand command = new EditReviewCommand(reviewReq);
+            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                    new ParameterizedTypeReference<Object>() {
+                    });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
             e.printStackTrace();

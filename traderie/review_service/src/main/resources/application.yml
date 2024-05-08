@@ -2,8 +2,21 @@ server:
     port: 8081
 
 spring:
+    cache:
+        type: redis
+        host: localhost
+        port: 6379
+        redis:
+            time-to-live: 60000
+
     application:
         name: review_service
+
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
     cassandra:
         schema-action: CREATE_IF_NOT_EXISTS
         request:

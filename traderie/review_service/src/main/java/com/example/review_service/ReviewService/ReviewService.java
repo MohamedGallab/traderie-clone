@@ -12,6 +12,9 @@ import com.example.review_service.dto.EditRequestDto;
 import com.example.review_service.dto.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +35,7 @@ public class ReviewService {
 
     private final ObjectsValidator<EditRequestDto> editRequestDtoObjectsValidator;
 
-
+    @CacheEvict(value = "reviewsCache", key = "#review.senderId")
     public Object createReview(ReviewRequestDto review) {
         var violations  = reviewRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){
@@ -84,13 +87,16 @@ public class ReviewService {
         return result;
     }
 
+    @Cacheable("reviewsCache")
     public List<ReviewBySender> getReviewBySender(UUID senderId) {
         return reviewBySenderRepository.findBySenderId(senderId);
     }
+    @Cacheable("reviewsCache")
     public List<ReviewByReceiver> getReviewByReceiver(UUID receiverId) {
         return reviewByReceiverRepository.findByReceiverId(receiverId);
     }
 
+    @CacheEvict(value = "reviewsCache", key = "#review.senderId")
     public Object editReview(EditRequestDto review){
         var violations  = editRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){

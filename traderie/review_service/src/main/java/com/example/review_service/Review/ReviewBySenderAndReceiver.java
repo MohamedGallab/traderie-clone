@@ -1,6 +1,7 @@
 package com.example.review_service.Review;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 import lombok.*;
@@ -28,7 +29,7 @@ public class ReviewBySenderAndReceiver {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID receiverId;
 
-    private LocalDateTime timestamp;
+    private String timestamp;
 
     @NotNull
     private int rating;
