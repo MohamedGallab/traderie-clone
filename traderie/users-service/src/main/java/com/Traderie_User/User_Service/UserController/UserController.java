@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -77,12 +78,13 @@ public class UserController {
     }
 
     @GetMapping("/status")
-    public UserStatus getUserStatus(
-            @RequestParam String token
+    public ResponseEntity<String> getUserStatus(
+
     ) {
-        Claims claims = Jwts.parser().parseClaimsJws(token).getBody();
-        String username = claims.getSubject();
-        return userService.getUserStatus(username);
+//        Claims claims = Jwts.parser().parseClaimsJws(token).getBody();
+//        String username = claims.getSubject();
+        System.out.println("username");
+        return ResponseEntity.status(HttpStatus.OK).body("responseMessage");
     }
 
 }

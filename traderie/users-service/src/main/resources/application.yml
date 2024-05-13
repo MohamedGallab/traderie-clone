@@ -6,6 +6,7 @@ logging:
 server:
   port: 8080
 
+
 spring:
   application:
     name: traderie_user
@@ -28,5 +29,8 @@ spring:
           new_generator_mappings: false
           type: uuid-char
     show-sql: true
+
+jwt:
+  secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=
 
 

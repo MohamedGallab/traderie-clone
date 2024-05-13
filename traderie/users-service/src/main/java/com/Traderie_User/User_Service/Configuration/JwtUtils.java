@@ -8,6 +8,8 @@ import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.security.Key;
 import java.util.Base64;
@@ -20,10 +22,8 @@ import java.util.function.Function;
 import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
 @Component
 public class JwtUtils {
-
-    private static final Key secret = MacProvider.generateKey(SignatureAlgorithm.HS256);
-    private static final byte[] secretBytes = secret.getEncoded();
-    private static final String base64SecretBytes = Base64.getEncoder().encodeToString(secretBytes);
+    @Value("${jwt.secret}")
+    private String base64SecretBytes;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -62,6 +62,8 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, UserDetails userDetails) {
+        System.out.println(base64SecretBytes);
+
         return Jwts.builder().setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .claim("authorities", userDetails.getAuthorities())
