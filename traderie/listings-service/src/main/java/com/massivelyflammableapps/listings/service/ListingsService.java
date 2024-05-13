@@ -2,28 +2,25 @@ package com.massivelyflammableapps.listings.service;
 
 import java.util.List;
 import java.util.UUID;
-
 import com.massivelyflammableapps.listings.dto.CreateListingDTO;
 import com.massivelyflammableapps.listings.dto.GetListingsByGameByProductDTO;
-import com.massivelyflammableapps.listings.dto.GetListingsByUserByGameDTO;
+import com.massivelyflammableapps.listings.dto.GetListingsByGameByUserDTO;
 import com.massivelyflammableapps.listings.dto.ListingUpdateDTO;
 import com.massivelyflammableapps.listings.exceptions.UnauthorizedException;
 import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
-import com.massivelyflammableapps.listings.model.ListingByUserByGame;
+import com.massivelyflammableapps.listings.model.ListingByGameByUser;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByProductRepository;
-import com.massivelyflammableapps.listings.repository.ListingsByUserByGameRepository;
+import com.massivelyflammableapps.listings.repository.ListingsByGameByUserRepository;
 import com.massivelyflammableapps.listings.resources.STATE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 
 @Service
 public class ListingsService {
     @Autowired
     private ListingsByGameByProductRepository listingsByGameByProductRepository;
     @Autowired
-    private ListingsByUserByGameRepository listingsByUserByGameRepository;
+    private ListingsByGameByUserRepository listingsByGameByUserRepository;
 
     public List<ListingByGameByProduct> getAllListingsByGameByProduct(GetListingsByGameByProductDTO request) {
         List<ListingByGameByProduct> listingsByGameByProduct = listingsByGameByProductRepository.findByGameIdAndProductIdAndBuying(
@@ -37,8 +34,8 @@ public class ListingsService {
         return listingsByGameByProduct;
     }
 
-    public List<ListingByUserByGame> getAllListingsByUserByGame(GetListingsByUserByGameDTO request) {
-        List<ListingByUserByGame> listingsByUserByGame = listingsByUserByGameRepository.findByUserIdAndGameIdAndBuying(
+    public List<ListingByGameByUser> getAllListingsByGameByUser(GetListingsByGameByUserDTO request) {
+        List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 request.getUserId(), request.getGameId(), request.isBuying());
         for(int i = 0; i < listingsByUserByGame.size(); i++) {
             if( listingsByUserByGame.get(i).getState() != STATE.ACTIVE) {
@@ -49,12 +46,12 @@ public class ListingsService {
         return listingsByUserByGame;
     }
 
-    public List<ListingByUserByGame> getAllMyListingsByGame(GetListingsByUserByGameDTO request) {
+    public List<ListingByGameByUser> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
 
         // TODO Decode token from the cache
         UUID userId = UUID.fromString("TOKEN DECODE PLS");
 
-        List<ListingByUserByGame> listingsByUserByGame = listingsByUserByGameRepository.findByUserIdAndGameIdAndBuying(
+        List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 userId, request.getGameId(), request.isBuying());
         for(int i = 0; i < listingsByUserByGame.size(); i++) {
             if(request.isHistory() && listingsByUserByGame.get(i).getState() == STATE.ACTIVE) {
@@ -84,7 +81,7 @@ public class ListingsService {
                 request.getDesiredOffer());
         listingsByGameByProductRepository.save(newListingByGameByProduct);
 
-        ListingByUserByGame newListingByUserByGame = new ListingByUserByGame(
+        ListingByGameByUser newListingByGameByUser = new ListingByGameByUser(
                 userId,
                 request.getGameId(),
                 request.isBuying(),
@@ -93,7 +90,7 @@ public class ListingsService {
                 newListingByGameByProduct.getProductIcon(),
                 newListingByGameByProduct.getQuantity(),
                 newListingByGameByProduct.getDesiredOffer());
-        listingsByUserByGameRepository.save(newListingByUserByGame);
+        listingsByGameByUserRepository.save(newListingByGameByUser);
         return newListingByGameByProduct;
     }
 
@@ -107,11 +104,11 @@ public class ListingsService {
         ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository.findByListingIdAndTimestampAndProductIdAndBuying(
                 request.getListingId(), request.getTimestamp(), request.getProductId(), request.isBuying());
         listingByGameByProduct.setState(request.getState());
-        ListingByUserByGame listingByUserByGame = listingsByUserByGameRepository.findByUserIdAndGameIdAndBuyingAndTimestampAndListingId(
+        ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuyingAndTimestampAndListingId(
                 listingByGameByProduct.getUserId(), listingByGameByProduct.getProductId(), listingByGameByProduct.isBuying(),
                 listingByGameByProduct.getTimestamp(), listingByGameByProduct.getListingId());
-        listingByUserByGame.setState(request.getState());
-        listingsByUserByGameRepository.save(listingByUserByGame);
+        listingByGameByUser.setState(request.getState());
+        listingsByGameByUserRepository.save(listingByGameByUser);
         return listingsByGameByProductRepository.save(listingByGameByProduct);
     }
 }
