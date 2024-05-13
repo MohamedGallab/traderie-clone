@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfiguration {
     @Bean
-    public Queue hello() {
-        return new Queue("hello");
+    public Queue listingsQueue() {
+        return new Queue("listingsQueue");
     }
 
     @Bean

@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class CreateListingCommand extends AbstractCommand<ListingByGameByProduct> {
+    @NonNull
     private ListingsService listingsService;
     @NonNull
     private CreateListingDTO createListingDTO;
