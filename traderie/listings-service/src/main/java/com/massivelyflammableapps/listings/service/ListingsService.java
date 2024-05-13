@@ -13,6 +13,7 @@ import com.massivelyflammableapps.listings.repository.ListingsByGameByProductRep
 import com.massivelyflammableapps.listings.repository.ListingsByGameByUserRepository;
 import com.massivelyflammableapps.listings.resources.STATE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,7 @@ public class ListingsService {
     @Autowired
     private ListingsByGameByUserRepository listingsByGameByUserRepository;
 
+    @Cacheable("listingsCache")
     public List<ListingByGameByProduct> getAllListingsByGameByProduct(GetListingsByGameByProductDTO request) {
         List<ListingByGameByProduct> listingsByGameByProduct = listingsByGameByProductRepository.findByGameIdAndProductIdAndBuying(
                 request.getGameId(), request.getProductId(), request.isBuying());
@@ -33,7 +35,7 @@ public class ListingsService {
         }
         return listingsByGameByProduct;
     }
-
+    @Cacheable("listingsCache")
     public List<ListingByGameByUser> getAllListingsByGameByUser(GetListingsByGameByUserDTO request) {
         List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 request.getUserId(), request.getGameId(), request.isBuying());
@@ -45,7 +47,7 @@ public class ListingsService {
         }
         return listingsByUserByGame;
     }
-
+    @Cacheable("listingsCache")
     public List<ListingByGameByUser> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
 
         // TODO Decode token from the cache

@@ -13,21 +13,28 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Table
 public class ListingByGameByUser {
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+        @NonNull
         private UUID userId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+        @NonNull
         private UUID gameId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-        private boolean listingType;
+        @NonNull
+        private boolean buying;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
+        @NonNull
         private String timestamp = new Date().toString();
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
+        @NonNull
         private UUID listingId;
 
         @NonNull
