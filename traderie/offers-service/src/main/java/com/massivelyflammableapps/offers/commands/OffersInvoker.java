@@ -11,7 +11,7 @@ public class OffersInvoker {
     @Autowired
     private OffersService offersService;
 
-    @RabbitListener(queues = {"hello"})
+    @RabbitListener(queues = {"${service.queue.name}"})
     public <T> T execute(AbstractCommand message) {
         message.setOffersService(offersService);
         return message.execute();
