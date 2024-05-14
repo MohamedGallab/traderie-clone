@@ -7,7 +7,6 @@ import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.service.OffersService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
