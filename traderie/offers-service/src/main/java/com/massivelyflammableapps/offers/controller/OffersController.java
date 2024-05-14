@@ -14,9 +14,6 @@ import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
 import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
-import com.massivelyflammableapps.offers.service.OffersService;
-
-import lombok.Value;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,10 +33,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("api/v1/offers")
 public class OffersController {
-
-    @Autowired
-    private OffersService offersService;
-
     @Value("${service.queue.name}")
     private String queueName;
     
