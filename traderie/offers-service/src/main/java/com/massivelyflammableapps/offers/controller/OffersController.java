@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,9 @@ public class OffersController {
 
     @Autowired
     private OffersService offersService;
+
+    @Value("${service.queue.name}")
+    private String queueName;
     
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -46,7 +50,7 @@ public class OffersController {
     public ResponseEntity<List<Offer>> getAllOffers() {
         try {
             AbstractCommand command = new GetAllOffersCommand();
-            List<Offer> offers = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+            List<Offer> offers = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<List<Offer>>() {
                     });
             return ResponseEntity.ok(offers);
@@ -60,7 +64,7 @@ public class OffersController {
     public ResponseEntity<Offer> createOffer(@RequestBody Offer request) {
         try {
             AbstractCommand command = new CreateOfferCommand(request);
-            Offer response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+            Offer response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Offer>() {
                     });
             return ResponseEntity.ok(response);
