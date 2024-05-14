@@ -1,24 +1,25 @@
 package com.massivelyflammableapps.offers.commands;
 
-import com.massivelyflammableapps.offers.model.Offer;
+import java.util.List;
+import java.util.UUID;
+
+import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.service.OffersService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
-public class CreateOfferCommand extends AbstractCommand {
+@RequiredArgsConstructor
+public class GetOffersByBuyerCommand extends AbstractCommand{
     private OffersService offersService;
     @NonNull
-    private Offer offer;
-    
-    @Override
-    public Offer execute() {
-        return offersService.createOffer(offer);
+    private UUID buyerId;
+
+    public List<OfferByBuyer> execute() {
+        return offersService.getOfferByBuyer(buyerId);
     }
 }
