@@ -11,7 +11,7 @@
 1. Create keyspace `CREATE KEYSPACE traderie_cassandra WITH replication = {'class' : 'SimpleStrategy', 'replication_factor' : 1};`
 
 ### RabbitMQ
-1. use docker `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
+1. use docker `docker run -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
 
 ### Media Server
 1. pull CouchDB `docker pull couchdb`
