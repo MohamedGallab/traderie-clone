@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -24,6 +26,7 @@ import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
 public class JwtUtils {
     @Value("${jwt.secret}")
     private String base64SecretBytes;
+    private Map<String, Date> tokenBlacklist = new ConcurrentHashMap<>();
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -74,6 +77,19 @@ public class JwtUtils {
 
     public Boolean isTokenValid(String token,UserDetails userDetails) {
         final String username= extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlacklisted(token));
+    }
+
+    public void invalidateToken(String token) {
+        Date expiration = Date.from(Instant.now());
+        tokenBlacklist.put(token, expiration);
+    }
+
+    private boolean isTokenBlacklisted(String token) {
+        Date expiration = tokenBlacklist.getOrDefault(token,null);
+        if(expiration==null){
+            return false;
+        }
+        return expiration.before(new Date());
     }
 }

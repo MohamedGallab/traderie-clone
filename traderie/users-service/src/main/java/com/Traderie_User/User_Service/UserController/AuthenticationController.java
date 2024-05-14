@@ -1,15 +1,18 @@
 package com.Traderie_User.User_Service.UserController;
 
 
+import com.Traderie_User.User_Service.Commands.AbstractCommand;
+import com.Traderie_User.User_Service.Commands.LoginCommand;
 import com.Traderie_User.User_Service.Configuration.JwtUtils;
-import com.Traderie_User.User_Service.Responses.ResponseMessage;
 import com.Traderie_User.User_Service.UserService.UserService;
 import com.Traderie_User.User_Service.dto.AuthenticationRequest;
 import com.Traderie_User.User_Service.dto.LoginRequestDto;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -26,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     private final AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsService userDetailsService;
@@ -34,15 +42,19 @@ public class AuthenticationController {
     @PostMapping("/login")
     @PermitAll
     @ResponseStatus(HttpStatus.OK)
-
-    public ResponseEntity<ResponseMessage> login(
-            @Valid @RequestBody LoginRequestDto loginRequest)
-     {
-         ResponseMessage responseMessage = (ResponseMessage) userService.login(loginRequest);
-         if(responseMessage.getStatus().equals("400"))
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
-         else
-             return ResponseEntity.status(Integer.parseInt(responseMessage.getStatus())).body(responseMessage);
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        AbstractCommand command = new LoginCommand(loginRequest);
+        Object user = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+                new ParameterizedTypeReference<Object>() {
+                });
+        List<String> response = List.of(user.toString().split("="));
+        if(Objects.equals(response.get(2).substring(0,3), "404")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found, Try Sign Up");}
+        else if( Objects.equals(response.get(2).substring(0,3), "401")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong password");}
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body("Login Successfully");
+        }
     }
 
 
