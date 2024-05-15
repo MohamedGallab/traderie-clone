@@ -6,7 +6,7 @@ import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
-@EnableCassandraRepositories(basePackages = "com.massivelyflammableapps")
+@EnableCassandraRepositories
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
 	@Override
     public SchemaAction getSchemaAction() {
@@ -15,7 +15,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Override
 	public String[] getEntityBasePackages() {
-		return new String[]{"com.massivelyflammableapps"};
+		return new String[]{"com.massivelyflammableapps.offers.model"};
 	}
 
 	@Override

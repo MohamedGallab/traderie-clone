@@ -6,6 +6,7 @@ logging:
 server:
   port: 8080
 
+
 spring:
   application:
     name: traderie_user
@@ -29,4 +30,10 @@ spring:
           type: uuid-char
     show-sql: true
 
+jwt:
+  secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=
+
+service:
+  queue:
+    name: users_queue
 

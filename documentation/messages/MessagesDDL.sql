@@ -1,6 +1,5 @@
 CREATE KEYSPACE messaging WITH replication = { 'class': 'SimpleStrategy',
 'replication_factor': 3 };
-
 CREATE TABLE messaging.messages (
     message_id uuid,
     sender_id uuid,
@@ -10,7 +9,6 @@ CREATE TABLE messaging.messages (
     chat_id uuid,
     PRIMARY KEY (chat_id, created_at, message_id)
 );
-
 CREATE TABLE messaging.chats (
     chat_id uuid PRIMARY KEY,
     initiator_id uuid,

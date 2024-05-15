@@ -5,25 +5,36 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
 @Component
 public class JwtUtils {
+    @Value("${jwt.secret}")
+    private String base64SecretBytes;
 
-    private static final Key secret = MacProvider.generateKey(SignatureAlgorithm.HS256);
-    private static final byte[] secretBytes = secret.getEncoded();
-    private static final String base64SecretBytes = Base64.getEncoder().encodeToString(secretBytes);
+    private static final String BLACKLIST_KEY = "blacklistedTokens";
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    private Map<String, Date> tokenBlacklist = new ConcurrentHashMap<>();
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -62,6 +73,8 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, UserDetails userDetails) {
+        System.out.println(base64SecretBytes);
+
         return Jwts.builder().setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .claim("authorities", userDetails.getAuthorities())
@@ -72,6 +85,21 @@ public class JwtUtils {
 
     public Boolean isTokenValid(String token,UserDetails userDetails) {
         final String username= extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlacklisted(token));
+    }
+
+    public void invalidateToken(String token) {
+        Date expiration = Date.from(Instant.now());
+        tokenBlacklist.put(token, expiration);
+        redisTemplate.opsForSet().add(BLACKLIST_KEY, token);
+    }
+
+    private boolean isTokenBlacklisted(String token) {
+        Date expiration = tokenBlacklist.getOrDefault(token,null);
+        if(expiration==null){
+            return false;
+        }
+        return redisTemplate.opsForSet().isMember(BLACKLIST_KEY, token);
+        //return expiration.before(new Date());
     }
 }

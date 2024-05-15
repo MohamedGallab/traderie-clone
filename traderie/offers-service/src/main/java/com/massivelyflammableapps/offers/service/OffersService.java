@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.offers.model.Offer;
@@ -30,6 +31,7 @@ public class OffersService {
     @Autowired
     private OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
 
+    @Cacheable("offersCache")
     public List<Offer> getAllOffers() {
         return offersRepository.findAll();
     }
@@ -87,18 +89,22 @@ public class OffersService {
         return response;
     }
 
+    @Cacheable("offersCache")
     public List<OfferByListing> getOfferByListing(UUID listingId) {
         return offersByListingRepository.findByListingId(listingId);
     }
 
+    @Cacheable("offersCache")
     public List<OfferBySeller> getOfferBySeller(UUID sellerId) {
         return offersBySellerRepository.findBySellerId(sellerId);
     }
 
+    @Cacheable("offersCache")
     public List<OfferByBuyer> getOfferByBuyer(UUID buyerId) {
         return offersByBuyerRepository.findByBuyerId(buyerId);
     }
 
+    @Cacheable("offersCache")
     public List<OfferBySellerAndBuyer> getOfferBySellerAndBuyer(UUID sellerId, UUID buyerId) {
         return offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
     }
