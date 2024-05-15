@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class OffersService {
     @Autowired
     private OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
 
+    @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO createOffer(OfferDTO request) {
         List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
 
@@ -105,7 +107,7 @@ public class OffersService {
         return response.toDTO();
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable("offers_cache")
     public List<OfferDTO> getAllOffers() {
         var offers = offersRepository.findAll();
         List<OfferDTO> offerDTOs = new ArrayList<>();
@@ -115,7 +117,7 @@ public class OffersService {
         return offerDTOs;
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable("offers_cache")
     public List<OfferDTO> getOfferByListing(UUID listingId) {
         var offers = offersByListingRepository.findByListingId(listingId);
         List<OfferDTO> offerDTOs = new ArrayList<>();
@@ -125,7 +127,7 @@ public class OffersService {
         return offerDTOs;
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable("offers_cache")
     public List<OfferDTO> getOfferBySeller(UUID sellerId) {
         var offers =  offersBySellerRepository.findBySellerId(sellerId);
         List<OfferDTO> offerDTOs = new ArrayList<>();
@@ -135,7 +137,7 @@ public class OffersService {
         return offerDTOs;
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable("offers_cache")
     public List<OfferDTO> getOfferByBuyer(UUID buyerId) {
         var offers =  offersByBuyerRepository.findByBuyerId(buyerId);
         List<OfferDTO> offerDTOs = new ArrayList<>();
@@ -145,7 +147,7 @@ public class OffersService {
         return offerDTOs;
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable("offers_cache")
     public List<OfferDTO> getOfferBySellerAndBuyer(UUID sellerId, UUID buyerId) {
         var offers =  offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
         List<OfferDTO> offerDTOs = new ArrayList<>();
