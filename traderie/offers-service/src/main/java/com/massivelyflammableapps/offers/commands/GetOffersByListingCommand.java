@@ -3,8 +3,8 @@ package com.massivelyflammableapps.offers.commands;
 import java.util.List;
 import java.util.UUID;
 
-import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.service.OffersService;
+import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class GetOffersByListingCommand extends AbstractCommand {
     @NonNull
     private UUID listingId;
 
-    public List<OfferByListing> execute() {
+    public List<OfferDTO> execute() {
         return offersService.getOfferByListing(listingId);
     }
 }

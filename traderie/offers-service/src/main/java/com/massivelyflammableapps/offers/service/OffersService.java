@@ -116,22 +116,42 @@ public class OffersService {
     }
 
     @Cacheable("${service.cache.name}")
-    public List<OfferByListing> getOfferByListing(UUID listingId) {
-        return offersByListingRepository.findByListingId(listingId);
+    public List<OfferDTO> getOfferByListing(UUID listingId) {
+        var offers = offersByListingRepository.findByListingId(listingId);
+        List<OfferDTO> offerDTOs = new ArrayList<>();
+        for (OfferByListing offer : offers) {
+            offerDTOs.add(offer.toDTO());
+        }
+        return offerDTOs;
     }
 
     @Cacheable("${service.cache.name}")
-    public List<OfferBySeller> getOfferBySeller(UUID sellerId) {
-        return offersBySellerRepository.findBySellerId(sellerId);
+    public List<OfferDTO> getOfferBySeller(UUID sellerId) {
+        var offers =  offersBySellerRepository.findBySellerId(sellerId);
+        List<OfferDTO> offerDTOs = new ArrayList<>();
+        for (OfferBySeller offer : offers) {
+            offerDTOs.add(offer.toDTO());
+        }
+        return offerDTOs;
     }
 
     @Cacheable("${service.cache.name}")
-    public List<OfferByBuyer> getOfferByBuyer(UUID buyerId) {
-        return offersByBuyerRepository.findByBuyerId(buyerId);
+    public List<OfferDTO> getOfferByBuyer(UUID buyerId) {
+        var offers =  offersByBuyerRepository.findByBuyerId(buyerId);
+        List<OfferDTO> offerDTOs = new ArrayList<>();
+        for (OfferByBuyer offer : offers) {
+            offerDTOs.add(offer.toDTO());
+        }
+        return offerDTOs;
     }
 
     @Cacheable("${service.cache.name}")
-    public List<OfferBySellerAndBuyer> getOfferBySellerAndBuyer(UUID sellerId, UUID buyerId) {
-        return offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
+    public List<OfferDTO> getOfferBySellerAndBuyer(UUID sellerId, UUID buyerId) {
+        var offers =  offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
+        List<OfferDTO> offerDTOs = new ArrayList<>();
+        for (OfferBySellerAndBuyer offer : offers) {
+            offerDTOs.add(offer.toDTO());
+        }
+        return offerDTOs;
     }
 }

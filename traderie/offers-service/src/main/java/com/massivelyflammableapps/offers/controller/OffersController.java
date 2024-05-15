@@ -16,6 +16,10 @@ import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
 import com.massivelyflammableapps.shared.dto.offers.CreateOfferRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetAllOffersRequest;
+import com.massivelyflammableapps.shared.dto.offers.GetOffersByBuyerRequest;
+import com.massivelyflammableapps.shared.dto.offers.GetOffersByListingRequest;
+import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerRequest;
+import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,60 +74,60 @@ public class OffersController {
         }
     }
 
-    // @GetMapping(params = { "listingId" })
-    // public ResponseEntity<List<OfferByListing>> getOfferByListing(@RequestParam UUID listingId) {
-    //     try {
-    //         AbstractCommand command = new GetOffersByListingCommand(listingId);
-    //         List<OfferByListing> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
-    //                 new ParameterizedTypeReference< List<OfferByListing>>() {
-    //                 });
-    //         return ResponseEntity.ok(response);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping(params = { "listingId" })
+    public ResponseEntity<List<OfferDTO>> getOfferByListing(@RequestParam UUID listingId) {
+        try {
+            GetOffersByListingRequest command = new GetOffersByListingRequest(listingId);
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference< List<OfferDTO>>() {
+                    });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
-    // @GetMapping(params = { "sellerId" })
-    // public ResponseEntity<List<OfferBySeller>> getOfferBySeller(@RequestParam UUID sellerId) {
-    //     try {
-    //         AbstractCommand command = new GetOffersBySellerCommand(sellerId);
-    //         List<OfferBySeller> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
-    //                 new ParameterizedTypeReference< List<OfferBySeller>>() {
-    //                 });
-    //         return ResponseEntity.ok(response);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping(params = { "sellerId" })
+    public ResponseEntity<List<OfferDTO>> getOfferBySeller(@RequestParam UUID sellerId) {
+        try {
+            GetOffersBySellerRequest command = new GetOffersBySellerRequest(sellerId);
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference< List<OfferDTO>>() {
+                    });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
-    // @GetMapping(params = { "buyerId" })
-    // public ResponseEntity<List<OfferByBuyer>> getOfferByBuyer(@RequestParam UUID buyerId) {
-    //     try {
-    //         AbstractCommand command = new GetOffersByBuyerCommand(buyerId);
-    //         List<OfferByBuyer> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
-    //                 new ParameterizedTypeReference< List<OfferByBuyer>>() {
-    //                 });
-    //         return ResponseEntity.ok(response);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping(params = { "buyerId" })
+    public ResponseEntity<List<OfferDTO>> getOfferByBuyer(@RequestParam UUID buyerId) {
+        try {
+            GetOffersByBuyerRequest command = new GetOffersByBuyerRequest(buyerId);
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference< List<OfferDTO>>() {
+                    });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
-    // @GetMapping(params = { "sellerId", "buyerId" })
-    // public ResponseEntity<List<OfferBySellerAndBuyer>> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,
-    //         @RequestParam UUID buyerId) {
-    //     try {
-    //         AbstractCommand command = new GetOffersBySellerAndBuyerCommand(sellerId,buyerId);
-    //         List<OfferBySellerAndBuyer> response = rabbitTemplate.convertSendAndReceiveAsType("", "hello",command,
-    //         new ParameterizedTypeReference<List<OfferBySellerAndBuyer>>() {
-    //         });
-    //         return ResponseEntity.ok(response);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping(params = { "sellerId", "buyerId" })
+    public ResponseEntity<List<OfferDTO>> getOfferBySellerAndBuyer(@RequestParam UUID sellerId,
+            @RequestParam UUID buyerId) {
+        try {
+            GetOffersBySellerAndBuyerRequest command = new GetOffersBySellerAndBuyerRequest(sellerId,buyerId);
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName,command,
+            new ParameterizedTypeReference<List<OfferDTO>>() {
+            });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
