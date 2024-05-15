@@ -17,5 +17,3 @@ spring:
 service:
   queue:
     name: offers_queue
-  cache:
-    name: offers_cache

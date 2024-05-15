@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class OffersService {
     @Autowired
     private OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
 
+    @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO createOffer(OfferDTO request) {
         List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
 
@@ -105,7 +107,7 @@ public class OffersService {
         return response.toDTO();
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable(value = "offers_cache")
     public List<OfferDTO> getAllOffers() {
         var offers = offersRepository.findAll();
         List<OfferDTO> offerDTOs = new ArrayList<>();
@@ -115,22 +117,22 @@ public class OffersService {
         return offerDTOs;
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable(value = "offers_cache")
     public List<OfferByListing> getOfferByListing(UUID listingId) {
         return offersByListingRepository.findByListingId(listingId);
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable(value = "offers_cache")
     public List<OfferBySeller> getOfferBySeller(UUID sellerId) {
         return offersBySellerRepository.findBySellerId(sellerId);
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable(value = "offers_cache")
     public List<OfferByBuyer> getOfferByBuyer(UUID buyerId) {
         return offersByBuyerRepository.findByBuyerId(buyerId);
     }
 
-    @Cacheable("${service.cache.name}")
+    @Cacheable(value = "offers_cache")
     public List<OfferBySellerAndBuyer> getOfferBySellerAndBuyer(UUID sellerId, UUID buyerId) {
         return offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
     }
