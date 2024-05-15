@@ -5,7 +5,6 @@ import com.Traderie_User.User_Service.Commands.*;
 import com.Traderie_User.User_Service.Configuration.JwtUtils;
 import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserRegistery.UserRepository;
-import com.Traderie_User.User_Service.UserService.UserService;
 import com.Traderie_User.User_Service.dto.UserRegisterDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,9 +13,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public class UserController {
     @Value("${jwt.secret}")
     private String base64SecretBytes;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    @Value("${service.queue.name}")
+    private String queueName;
 
     @Autowired
-    private UserService userService;
+    private JwtUtils jwtUtils;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -49,7 +48,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(
            @RequestBody UserRegisterDto userRegister) {
         AbstractCommand command = new RegisterCommand(userRegister);
-        Object user = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+        Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
         System.out.println(user);
@@ -63,18 +62,19 @@ public class UserController {
 
         @GetMapping
     public ResponseEntity<Object> getUserInfo(
-            @RequestParam String token
-    ) {
-            Optional<User> userDetails = getUserDetailsFromToken(token);
+                @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+        ) {
+            String tokenwWithoutHeader= token.substring(7);
+            Optional<User> userDetails = getUserDetailsFromToken(tokenwWithoutHeader);
             User user = userDetails.get();
-            if (!jwtUtils.isTokenValid(token, user)) {
+            if (!jwtUtils.isTokenValid(tokenwWithoutHeader, user)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
-        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(tokenwWithoutHeader).getBody();
         String username = claims.getSubject();
         System.out.println(username+ " "+ claims);
             AbstractCommand command = new GetUserInfoCommand(username);
-            Object response =rabbitTemplate.convertSendAndReceive("", "hello", command);
+            Object response =rabbitTemplate.convertSendAndReceive("", queueName, command);
 
             if (response==null) {
                 return ResponseEntity.notFound().build();
@@ -85,10 +85,11 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(
-            @RequestParam String token
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        AbstractCommand command = new LogoutCommand(token);
-        Object response = rabbitTemplate.convertSendAndReceive("", "hello", command);
+        String tokenwWithoutHeader= token.substring(7);
+        AbstractCommand command = new LogoutCommand(tokenwWithoutHeader);
+        Object response = rabbitTemplate.convertSendAndReceive("",queueName, command);
         if (response==null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -98,17 +99,19 @@ public class UserController {
     //send request for offers and listings to delete the offers/listings
     @DeleteMapping
     public ResponseEntity<String> deleteUser(
-            @RequestParam String token
+
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        Optional<User> userDetails = getUserDetailsFromToken(token);
+        String tokenwWithoutHeader= token.substring(7);
+        Optional<User> userDetails = getUserDetailsFromToken(tokenwWithoutHeader);
         User user = userDetails.get();
-        if (!jwtUtils.isTokenValid(token, user)) {
+        if (!jwtUtils.isTokenValid(tokenwWithoutHeader, user)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(tokenwWithoutHeader).getBody();
         String username = claims.getSubject();
         AbstractCommand command = new DeleteUserCommand(username);
-        Object response = rabbitTemplate.convertSendAndReceive("", "hello", command);
+        Object response = rabbitTemplate.convertSendAndReceive("", queueName, command);
         List<String> res = List.of(response.toString().split("="));
         if(Objects.equals(res.get(3).substring(0,3), "404")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res.get(1));
@@ -119,17 +122,18 @@ public class UserController {
 
     @GetMapping("/status")
     public ResponseEntity<String> getUserStatus(
-            @RequestParam String token
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        Optional<User> userDetails = getUserDetailsFromToken(token);
+        String tokenwWithoutHeader= token.substring(7);
+        Optional<User> userDetails = getUserDetailsFromToken(tokenwWithoutHeader);
         User user = userDetails.get();
-        if (!jwtUtils.isTokenValid(token, user)) {
+        if (!jwtUtils.isTokenValid(tokenwWithoutHeader, user)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(tokenwWithoutHeader).getBody();
         String username = claims.getSubject();
         AbstractCommand command = new GetUserStatus(username);
-        Object response =rabbitTemplate.convertSendAndReceive("", "hello", command);
+        Object response =rabbitTemplate.convertSendAndReceive("", queueName, command);
         if (response==null) {
             return ResponseEntity.notFound().build();
         } else {

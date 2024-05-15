@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,12 @@ import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
 public class JwtUtils {
     @Value("${jwt.secret}")
     private String base64SecretBytes;
+
+    private static final String BLACKLIST_KEY = "blacklistedTokens";
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
     private Map<String, Date> tokenBlacklist = new ConcurrentHashMap<>();
 
     public String extractUsername(String token) {
@@ -83,6 +91,7 @@ public class JwtUtils {
     public void invalidateToken(String token) {
         Date expiration = Date.from(Instant.now());
         tokenBlacklist.put(token, expiration);
+        redisTemplate.opsForSet().add(BLACKLIST_KEY, token);
     }
 
     private boolean isTokenBlacklisted(String token) {
@@ -90,6 +99,7 @@ public class JwtUtils {
         if(expiration==null){
             return false;
         }
-        return expiration.before(new Date());
+        return redisTemplate.opsForSet().isMember(BLACKLIST_KEY, token);
+        //return expiration.before(new Date());
     }
 }

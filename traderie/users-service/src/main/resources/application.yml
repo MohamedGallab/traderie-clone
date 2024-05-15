@@ -33,4 +33,7 @@ spring:
 jwt:
   secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=
 
+service:
+  queue:
+    name: users_queue
 

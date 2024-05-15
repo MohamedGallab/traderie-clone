@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 
 public class AuthenticationController {
+    @Value("${service.queue.name}")
+    private String queueName;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -44,7 +48,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
         AbstractCommand command = new LoginCommand(loginRequest);
-        Object user = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+        Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
         List<String> response = List.of(user.toString().split("="));
