@@ -1,0 +1,39 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: traderie_user
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    password: password
+    url: jdbc:postgresql://localhost:5432/traderie_user
+    username: traderie_user
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        id:
+          new_generator_mappings: false
+          type: uuid-char
+    show-sql: true
+
+jwt:
+  secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=
+
+service:
+  queue:
+    name: users_queue
+
