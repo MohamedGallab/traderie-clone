@@ -10,6 +10,7 @@
         <module name="listings-service" />
         <module name="offers-service" />
         <module name="User_Service" />
+        <module name="review_service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -22,6 +23,7 @@
       <module name="listings-service" options="-parameters" />
       <module name="messages-service" options="-parameters" />
       <module name="offers-service" options="-parameters" />
+      <module name="review_service" options="-parameters" />
     </option>
   </component>
 </project>
