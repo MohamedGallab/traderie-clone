@@ -14,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class GetOffersByListingCommand extends AbstractCommand{
-    
-     private OffersService offersService;
-     @NonNull
-     private UUID listingId;
+public class GetOffersByListingCommand extends AbstractCommand {
+    @NonNull
+    private OffersService offersService;
+    @NonNull
+    private UUID listingId;
 
     public List<OfferByListing> execute() {
         return offersService.getOfferByListing(listingId);

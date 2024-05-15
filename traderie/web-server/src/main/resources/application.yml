@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: offers
+    name: web-server
   rabbitmq:
     host: localhost
     port: 5672
@@ -14,8 +14,18 @@ spring:
       host: localhost
       port: 6379
 
-service:
+offers-service:
   queue:
     name: offers_queue
-  cache:
-    name: offers_cache
+
+listings-service:
+  queue:
+    name: listings_queue
+
+messages-service:
+  queue:
+    name: messages_queue
+
+users-service:
+  queue:
+    name: users_queue

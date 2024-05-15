@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class GetOffersByBuyerCommand extends AbstractCommand{
+    @NonNull
     private OffersService offersService;
     @NonNull
     private UUID buyerId;
