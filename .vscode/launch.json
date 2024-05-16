@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WebServerApplication",
+            "request": "launch",
+            "mainClass": "com.massivelyflammableapps.webserver.WebServerApplication",
+            "projectName": "web-server"
+        },
+        {
+            "type": "java",
             "name": "ControllerApplication",
             "request": "launch",
             "mainClass": "com.massivelyflammableapps.ControllerApplication",

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.service.OffersService;
 import com.massivelyflammableapps.shared.dto.offers.CreateOfferRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetAllOffersRequest;

@@ -8,13 +8,15 @@ import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class GetOffersByBuyerCommand extends AbstractCommand{
+public class GetOffersByBuyerCommand extends AbstractCommand<List<OfferDTO>>{
     @NonNull
     private OffersService offersService;
     @NonNull
