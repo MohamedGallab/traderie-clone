@@ -24,10 +24,10 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 @RestController
-@RequestMapping("api/v1/offers")
+@RequestMapping("api/v1/web-server")
 public class OffersController {
     @Value("${offers-service.queue.name}")
-    private String queueName;
+    private String offersQueueName;
     
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -36,7 +36,7 @@ public class OffersController {
     public ResponseEntity<List<OfferDTO>> getAllOffers() {
         try {
             GetAllOffersRequest command = new GetAllOffersRequest();
-            List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
             return ResponseEntity.ok(offers);
@@ -50,7 +50,7 @@ public class OffersController {
     public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO request) {
         try {
             CreateOfferRequest command = new CreateOfferRequest(request);
-            OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<OfferDTO>() {
                     });
             return ResponseEntity.ok(response);
@@ -64,7 +64,7 @@ public class OffersController {
     public ResponseEntity<List<OfferDTO>> getOfferByListing(@RequestParam UUID listingId) {
         try {
             GetOffersByListingRequest command = new GetOffersByListingRequest(listingId);
-            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference< List<OfferDTO>>() {
                     });
             return ResponseEntity.ok(response);
@@ -78,7 +78,7 @@ public class OffersController {
     public ResponseEntity<List<OfferDTO>> getOfferBySeller(@RequestParam UUID sellerId) {
         try {
             GetOffersBySellerRequest command = new GetOffersBySellerRequest(sellerId);
-            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference< List<OfferDTO>>() {
                     });
             return ResponseEntity.ok(response);
@@ -92,7 +92,7 @@ public class OffersController {
     public ResponseEntity<List<OfferDTO>> getOfferByBuyer(@RequestParam UUID buyerId) {
         try {
             GetOffersByBuyerRequest command = new GetOffersByBuyerRequest(buyerId);
-            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference< List<OfferDTO>>() {
                     });
             return ResponseEntity.ok(response);
@@ -107,7 +107,7 @@ public class OffersController {
             @RequestParam UUID buyerId) {
         try {
             GetOffersBySellerAndBuyerRequest command = new GetOffersBySellerAndBuyerRequest(sellerId,buyerId);
-            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", queueName,command,
+            List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName,command,
             new ParameterizedTypeReference<List<OfferDTO>>() {
             });
             return ResponseEntity.ok(response);
