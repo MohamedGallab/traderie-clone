@@ -1,11 +1,11 @@
 package com.massivelyflammableapps.User_Service.UserController;
 
 
-import com.Traderie_User.User_Service.Commands.AbstractCommand;
-import com.Traderie_User.User_Service.Commands.LoginCommand;
-import com.Traderie_User.User_Service.Configuration.JwtUtils;
-import com.Traderie_User.User_Service.UserService.UserService;
-import com.Traderie_User.User_Service.dto.AuthenticationRequest;
+import com.massivelyflammableapps.User_Service.Commands.AbstractCommand;
+import com.massivelyflammableapps.User_Service.Commands.LoginCommand;
+import com.massivelyflammableapps.User_Service.Configuration.JwtUtils;
+import com.massivelyflammableapps.User_Service.UserService.UserService;
+import com.massivelyflammableapps.shared.dto.users.AuthenticationRequest;
 import com.massivelyflammableapps.shared.dto.users.LoginRequestDto;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;

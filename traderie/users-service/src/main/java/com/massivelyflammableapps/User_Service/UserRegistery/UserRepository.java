@@ -1,6 +1,6 @@
 package com.massivelyflammableapps.User_Service.UserRegistery;
 
-import com.Traderie_User.User_Service.User.User;
+import com.massivelyflammableapps.User_Service.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package com.massivelyflammableapps.User_Service.Configuration;
 
 
-import com.Traderie_User.User_Service.User.UserStatus;
-import com.Traderie_User.User_Service.UserService.UserService;
+import com.massivelyflammableapps.User_Service.User.UserStatus;
+import com.massivelyflammableapps.User_Service.UserService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

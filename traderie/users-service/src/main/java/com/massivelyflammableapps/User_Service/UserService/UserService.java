@@ -1,11 +1,11 @@
 package com.massivelyflammableapps.User_Service.UserService;
 
-import com.Traderie_User.User_Service.Configuration.JwtUtils;
-import com.Traderie_User.User_Service.Responses.ResponseMessage;
+import com.massivelyflammableapps.User_Service.Configuration.JwtUtils;
+import com.massivelyflammableapps.User_Service.Responses.ResponseMessage;
 import com.massivelyflammableapps.User_Service.User.User;
-import com.Traderie_User.User_Service.User.UserStatus;
-import com.Traderie_User.User_Service.UserRegistery.UserRepository;
-import com.Traderie_User.User_Service.Validators.ObjectsValidator;
+import com.massivelyflammableapps.User_Service.User.UserStatus;
+import com.massivelyflammableapps.User_Service.UserRegistery.UserRepository;
+import com.massivelyflammableapps.User_Service.Validators.ObjectsValidator;
 import com.massivelyflammableapps.User_Service.UserRegistery.UserRepository;
 import com.massivelyflammableapps.shared.dto.users.LoginRequestDto;
 import com.massivelyflammableapps.shared.dto.users.UserRegisterDto;

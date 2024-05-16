@@ -10,6 +10,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/traderie/pom.xml" />
+        <option value="$PROJECT_DIR$/traderie/review_service/pom.xml" />
       </list>
     </option>
   </component>
