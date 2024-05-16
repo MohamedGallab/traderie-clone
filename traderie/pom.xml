@@ -19,9 +19,9 @@
 		<module>messages-service</module>
 		<module>users-service</module>
 		<module>review_service</module>
-		<module>controller</module>
 		<module>shared</module>
 		<module>web-server</module>
+		<module>admin-service</module>
 	</modules>
 	<name>traderie</name>
 	<description>Demo project for Spring Boot</description>

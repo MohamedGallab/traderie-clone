@@ -78,8 +78,3 @@ public class AuthenticationController {
         return ResponseEntity.status(400).body("Some error has occurred");
     }
 }
-
-
-
-
-
