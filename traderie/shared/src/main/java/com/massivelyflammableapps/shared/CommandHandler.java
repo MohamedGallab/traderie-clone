@@ -48,6 +48,7 @@ public class CommandHandler {
 
     public Object runIt(String commandClass, Object paramsObj[]) {
         try {
+            @SuppressWarnings("rawtypes")
             Class params[] = new Class[paramsObj.length];
 
             for (int i = 0; i < params.length; i++) {
