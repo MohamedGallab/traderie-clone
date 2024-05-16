@@ -1,4 +1,4 @@
 FROM openjdk:21-jdk
 WORKDIR /usr/app
-COPY . .
+COPY target/messages-service-1.0-SNAPSHOT.jar .
 CMD ["java", "-jar", "messages-service-1.0-SNAPSHOT.jar"]

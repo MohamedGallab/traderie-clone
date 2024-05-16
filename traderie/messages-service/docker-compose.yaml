@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  spring-boot-app:
+    image: messages-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra 
+    depends_on:
+      - cassandra
+      - rabbitmq
+      - redis-stack-server
+    restart: always
+  
+  cassandra:
+    image: cassandra
+    ports:
+      - "9042:9042"
+  
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+  
+  redis-stack-server:
+    image: redis/redis-stack-server
+    ports:
+      - "6379:6379"
+    restart: always
+
+networks:
+  default:
+    driver: bridge
+
+ 
