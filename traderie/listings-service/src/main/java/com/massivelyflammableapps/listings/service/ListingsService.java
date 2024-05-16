@@ -1,20 +1,20 @@
 package com.massivelyflammableapps.listings.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.massivelyflammableapps.listings.dto.CreateListingDTO;
-import com.massivelyflammableapps.listings.dto.GetListingsByGameByProductDTO;
-import com.massivelyflammableapps.listings.dto.GetListingsByGameByUserDTO;
-import com.massivelyflammableapps.listings.dto.ListingUpdateDTO;
+
+import com.massivelyflammableapps.resources.STATE;
+import com.massivelyflammableapps.shared.dto.listings.*;
 import com.massivelyflammableapps.listings.exceptions.UnauthorizedException;
 import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
 import com.massivelyflammableapps.listings.model.ListingByGameByUser;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByProductRepository;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByUserRepository;
-import com.massivelyflammableapps.listings.resources.STATE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class ListingsService {
@@ -24,67 +24,59 @@ public class ListingsService {
     private ListingsByGameByUserRepository listingsByGameByUserRepository;
 
     @Cacheable("listingsCache")
-    public List<ListingByGameByProduct> getAllListingsByGameByProduct(GetListingsByGameByProductDTO request) {
+    public List<ListingDTO> getAllListingsByGameByProduct(GetListingsByGameByProductDTO request) {
         List<ListingByGameByProduct> listingsByGameByProduct = listingsByGameByProductRepository.findByGameIdAndProductIdAndBuying(
                 request.getGameId(), request.getProductId(), request.isBuying());
+        List<ListingDTO> listingsByGameByProductDTO = new ArrayList<ListingDTO>();
         for(int i = 0; i < listingsByGameByProduct.size(); i++) {
-            if(listingsByGameByProduct.get(i).getState() != STATE.ACTIVE) {
-                listingsByGameByProduct.remove(i);
-                i--;
+            if(listingsByGameByProduct.get(i).getState() == STATE.ACTIVE) {
+               listingsByGameByProductDTO.add(listingsByGameByProduct.get(i).toDTO());
             }
         }
-        return listingsByGameByProduct;
+        return listingsByGameByProductDTO;
     }
     @Cacheable("listingsCache")
-    public List<ListingByGameByUser> getAllListingsByGameByUser(GetListingsByGameByUserDTO request) {
+    public List<ListingDTO> getAllListingsByGameByUser(GetListingsByGameByUserDTO request) {
         List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 request.getUserId(), request.getGameId(), request.isBuying());
+        List<ListingDTO> listingsByGameByProductDTO = new ArrayList<ListingDTO>();
         for(int i = 0; i < listingsByUserByGame.size(); i++) {
-            if( listingsByUserByGame.get(i).getState() != STATE.ACTIVE) {
-                listingsByUserByGame.remove(i);
-                i--;
+            if(listingsByUserByGame.get(i).getState() == STATE.ACTIVE) {
+                listingsByGameByProductDTO.add(listingsByUserByGame.get(i).toDTO());
             }
         }
-        return listingsByUserByGame;
+        return listingsByGameByProductDTO;
     }
     @Cacheable("listingsCache")
-    public List<ListingByGameByUser> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
+    public List<ListingDTO> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
 
         // TODO Decode token from the cache
         UUID userId = UUID.fromString("TOKEN DECODE PLS");
 
         List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 userId, request.getGameId(), request.isBuying());
+        List<ListingDTO> listingsByGameByProductDTO = new ArrayList<ListingDTO>();
         for(int i = 0; i < listingsByUserByGame.size(); i++) {
             if(request.isHistory() && listingsByUserByGame.get(i).getState() == STATE.ACTIVE) {
-                listingsByUserByGame.remove(i);
-                i--;
+              continue;
             }
             if(!request.isHistory() && listingsByUserByGame.get(i).getState() != STATE.ACTIVE) {
-                listingsByUserByGame.remove(i);
-                i--;
+                continue;
             }
+            listingsByGameByProductDTO.add(listingsByUserByGame.get(i).toDTO());
         }
-        return listingsByUserByGame;
+        return listingsByGameByProductDTO;
     }
 
-    public ListingByGameByProduct createListing(CreateListingDTO request) {
+    public ListingDTO createListing(ListingDTO request) {
         // TODO Decode token from the cache
-        UUID userId = UUID.fromString("TOKEN DECODE PLS");
+        request.setUserId(UUID.fromString("TOKEN DECODE PLS"));
 
-        ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(
-                request.getProductId(),
-                request.isBuying(),
-                request.getGameId(),
-                request.getProductName(),
-                request.getProductIcon(),
-                request.getQuantity(),
-                userId,
-                request.getDesiredOffer());
+        ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(request);
         listingsByGameByProductRepository.save(newListingByGameByProduct);
 
         ListingByGameByUser newListingByGameByUser = new ListingByGameByUser(
-                userId,
+                request.getUserId(),
                 request.getGameId(),
                 request.isBuying(),
                 newListingByGameByProduct.getListingId(),
@@ -93,10 +85,10 @@ public class ListingsService {
                 newListingByGameByProduct.getQuantity(),
                 newListingByGameByProduct.getDesiredOffer());
         listingsByGameByUserRepository.save(newListingByGameByUser);
-        return newListingByGameByProduct;
+        return newListingByGameByProduct.toDTO();
     }
 
-    public ListingByGameByProduct updateListingState(ListingUpdateDTO request) throws UnauthorizedException {
+    public ListingDTO updateListingState(ListingUpdateDTO request) throws UnauthorizedException {
         // TODO Decode token from the cache
         UUID userId = UUID.fromString("TOKEN DECODE PLS");
         // TODO I dont know what deez is
@@ -111,6 +103,6 @@ public class ListingsService {
                 listingByGameByProduct.getTimestamp(), listingByGameByProduct.getListingId());
         listingByGameByUser.setState(request.getState());
         listingsByGameByUserRepository.save(listingByGameByUser);
-        return listingsByGameByProductRepository.save(listingByGameByProduct);
+        return listingsByGameByProductRepository.save(listingByGameByProduct).toDTO();
     }
 }

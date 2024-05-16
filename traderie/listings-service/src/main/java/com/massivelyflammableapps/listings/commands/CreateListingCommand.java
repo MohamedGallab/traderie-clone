@@ -1,25 +1,25 @@
 package com.massivelyflammableapps.listings.commands;
 
-import com.massivelyflammableapps.listings.dto.CreateListingDTO;
-import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
+
+
 import com.massivelyflammableapps.listings.service.ListingsService;
+import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CreateListingCommand extends AbstractCommand<ListingByGameByProduct> {
+public class CreateListingCommand extends AbstractCommand<ListingDTO> {
     @NonNull
     private ListingsService listingsService;
     @NonNull
-    private CreateListingDTO createListingDTO;
+    private ListingDTO createListingDTO;
     
     @Override
-    public ListingByGameByProduct execute() {
+    public ListingDTO execute() {
         return listingsService.createListing(createListingDTO);
     }
 }

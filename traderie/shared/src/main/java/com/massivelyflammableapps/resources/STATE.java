@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.listings.resources;
+package com.massivelyflammableapps.resources;
 
 public enum STATE {
     ACTIVE,

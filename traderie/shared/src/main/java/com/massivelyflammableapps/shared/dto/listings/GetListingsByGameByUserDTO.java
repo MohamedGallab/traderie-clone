@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.listings.dto;
+package com.massivelyflammableapps.shared.dto.listings;
 
 import lombok.Getter;
 
