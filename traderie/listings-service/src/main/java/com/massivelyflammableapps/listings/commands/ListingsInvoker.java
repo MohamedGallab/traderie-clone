@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@RabbitListener(queues = {"${rabbitmq.queue.name}"})
+@RabbitListener(queues = {"${service.queue.name}"})
 public class ListingsInvoker {
     @Autowired
     private ListingsService listingsService;

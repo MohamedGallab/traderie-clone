@@ -2,6 +2,7 @@ package com.massivelyflammableapps.webserver.controllers;
 
 
 import com.massivelyflammableapps.shared.dto.listings.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,11 +16,14 @@ public class ListingsController {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Value("${listings-service.queue.name}")
+    private String listingsQueueName;
+
     @GetMapping
     public ResponseEntity<List<ListingDTO>> getAllListingsByGameByProduct(@RequestBody GetListingsByGameByProductDTO request){
         try {
 
-            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", "listingsQueue", request,
+            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
             return ResponseEntity.ok(listings);
@@ -33,7 +37,7 @@ public class ListingsController {
     public ResponseEntity<List<ListingDTO>> getAllListingsByGameByUser(@RequestBody GetListingsByGameByUserDTO request){
         try {
 
-            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", "listingsQueue", request,
+            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("",listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
             return ResponseEntity.ok(listings);
@@ -47,7 +51,7 @@ public class ListingsController {
     public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetListingsByGameByUserDTO request){
         try {
 
-            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", "listingsQueue", request,
+            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
             return ResponseEntity.ok(listings);
@@ -61,7 +65,7 @@ public class ListingsController {
     public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {
         try {
 
-            ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", "listingsQueue", request,
+            ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });
             return ResponseEntity.ok(response);
@@ -75,7 +79,7 @@ public class ListingsController {
     public ResponseEntity<ListingDTO> updateListingState(@RequestBody ListingUpdateDTO request) {
         try {
 
-            ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", "listingsQueue", request,
+            ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });
             return ResponseEntity.ok(response);
