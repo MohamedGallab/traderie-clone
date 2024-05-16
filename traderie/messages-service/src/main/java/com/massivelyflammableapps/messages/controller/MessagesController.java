@@ -8,11 +8,11 @@ import com.massivelyflammableapps.messages.commands.chats.ChangeArchiveStatusCom
 import com.massivelyflammableapps.messages.commands.chats.GetUserChatsCommand;
 import com.massivelyflammableapps.messages.commands.chats.PostChatCommand;
 import com.massivelyflammableapps.messages.commands.chats.RequestChatCommand;
-import com.massivelyflammableapps.messages.dto.ChatRequest;
 import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.model.ChatByInitiatorAndReceiver;
 import com.massivelyflammableapps.messages.model.Message;
 import com.massivelyflammableapps.messages.service.MessagesService;
+import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

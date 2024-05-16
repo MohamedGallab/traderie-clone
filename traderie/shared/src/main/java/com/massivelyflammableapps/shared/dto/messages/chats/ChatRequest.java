@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.messages.dto;
+package com.massivelyflammableapps.shared.dto.messages.chats;
 
 import java.util.UUID;
 

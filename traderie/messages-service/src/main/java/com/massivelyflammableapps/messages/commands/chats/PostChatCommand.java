@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
-import com.massivelyflammableapps.messages.dto.ChatRequest;
 import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.service.MessagesService;
+import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;

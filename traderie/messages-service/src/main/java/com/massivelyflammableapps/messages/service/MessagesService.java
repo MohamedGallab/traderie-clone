@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.massivelyflammableapps.messages.dto.ChatRequest;
 import com.massivelyflammableapps.messages.model.Chat;
 import com.massivelyflammableapps.messages.model.ChatByInitiator;
 import com.massivelyflammableapps.messages.model.ChatByInitiatorAndReceiver;
@@ -19,6 +18,7 @@ import com.massivelyflammableapps.messages.repository.ChatByInitiatorRepository;
 import com.massivelyflammableapps.messages.repository.ChatByReceiverRepository;
 import com.massivelyflammableapps.messages.repository.ChatRepository;
 import com.massivelyflammableapps.messages.repository.MessageRepository;
+import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
 
 @Service
 public class MessagesService {

@@ -7,6 +7,8 @@ import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import com.massivelyflammableapps.shared.dto.messages.ChatDTO;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,4 +34,9 @@ public class ChatByInitiatorAndReceiver {
     private boolean isAccepted;
 
     private boolean isArchived;
+
+    public ChatDTO toDTO(){
+        return new ChatDTO(chatId, initiatorId, receiverId, createdAt, isAccepted,
+        isArchived);
+    }
 }
