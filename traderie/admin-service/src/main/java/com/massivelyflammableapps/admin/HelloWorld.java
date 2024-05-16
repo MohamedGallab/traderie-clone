@@ -1,0 +1,1 @@
+package com.massivelyflammableapps.admin; public class HelloWorld { public void doit() { System.out.println("Try programiz.pro"); }}

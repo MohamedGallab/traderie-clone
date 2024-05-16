@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: offers
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+service:
+  queue:
+    name: offers_queue
+  classpath: admin-service/src/main/java/com/massivelyflammableapps/admin/

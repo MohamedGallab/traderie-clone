@@ -23,6 +23,8 @@ public class OffersInvoker {
     @Autowired
     private OffersService offersService;
 
+    // Class currnetCommand = null;
+
     @RabbitHandler
     public List<OfferDTO> getAllOffers(@Payload GetAllOffersRequest request) {
         GetAllOffersCommand command = new GetAllOffersCommand(offersService);
@@ -58,9 +60,4 @@ public class OffersInvoker {
         GetOffersBySellerAndBuyerCommand command = new GetOffersBySellerAndBuyerCommand(offersService,request.getSellerId(),request.getBuyerId());
         return command.execute();
     }
-
-    // public <T> T execute(AbstractCommand message) {
-    //     message.setOffersService(offersService);
-    //     return message.execute();
-    // }
 }

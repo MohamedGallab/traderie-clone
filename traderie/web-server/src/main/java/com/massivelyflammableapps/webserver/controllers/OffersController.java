@@ -49,11 +49,6 @@ public class OffersController {
     @PostMapping
     public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO request) {
         try {
-            // AuthenticateJWTRequest command = new AuthenticateJWTRequest(token);
-            // AuthenticateJWTResponse response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
-            //         new ParameterizedTypeReference<AuthenticateJWTResponse>() {
-            //         });
-            // if not authenticated, return 401
             CreateOfferRequest command = new CreateOfferRequest(request);
             OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<OfferDTO>() {
