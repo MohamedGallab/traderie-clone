@@ -24,7 +24,7 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 @RestController
-@RequestMapping("api/v1/web-server")
+@RequestMapping("api/v1/offers")
 public class OffersController {
     @Value("${offers-service.queue.name}")
     private String offersQueueName;

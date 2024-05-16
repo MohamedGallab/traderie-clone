@@ -14,14 +14,12 @@ import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
-import com.massivelyflammableapps.offers.model.OfferedProduct;
 import com.massivelyflammableapps.offers.repository.OffersByBuyerRepository;
 import com.massivelyflammableapps.offers.repository.OffersByListingRepository;
 import com.massivelyflammableapps.offers.repository.OffersBySellerAndBuyerRepository;
 import com.massivelyflammableapps.offers.repository.OffersBySellerRepository;
 import com.massivelyflammableapps.offers.repository.OffersRepository;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
-import com.massivelyflammableapps.shared.dto.offers.OfferedProductDTO;
 
 @Service
 public class OffersService {
@@ -38,65 +36,15 @@ public class OffersService {
 
     @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO createOffer(OfferDTO request) {
-        List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
+        Offer newOffer = new Offer(request);
 
-        for (List<OfferedProductDTO> offeredProductList : request.getOfferedProducts()) {
-            var tempOfferedProduct = new ArrayList<OfferedProduct>();
-            for (OfferedProductDTO item : offeredProductList) {
-                tempOfferedProduct.add(new OfferedProduct(
-                        item.getId(),
-                        item.getGameId(),
-                        item.getProductId(),
-                        item.getQuantity(),
-                        item.getProductName(),
-                        item.getProductIcon()
-                        ));
-            }
-            offeredProducts.add(tempOfferedProduct);
-        }
+        OfferByListing newOfferByListing = new OfferByListing(request);
 
-        Offer newOffer = new Offer(
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                request.getStatus(),
-                offeredProducts);
+        OfferBySeller newOfferBySeller = new OfferBySeller(request);
 
-        OfferByListing newOfferByListing = new OfferByListing(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                offeredProducts);
+        OfferByBuyer newOfferByBuyer = new OfferByBuyer(request);
 
-        OfferBySeller newOfferBySeller = new OfferBySeller(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                offeredProducts);
-
-        OfferByBuyer newOfferByBuyer = new OfferByBuyer(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                offeredProducts);
-
-        OfferBySellerAndBuyer newOfferBySellerAndBuyer = new OfferBySellerAndBuyer(
-                newOffer.getId(),
-                request.getListingId(),
-                request.getBuyerId(),
-                request.getSellerId(),
-                newOffer.getTimestamp(),
-                request.getStatus(),
-                offeredProducts);
+        OfferBySellerAndBuyer newOfferBySellerAndBuyer = new OfferBySellerAndBuyer(request);
 
         Offer response = offersRepository.save(newOffer);
         offersByListingRepository.save(newOfferByListing);
