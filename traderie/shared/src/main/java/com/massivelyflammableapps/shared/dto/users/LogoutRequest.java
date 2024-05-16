@@ -8,7 +8,9 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetUserInfoNStatusNLogoutRequest {
+public class LogoutRequest {
+
     @NonNull
     String username;
+
 }

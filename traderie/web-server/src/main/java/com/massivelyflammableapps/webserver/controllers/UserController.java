@@ -1,8 +1,8 @@
 package com.massivelyflammableapps.webserver.controllers;
 
-import com.massivelyflammableapps.shared.dto.users.GetUserInfoNStatusNLogoutRequest;
-import com.massivelyflammableapps.shared.dto.users.RegisterRequest;
-import com.massivelyflammableapps.shared.dto.users.UserRegisterDto;
+import com.massivelyflammableapps.shared.dto.users.*;
+import jakarta.annotation.security.PermitAll;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class UserController {
     @Value("${jwt.secret}")
     private String base64SecretBytes;
 
-    @Value("${service.queue.name}")
+    @Value("${users-service.queue.name}")
     private String queueName;
 
     @Autowired
@@ -47,27 +47,54 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Sign Up Successful");
     }
 
+    /////move to authenticate route
+    @PostMapping("/login")
+    @PermitAll
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        LoginRequest command = new LoginRequest(loginRequest);
+        Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<Object>() {
+                });
+        List<String> response = List.of(user.toString().split("="));
+        if(Objects.equals(response.get(2).substring(0,3), "404")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found, Try Sign Up");}
+        else if( Objects.equals(response.get(2).substring(0,3), "401")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong password");}
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body("Login Successfully");
+        }
+    }
 
-        @GetMapping
+
+    @GetMapping
     public ResponseEntity<Object> getUserInfo(
                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token
         ) {
-            GetUserInfoNStatusNLogoutRequest command = new GetUserInfoNStatusNLogoutRequest("test3");
-            Object response =rabbitTemplate.convertSendAndReceive("", queueName, command);
-
-            if (response==null) {
-                return ResponseEntity.notFound().build();
-            } else {
-                return ResponseEntity.ok(response);
-            }
+        try {
+            String username= "test";
+            GetUserInfoRequest command = new GetUserInfoRequest(username);
+            Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference<Object>() {
+                    });
+            System.out.println(response+" njjjjj");
+            return ResponseEntity.ok(response);
+        } catch (Exception e)
+        {
+        e.printStackTrace();
+        return ResponseEntity.status(500).build();
+        }
     }
+
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        GetUserInfoNStatusNLogoutRequest command = new GetUserInfoNStatusNLogoutRequest("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyIsImV4cCI6MTcxNTk1OTM3NCwiaWF0IjoxNzE1ODcyOTc0LCJhdXRob3JpdGllcyI6W119.pHabTBXXXSnBFj-5r9CSaB7yvFIzWp1yoLjF7gRnA7Q");
-        Object response = rabbitTemplate.convertSendAndReceive("",queueName, command);
+        LogoutRequest command = new LogoutRequest("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyIsImV4cCI6MTcxNTk1OTM3NCwiaWF0IjoxNzE1ODcyOTc0LCJhdXRob3JpdGllcyI6W119.pHabTBXXXSnBFj-5r9CSaB7yvFIzWp1yoLjF7gRnA7Q");
+        Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<Object>() {
+                });
         if (response==null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -80,8 +107,10 @@ public class UserController {
 
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        GetUserInfoNStatusNLogoutRequest command = new GetUserInfoNStatusNLogoutRequest("test3");
-        Object response = rabbitTemplate.convertSendAndReceive("", queueName, command);
+        DeleteUserRequest command = new DeleteUserRequest("test3");
+        Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<Object>() {
+                });
         List<String> res = List.of(response.toString().split("="));
         if(Objects.equals(res.get(3).substring(0,3), "404")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res.get(1));
@@ -94,8 +123,10 @@ public class UserController {
     public ResponseEntity<String> getUserStatus(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
-        GetUserInfoNStatusNLogoutRequest command = new GetUserInfoNStatusNLogoutRequest("test3");
-        Object response =rabbitTemplate.convertSendAndReceive("", queueName, command);
+        GetUserStatusRequest command = new GetUserStatusRequest("test3");
+        Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<Object>() {
+                });
         if (response==null) {
             return ResponseEntity.notFound().build();
         } else {

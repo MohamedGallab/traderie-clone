@@ -29,3 +29,6 @@ messages-service:
 users-service:
   queue:
     name: users_queue
+
+jwt:
+  secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=

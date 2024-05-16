@@ -39,6 +39,7 @@ public class OffersController {
             List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            System.out.println(offers);
             return ResponseEntity.ok(offers);
         } catch (Exception e) {
             e.printStackTrace();

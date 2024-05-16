@@ -1,10 +1,7 @@
 package com.massivelyflammableapps.User_Service.Commands;
 
 import com.massivelyflammableapps.User_Service.UserService.UserService;
-import com.massivelyflammableapps.User_Service.UserService.UserService;
-import com.massivelyflammableapps.shared.dto.users.GetUserInfoNStatusNLogoutRequest;
-import com.massivelyflammableapps.shared.dto.users.LoginRequest;
-import com.massivelyflammableapps.shared.dto.users.RegisterRequest;
+import com.massivelyflammableapps.shared.dto.users.*;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RabbitListener(queues = {"${service.queue.name}"})
 public class UsersInvoker {
 
     @Autowired
@@ -28,26 +26,26 @@ public class UsersInvoker {
     }
 
     @RabbitHandler
-    public Object getUserInfo(@Payload GetUserInfoNStatusNLogoutRequest userInfoRequest) {
-        GetUserInfoCommand command = new GetUserInfoCommand(userService, userInfoRequest.toString());
+    public Object getUserInfo(@Payload GetUserInfoRequest userInfoRequest) {
+        GetUserInfoCommand command = new GetUserInfoCommand(userService, userInfoRequest.getUsername());
         return command.execute();
     }
 
     @RabbitHandler
-    public Object getUserStatus(@Payload GetUserInfoNStatusNLogoutRequest userInfoRequest) {
-        GetUserStatus command = new GetUserStatus(userService, userInfoRequest.toString());
+    public Object getUserStatus(@Payload GetUserStatusRequest userInfoRequest) {
+        GetUserStatus command = new GetUserStatus(userService, userInfoRequest.getUsername());
         return command.execute();
     }
 
     @RabbitHandler
-    public Object logout(@Payload GetUserInfoNStatusNLogoutRequest userInfoRequest) {
-        LogoutCommand command = new LogoutCommand(userService, userInfoRequest.toString());
+    public Object logout(@Payload LogoutRequest userInfoRequest) {
+        LogoutCommand command = new LogoutCommand(userService, userInfoRequest.getUsername());
         return command.execute();
     }
 
     @RabbitHandler
-    public Object deleteUser(@Payload GetUserInfoNStatusNLogoutRequest userInfoRequest) {
-        DeleteUserCommand command = new DeleteUserCommand(userService, userInfoRequest.toString());
+    public Object deleteUser(@Payload DeleteUserRequest userInfoRequest) {
+        DeleteUserCommand command = new DeleteUserCommand(userService, userInfoRequest.getUsername());
         return command.execute();
     }
 
