@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.massivelyflammableapps</groupId>
-    <artifactId>controller</artifactId>
+    <artifactId>admin-service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

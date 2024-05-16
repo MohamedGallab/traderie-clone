@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AdminApplication",
+            "request": "launch",
+            "mainClass": "com.massivelyflammableapps.admin.AdminApplication",
+            "projectName": "admin-service"
+        },
+        {
+            "type": "java",
             "name": "WebServerApplication",
             "request": "launch",
             "mainClass": "com.massivelyflammableapps.webserver.WebServerApplication",
