@@ -2,6 +2,7 @@ package com.massivelyflammableapps.offers.commands;
 
 import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.service.OffersService;
+import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -13,12 +14,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class CreateOfferCommand extends AbstractCommand {
+    @NonNull
     private OffersService offersService;
     @NonNull
-    private Offer offer;
+    private OfferDTO offer;
     
     @Override
-    public Offer execute() {
+    public OfferDTO execute() {
         return offersService.createOffer(offer);
     }
 }
