@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: messages
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+service:
+  queue:
+    name: messages_queue
+
+logging:
+  file:
+    name: C:/Users/Youse/Documents/traderie-clone/traderie/logs/app.log

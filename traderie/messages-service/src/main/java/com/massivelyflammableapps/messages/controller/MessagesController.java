@@ -2,6 +2,7 @@ package com.massivelyflammableapps.messages.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.massivelyflammableapps.messages.MessagesApplication;
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
 import com.massivelyflammableapps.messages.commands.chats.ChangeAcceptStatusCommand;
 import com.massivelyflammableapps.messages.commands.chats.ChangeArchiveStatusCommand;
@@ -27,17 +28,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 @RestController
 @RequestMapping("api/v1/messages")
 public class MessagesController {
-
     @Autowired
     MessagesService messagesService;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
     @GetMapping
     public List<Message> getChatMessages(@RequestBody Message request) {
@@ -57,6 +61,11 @@ public class MessagesController {
                     command,
                     new ParameterizedTypeReference<List<Chat>>() {
                     });
+
+            logger.debug("A DEBUG Message");
+            logger.info("An INFO Message");
+            logger.warn("A WARN Message");
+            logger.error("An ERROR Message");
             return ResponseEntity.ok(chats);
         } catch (Exception e) {
             e.printStackTrace();
