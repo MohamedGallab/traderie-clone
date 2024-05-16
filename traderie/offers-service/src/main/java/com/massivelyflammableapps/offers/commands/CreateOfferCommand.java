@@ -1,19 +1,20 @@
 package com.massivelyflammableapps.offers.commands;
 
-import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.service.OffersService;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class CreateOfferCommand extends AbstractCommand {
+public class CreateOfferCommand extends AbstractCommand<OfferDTO> {
     @NonNull
     private OffersService offersService;
     @NonNull

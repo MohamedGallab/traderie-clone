@@ -5,7 +5,7 @@ import com.massivelyflammableapps.offers.service.OffersService;
 import lombok.Data;
 
 @Data
-public abstract class AbstractCommand {
+public abstract class AbstractCommand<T> {
     private OffersService offersService;
-    public abstract <T> T execute();
+    public abstract T execute();
 }
