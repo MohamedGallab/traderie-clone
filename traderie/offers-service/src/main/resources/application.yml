@@ -1,5 +1,19 @@
 server:
-    port: 8080
+  port: 8081
+
 spring:
-    application:
-        name: offers
+  application:
+    name: offers
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+service:
+  queue:
+    name: offers_queue
