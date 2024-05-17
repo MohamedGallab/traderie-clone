@@ -12,6 +12,7 @@ import com.massivelyflammableapps.listings.model.ListingByGameByUser;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByProductRepository;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,7 @@ public class ListingsService {
         }
         return listingsByGameByProductDTO;
     }
-
+    @CacheEvict(value = "listingsCache", allEntries = true)
     public ListingDTO createListing(ListingDTO request) {
         // TODO Decode token from the cache
         request.setUserId(UUID.fromString("TOKEN DECODE PLS"));
@@ -87,7 +88,7 @@ public class ListingsService {
         listingsByGameByUserRepository.save(newListingByGameByUser);
         return newListingByGameByProduct.toDTO();
     }
-
+    @CacheEvict(value = "listingsCache", allEntries = true)
     public ListingDTO updateListingState(ListingUpdateDTO request) throws UnauthorizedException {
         // TODO Decode token from the cache
         UUID userId = UUID.fromString("TOKEN DECODE PLS");
