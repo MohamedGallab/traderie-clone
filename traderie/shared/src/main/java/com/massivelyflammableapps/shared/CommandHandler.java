@@ -27,6 +27,7 @@ public class CommandHandler {
 
         File sourceFile = new File(sourcePath);
         if (sourceFile.exists()) {
+            instanceMap.remove(commandClass);
             return false;
         }
 
@@ -50,6 +51,7 @@ public class CommandHandler {
                 return false;
             }
 
+            instanceMap.remove(commandClass);
             return sourceFile.delete();
         } catch (Exception e) {
             e.printStackTrace();
