@@ -2,18 +2,22 @@ package com.massivelyflammableapps.offers.commands;
 
 import java.util.List;
 
-import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.service.OffersService;
+import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
-public class GetAllOffersCommand extends AbstractCommand {
+@EqualsAndHashCode(callSuper = true)
+@RequiredArgsConstructor
+public class GetAllOffersCommand extends AbstractCommand<List<OfferDTO>> {
+    @NonNull
     private OffersService offersService;
 
-    public List<Offer> execute() {
+    public List<OfferDTO> execute() {
         return offersService.getAllOffers();
     }
 }

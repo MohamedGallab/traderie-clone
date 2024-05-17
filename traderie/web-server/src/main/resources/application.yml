@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: web-server
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+offers-service:
+  queue:
+    name: offers_queue
+
+listings-service:
+  queue:
+    name: listings_queue
+
+messages-service:
+  queue:
+    name: messages_queue
+
+users-service:
+  queue:
+    name: users_queue
+
+reviews-service:
+  queue:
+    name: reviews_queue

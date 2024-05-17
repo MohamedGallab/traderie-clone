@@ -1,13 +1,13 @@
 package com.example.review_service.Commands;
 import com.example.review_service.ReviewService.ReviewService;
-import com.example.review_service.dto.ReviewRequestDto;
+import com.massivelyflammableapps.shared.dto.reviews.ReviewRequestDto;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class CreateReviewCommand extends AbstractCommand{
+    @NonNull
     private ReviewService reviewService;
 
     @NonNull
