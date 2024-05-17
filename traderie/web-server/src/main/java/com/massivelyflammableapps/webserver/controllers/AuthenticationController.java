@@ -1,11 +1,7 @@
-package com.massivelyflammableapps.User_Service.UserController;
+package com.massivelyflammableapps.webserver.controllers;
 
-
-import com.massivelyflammableapps.User_Service.Commands.AbstractCommand;
-import com.massivelyflammableapps.User_Service.Commands.LoginCommand;
-import com.massivelyflammableapps.User_Service.Configuration.JwtUtils;
-import com.massivelyflammableapps.User_Service.UserService.UserService;
 import com.massivelyflammableapps.shared.dto.users.AuthenticationRequest;
+import com.massivelyflammableapps.shared.dto.users.LoginRequest;
 import com.massivelyflammableapps.shared.dto.users.LoginRequestDto;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -35,19 +31,17 @@ public class AuthenticationController {
     private String queueName;
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private RabbitTemplate rabbitTemplate;
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsService userDetailsService;
-    private final JwtUtils jwtUtils;
+    //private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
     @PermitAll
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
-        AbstractCommand command = new LoginCommand(loginRequest);
+        LoginRequest command = new LoginRequest(loginRequest);
         Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
@@ -62,21 +56,21 @@ public class AuthenticationController {
     }
 
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(
-            @RequestBody AuthenticationRequest request
-    ){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        if (userDetails != null) {
-            return ResponseEntity.ok(jwtUtils.generateToken(userDetails));
-        }
-        return ResponseEntity.status(400).body("Some error has occurred");
-    }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<String> authenticate(
+//            @RequestBody AuthenticationRequest request
+//    ){
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+//        );
+//
+//
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+//        if (userDetails != null) {
+//            return ResponseEntity.ok(jwtUtils.generateToken(userDetails));
+//        }
+//        return ResponseEntity.status(400).body("Some error has occurred");
+//    }
 }
 
 

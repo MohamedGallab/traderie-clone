@@ -47,26 +47,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Sign Up Successful");
     }
 
-    /////move to authenticate route
-    @PostMapping("/login")
-    @PermitAll
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
-        LoginRequest command = new LoginRequest(loginRequest);
-        Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
-                new ParameterizedTypeReference<Object>() {
-                });
-        List<String> response = List.of(user.toString().split("="));
-        if(Objects.equals(response.get(2).substring(0,3), "404")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found, Try Sign Up");}
-        else if( Objects.equals(response.get(2).substring(0,3), "401")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong password");}
-        else {
-            return ResponseEntity.status(HttpStatus.OK).body("Login Successfully");
-        }
-    }
-
-
     @GetMapping
     public ResponseEntity<Object> getUserInfo(
                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token
