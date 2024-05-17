@@ -5,8 +5,8 @@ import com.massivelyflammableapps.messages.service.MessagesService;
 import lombok.Data;
 
 @Data
-public abstract class MessagesAbstractCommand {
+public abstract class MessagesAbstractCommand<T> {
     private MessagesService messagesService;
 
-    public abstract <T> T execute();
+    public abstract T execute();
 }

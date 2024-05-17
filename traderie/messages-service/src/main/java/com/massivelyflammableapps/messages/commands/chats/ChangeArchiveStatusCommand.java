@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
 import com.massivelyflammableapps.messages.model.Chat;
+import com.massivelyflammableapps.shared.dto.messages.ChatDTO;
 import com.massivelyflammableapps.messages.service.MessagesService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -16,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class ChangeArchiveStatusCommand extends MessagesAbstractCommand {
+public class ChangeArchiveStatusCommand extends MessagesAbstractCommand<ChatDTO> {
     private MessagesService messagesService;
 
     @NonNull
     private UUID chatId;
 
-    public Chat execute() {
+    public ChatDTO execute() {
         return messagesService.changeArchiveStatus(chatId);
     }
 }

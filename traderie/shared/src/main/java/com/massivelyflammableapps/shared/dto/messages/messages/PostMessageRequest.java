@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostMessageRequest {
     @NonNull
-    private MessageDTO request;
+    private MessageDTO message;
 }

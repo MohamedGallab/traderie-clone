@@ -19,6 +19,8 @@ import com.massivelyflammableapps.messages.repository.ChatByReceiverRepository;
 import com.massivelyflammableapps.messages.repository.ChatRepository;
 import com.massivelyflammableapps.messages.repository.MessageRepository;
 import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
+import com.massivelyflammableapps.shared.dto.messages.ChatDTO;
+import com.massivelyflammableapps.shared.dto.messages.MessageDTO;
 
 @Service
 public class MessagesService {
@@ -38,24 +40,26 @@ public class MessagesService {
         ChatByInitiatorAndReceiverRepository chatByInitiatorAndReceiverRepository;
 
         @Cacheable("messages")
-        public List<Message> getChatMessages(Message request) {
+        public List<MessageDTO> getChatMessages(MessageDTO request) {
                 List<Message> chatMessages = messageRepository.findByChatIdAndSenderIdAndReceiverId(request.getChatId(),
                                 request.getSenderId(),
                                 request.getReceiverId());
-                return chatMessages;
+                List<MessageDTO> chatMessagesDTO = new ArrayList<>();
+                chatMessages.forEach(message -> chatMessagesDTO.add(message.toDTO()));
+                return chatMessagesDTO;
         }
 
-        public Message postMessage(Message request) {
+        public MessageDTO postMessage(MessageDTO request) {
                 Message newMessage = new Message(request.getSenderId(), request.getReceiverId(),
                                 request.getMessageText(),
                                 request.getChatId());
 
                 Message response = messageRepository.save(newMessage);
-                return response;
+                return response.toDTO();
         }
 
         @Cacheable("chats")
-        public List<Chat> getUserChats(UUID userId) {
+        public List<ChatDTO> getUserChats(UUID userId) {
                 List<Chat> chatsInitiator = new ArrayList<>();
                 List<ChatByInitiator> chatByInitiators = chatByInitiatorRepository.findByInitiatorId(userId);
                 chatByInitiators.forEach(chatByInitiator -> chatsInitiator.add(chatByInitiator.getChat()));
@@ -66,11 +70,15 @@ public class MessagesService {
 
                 List<Chat> userChats = new ArrayList<>(chatsInitiator);
                 userChats.addAll(chatsReceiver);
+                //convert to DTO
+                List<ChatDTO> userChatsDTO = new ArrayList<>();
+                userChats.forEach(chat -> userChatsDTO.add(chat.toDTO()));
 
-                return userChats;
+
+                return userChatsDTO;
         }
 
-        public Chat postChat(ChatRequest request) {
+        public ChatDTO postChat(ChatRequest request) {
                 Chat newChat = new Chat(
                                 request.getInitiatorId(),
                                 request.getReceiverId(),
@@ -106,10 +114,10 @@ public class MessagesService {
                 chatByReceiverRepository.save(newChatByReceiver);
                 chatByInitiatorAndReceiverRepository.save(newChatByInitiatorAndReceiver);
 
-                return savedChat;
+                return savedChat.toDTO();
         }
 
-        public Chat changeArchiveStatus(UUID chatId) {
+        public ChatDTO changeArchiveStatus(UUID chatId) {
                 Chat chatData = chatRepository.findByChatId(chatId);
                 ChatByInitiator chatByInitiatorData = chatByInitiatorRepository
                                 .findByInitiatorIdAndChatId(chatData.getInitiatorId(), chatId);
@@ -129,10 +137,10 @@ public class MessagesService {
                 chatByReceiverRepository.save(chatByReceiverData);
                 chatByInitiatorAndReceiverRepository.save(chatByInitiatorAndReceiverData);
 
-                return chatData;
+                return chatData.toDTO();
         }
 
-        public Chat changeAcceptStatus(UUID chatId) {
+        public ChatDTO changeAcceptStatus(UUID chatId) {
 
                 Chat chatData = chatRepository.findByChatId(chatId);
                 ChatByInitiator chatByInitiatorData = chatByInitiatorRepository
@@ -153,10 +161,10 @@ public class MessagesService {
                 chatByReceiverRepository.save(chatByReceiverData);
                 chatByInitiatorAndReceiverRepository.save(chatByInitiatorAndReceiverData);
 
-                return chatData;
+                return chatData.toDTO();
         }
 
-        public ChatByInitiatorAndReceiver requestChat(ChatRequest request) {
+        public ChatDTO requestChat(ChatRequest request) {
                 ChatByInitiatorAndReceiver foundedChatByInitiatorAndReceiver = chatByInitiatorAndReceiverRepository
                                 .findByInitiatorIdAndReceiverId(
                                                 request.getInitiatorId(),
@@ -170,13 +178,13 @@ public class MessagesService {
                 }
                 // first interaction, first offer, no existing records
                 if (foundedChatByInitiatorAndReceiver == null) {
-                        Chat newChat = postChat(request);
+                        Chat newChat = new Chat(postChat(request));
                         if (request.getMessageContent() != null & request.getMessageContent() != "") {
-                                postMessage(new Message(
+                                postMessage((new Message(
                                                 request.getInitiatorId(),
                                                 request.getReceiverId(),
                                                 request.getMessageContent(),
-                                                newChat.getChatId()));
+                                                newChat.getChatId())).toDTO());
                         }
                 } else {
                         // not the first interaction
@@ -199,6 +207,6 @@ public class MessagesService {
                         chatRepository.save(foundedChat);
                 }
 
-                return foundedChatByInitiatorAndReceiver;
+                return foundedChatByInitiatorAndReceiver.toDTO();
         }
 }

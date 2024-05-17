@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetChatMessagesRequest {
     @NonNull
-    private MessageDTO request;
+    private MessageDTO message;
 }

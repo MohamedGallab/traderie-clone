@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class CreateListingCommand extends AbstractCommand<ListingDTO> {
     @NonNull
     private ListingsService listingsService;
