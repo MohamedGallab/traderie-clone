@@ -6,24 +6,29 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="shared" />
+        <module name="offers-service" />
+        <module name="users-service" />
+        <module name="User_Service" />
         <module name="messages-service" />
         <module name="listings-service" />
-        <module name="offers-service" />
-        <module name="User_Service" />
+        <module name="web-server" />
+        <module name="admin-service" />
         <module name="review_service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="review_service" target="22" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="User_Service" options="-parameters" />
+      <module name="admin-service" options="-parameters" />
       <module name="listings-service" options="-parameters" />
       <module name="messages-service" options="-parameters" />
       <module name="offers-service" options="-parameters" />
       <module name="review_service" options="-parameters" />
+      <module name="shared" options="-parameters" />
+      <module name="users-service" options="-parameters" />
+      <module name="web-server" options="-parameters" />
     </option>
   </component>
 </project>

@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Frozen;
@@ -45,11 +46,11 @@ public class OfferByBuyer {
     private List<List<OfferedProduct>> offeredProducts;
 
         public OfferByBuyer(OfferDTO offerDTO) {
-        this.id = offerDTO.getId();
+        this.id = UUID.randomUUID();
         this.listingId = offerDTO.getListingId();
         this.buyerId = offerDTO.getBuyerId();
         this.sellerId = offerDTO.getSellerId();
-        this.timestamp = offerDTO.getTimestamp();
+        this.timestamp = new Date().toString();
         this.status = offerDTO.getStatus();
         List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
         for (List<OfferedProductDTO> offeredProductDTOList : offerDTO.getOfferedProducts()) {
