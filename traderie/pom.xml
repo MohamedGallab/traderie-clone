@@ -17,8 +17,8 @@
 		<module>offers-service</module>
 		<module>listings-service</module>
 		<module>messages-service</module>
-		<module>users-service</module>
-		<module>review_service</module>
+		<!-- <module>users-service</module>
+		<module>review_service</module> -->
 		<module>shared</module>
 		<module>web-server</module>
 		<module>admin-service</module>
@@ -56,6 +56,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+					  <id>repackage</id>
+					  <configuration>
+						<classifier>exec</classifier>
+					  </configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
