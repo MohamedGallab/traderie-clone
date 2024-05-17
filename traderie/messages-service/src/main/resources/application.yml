@@ -21,4 +21,4 @@ service:
 
 logging:
   file:
-    name: logs/app.log
+    name: /var/log/app.log

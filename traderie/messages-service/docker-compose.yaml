@@ -5,12 +5,12 @@ services:
     image: messages-service
     ports:
       - "8081:8081"
-    environment:
-      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra 
     depends_on:
       - cassandra
       - rabbitmq
       - redis-stack-server
+    volumes:
+      - ./logs:/var/log
     restart: always
   
   cassandra:
@@ -30,6 +30,26 @@ services:
     ports:
       - "6379:6379"
     restart: always
+
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./docker:/etc/loki
+    command: -config.file=/etc/loki/loki-config.yaml
+
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - ./logs:/var/log
+      - ./docker:/etc/promtail 
+    command: -config.file=/etc/promtail/promtail-config.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
 
 networks:
   default:
