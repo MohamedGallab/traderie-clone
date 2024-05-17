@@ -24,66 +24,61 @@ import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
 import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.messages.*;
 import com.massivelyflammableapps.shared.dto.messages.chats.*;
-import com.massivelyflammableapps.shared.dto.messages.*;
-
-
+import com.massivelyflammableapps.shared.dto.messages.messages.*;
 
 @Service
-@RabbitListener(queues = {"${service.queue.name}"})
+@RabbitListener(queues = { "${service.queue.name}" })
 public class MessagesInvoker {
     @Autowired
     private MessagesService messagesService;
-    
+
     private CommandHandler commandHandler = new CommandHandler();
-    //messages commands
+
+    // messages commands
     @RabbitHandler
-    public MessageDTO postMessage(@Payload PostMessageCommand request) {
+    public MessageDTO postMessage(@Payload PostMessageRequest request) {
         PostMessageCommand command = new PostMessageCommand(messagesService, request.getMessage());
         return command.execute();
     }
 
     @RabbitHandler
-    public List<MessageDTO> getChatMessages(@Payload GetChatMessagesCommand request) {
+    public List<MessageDTO> getChatMessages(@Payload GetChatMessagesRequest request) {
         GetChatMessagesCommand command = new GetChatMessagesCommand(messagesService, request.getMessage());
         return command.execute();
     }
 
-    //chat commands
+    // chat commands
     @RabbitHandler
-    public ChatDTO changeAcceptStatus(@Payload ChangeAcceptStatusCommand request) {
+    public ChatDTO changeAcceptStatus(@Payload ChangeAcceptStatusRequest request) {
         ChangeAcceptStatusCommand command = new ChangeAcceptStatusCommand(messagesService, request.getChatId());
         return command.execute();
     }
 
     @RabbitHandler
-    public ChatDTO changeArchiveStatus(@Payload ChangeArchiveStatusCommand request) {
+    public ChatDTO changeArchiveStatus(@Payload ChangeArchiveStatusRequest request) {
         ChangeArchiveStatusCommand command = new ChangeArchiveStatusCommand(messagesService, request.getChatId());
         return command.execute();
     }
 
     @RabbitHandler
-    public List<ChatDTO> getUserChats(@Payload GetUserChatsCommand request) {
+    public List<ChatDTO> getUserChats(@Payload GetUserChatsRequest request) {
         GetUserChatsCommand command = new GetUserChatsCommand(messagesService, request.getUserId());
         return command.execute();
     }
 
     @RabbitHandler
-    public ChatDTO postChat(@Payload PostChatCommand request) {
+    public ChatDTO postChat(@Payload PostChatRequest request) {
         PostChatCommand command = new PostChatCommand(messagesService, request.getChatRequest());
         return command.execute();
     }
 
     @RabbitHandler
-    public ChatDTO requestChat(@Payload RequestChatCommand request) {
+    public ChatDTO requestChat(@Payload RequestChatRequest request) {
         RequestChatCommand command = new RequestChatCommand(messagesService, request.getChatRequest());
         return command.execute();
     }
 
-    //reflection commands
-    
-
-
-
+    // reflection commands
 
     @RabbitHandler
     public Boolean addCommand(@Payload AddCommandRequest request) {
@@ -103,7 +98,7 @@ public class MessagesInvoker {
         }
         return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
     }
-    
+
     @RabbitHandler
     public Object executeCommand(@Payload ExecuteCommandRequest request) {
         var result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());

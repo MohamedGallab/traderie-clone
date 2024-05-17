@@ -19,48 +19,45 @@ import org.springframework.web.bind.annotation.RestController;
 import com.massivelyflammableapps.shared.dto.messages.chats.*;
 import com.massivelyflammableapps.shared.dto.messages.messages.*;
 import com.massivelyflammableapps.shared.dto.messages.*;
-import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
 
 @RestController
 @RequestMapping("api/v1/messages")
 public class MessagesController {
-    @Value("${offers-service.queue.name}")
+    @Value("${messages-service.queue.name}")
     private String messagesQueueName;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    
     @GetMapping()
-    public ResponseEntity<List<MessageDTO>> getChatMessages(@RequestBody MessageDTO request){
-        try{
+    public ResponseEntity<List<MessageDTO>> getChatMessages(@RequestBody MessageDTO request) {
+        try {
             GetChatMessagesRequest command = new GetChatMessagesRequest(request);
-            List<MessageDTO> messages = rabbitTemplate.convertSendAndReceiveAsType("",messagesQueueName, command,
+            List<MessageDTO> messages = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName, command,
                     new ParameterizedTypeReference<List<MessageDTO>>() {
                     });
             return ResponseEntity.ok(messages);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
 
-
     @PostMapping()
-    public ResponseEntity<MessageDTO> postMessage(@RequestBody MessageDTO request){
-        try{
+    public ResponseEntity<MessageDTO> postMessage(@RequestBody MessageDTO request) {
+        try {
             PostMessageRequest command = new PostMessageRequest(request);
-            MessageDTO message = rabbitTemplate.convertSendAndReceiveAsType("",messagesQueueName, command,
+            MessageDTO message = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName, command,
                     new ParameterizedTypeReference<MessageDTO>() {
                     });
             return ResponseEntity.ok(message);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
 
-    @GetMapping(params = {"userId"})
+    @GetMapping(value = "/getUserChats", params = { "userId" })
     public ResponseEntity<List<ChatDTO>> getUserChats(@RequestParam UUID userId) {
         try {
             GetUserChatsRequest command = new GetUserChatsRequest(userId);
@@ -75,7 +72,7 @@ public class MessagesController {
         }
     }
 
-    @PostMapping()
+    @PostMapping(value = "/postChat")
     public ResponseEntity<ChatDTO> postChat(@RequestBody ChatRequest request) {
         try {
             PostChatRequest command = new PostChatRequest(request);
@@ -90,11 +87,12 @@ public class MessagesController {
         }
     }
 
-    @PostMapping()
+    @PostMapping("/requestChat")
     public ResponseEntity<ChatDTO> requestChat(@RequestBody ChatRequest request) {
         try {
             RequestChatRequest command = new RequestChatRequest(request);
-            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName,
+            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("",
+                    messagesQueueName,
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
@@ -105,11 +103,12 @@ public class MessagesController {
         }
     }
 
-    @PutMapping(params = {"chatId"})
+    @PutMapping(value = "/changeArchiveStatus", params = { "chatId" })
     public ResponseEntity<ChatDTO> changeArchiveStatus(@RequestParam UUID chatId) {
         try {
             ChangeArchiveStatusRequest command = new ChangeArchiveStatusRequest(chatId);
-            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName,
+            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("",
+                    messagesQueueName,
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
@@ -120,11 +119,12 @@ public class MessagesController {
         }
     }
 
-    @PutMapping(params = {"chatId"})
+    @PutMapping(value = "/changeAcceptStatus", params = { "chatId" })
     public ResponseEntity<ChatDTO> changeAcceptStatus(@RequestParam UUID chatId) {
         try {
             ChangeAcceptStatusRequest command = new ChangeAcceptStatusRequest(chatId);
-            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName,
+            ChatDTO chat = rabbitTemplate.convertSendAndReceiveAsType("",
+                    messagesQueueName,
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
