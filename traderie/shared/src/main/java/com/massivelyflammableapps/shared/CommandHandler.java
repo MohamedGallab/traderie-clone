@@ -3,16 +3,27 @@ package com.massivelyflammableapps.shared;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 public class CommandHandler {
-    String classPath = "./traderie/shared/src/main/java/com/massivelyflammableapps/shared/commands/";
+    String classPath = "";
 
     public boolean createCommandFile(String commandClass, String commandCode) {
-        String sourcePath = classPath + commandClass + ".java";
+        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
+
+        String sourcePath = jarPath.toString() + "commands/" + commandClass + ".java";
 
         File sourceFile = new File(sourcePath);
         if (sourceFile.exists()) {
@@ -21,9 +32,7 @@ public class CommandHandler {
 
         try (FileWriter aWriter = new FileWriter(sourcePath, false)) {
             aWriter.write(commandCode);
-            String[] source = { sourcePath };
-            int result = com.sun.tools.javac.Main.compile(source);
-            return (result == 0);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -31,7 +40,9 @@ public class CommandHandler {
     }
 
     public boolean deleteCommandFile(String commandClass) {
-        String sourcePath = classPath + commandClass + ".java";
+        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
+
+        String sourcePath = jarPath.toString() + "commands/" + commandClass + ".java";
 
         try {
             File sourceFile = new File(sourcePath);
@@ -46,7 +57,10 @@ public class CommandHandler {
         }
     }
 
+    private static Map<String, Object> instanceMap = new HashMap<>();
+
     public Object runIt(String commandClass, Object paramsObj[]) {
+        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
         try {
             @SuppressWarnings("rawtypes")
             Class params[] = new Class[paramsObj.length];
@@ -55,20 +69,60 @@ public class CommandHandler {
                 params[i] = (Class<?>) paramsObj[i].getClass();
             }
 
-            URL classUrl = Paths.get(classPath).toUri().toURL();
-            URL[] classUrls = { classUrl };
+            if (instanceMap.containsKey(commandClass)) {
+                Object existingInstance = instanceMap.get(commandClass);
+                Method thisMethod = existingInstance.getClass().getDeclaredMethod("execute", params);
+                return thisMethod.invoke(existingInstance, paramsObj);
+            }
 
-            URLClassLoader urlClassLoader = new URLClassLoader(classUrls);
+            try {
 
-            Class<?> thisClass = urlClassLoader.loadClass("com.massivelyflammableapps.shared.commands." + commandClass);
-            Object iClass = thisClass.getDeclaredConstructor().newInstance();
-            Method thisMethod = thisClass.getDeclaredMethod("execute", params);
-            urlClassLoader.close();
+                String filePath = jarPath.toString() + "commands/" + commandClass + ".java";
+                File javaFile = new File(filePath);
 
-            return thisMethod.invoke(iClass, paramsObj);
+                JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+                Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(javaFile);
+
+                List<String> optionList = new ArrayList<>();
+                optionList.add("-d");
+                optionList.add("out");
+
+                JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, optionList, null,
+                        compilationUnits);
+                boolean success = task.call();
+
+                if (success) {
+                    System.out.println("Compilation successful.");
+
+                    URLClassLoader classLoader = URLClassLoader
+                            .newInstance(new URL[] { new File("out").toURI().toURL() });
+                    String className = "com.massivelyflammableapps.shared." + commandClass;
+                    Class<?> cls = Class.forName(className, true, classLoader);
+
+                    Object instance = cls.getDeclaredConstructor().newInstance();
+                    System.out.println("Instance created: " + instance);
+
+                    instanceMap.put(commandClass, instance);
+
+                    Method thisMethod = cls.getDeclaredMethod("execute", params);
+                    classLoader.close();
+                    return thisMethod.invoke(instance, paramsObj);
+
+                } else {
+                    System.out.println("Compilation failed.");
+                }
+
+                fileManager.close();
+            } catch (IOException | ClassNotFoundException | NoSuchMethodException | InstantiationException
+                    | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+        return null;
     }
 }
