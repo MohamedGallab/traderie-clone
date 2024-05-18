@@ -49,7 +49,7 @@ public class ListingsService {
         return listingsByGameByProductDTO;
     }
     @Cacheable("listingsCache")
-    public List<ListingDTO> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
+    public List<ListingDTO> getAllMyListingsByGame(GetMyListingsByGameDTO request) {
 
         // TODO Decode token from the cache
         UUID userId = UUID.fromString("TOKEN DECODE PLS");

@@ -42,7 +42,7 @@ public class ListingsInvoker {
     return command.execute();
     }
     @RabbitHandler
-    public List<ListingDTO> getAllMyListingsByGame(GetListingsByGameByUserDTO request) {
+    public List<ListingDTO> getAllMyListingsByGame(GetMyListingsByGameDTO request) {
         GetAllMyListingsByGameCommand command = new GetAllMyListingsByGameCommand(listingsService ,request);
         return command.execute();
     }

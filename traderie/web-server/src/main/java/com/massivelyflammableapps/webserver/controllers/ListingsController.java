@@ -33,34 +33,34 @@ public class ListingsController {
         }
     }
 
-    // @GetMapping
-    // public ResponseEntity<List<ListingDTO>> getAllListingsByGameByUser(@RequestBody GetListingsByGameByUserDTO request){
-    //     try {
+     @GetMapping
+     public ResponseEntity<List<ListingDTO>> getAllListingsByGameByUser(@RequestBody GetListingsByGameByUserDTO request){
+         try {
 
-    //         List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("",listingsQueueName, request,
-    //                 new ParameterizedTypeReference<List<ListingDTO>>() {
-    //                 });
-    //         return ResponseEntity.ok(listings);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("",listingsQueueName, request,
+                     new ParameterizedTypeReference<List<ListingDTO>>() {
+                     });
+             return ResponseEntity.ok(listings);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return ResponseEntity.status(500).build();
+         }
+     }
 
-    // figure out how to route based on body
-    // @GetMapping
-    // public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetListingsByGameByUserDTO request){
-    //     try {
 
-    //         List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
-    //                 new ParameterizedTypeReference<List<ListingDTO>>() {
-    //                 });
-    //         return ResponseEntity.ok(listings);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+     @GetMapping
+     public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetMyListingsByGameDTO request){
+         try {
+
+             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
+                     new ParameterizedTypeReference<List<ListingDTO>>() {
+                     });
+             return ResponseEntity.ok(listings);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return ResponseEntity.status(500).build();
+         }
+     }
 
     @PostMapping
     public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {
