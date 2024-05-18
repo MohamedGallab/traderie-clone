@@ -4,9 +4,11 @@ package com.Traderie_User.User_Service.UserController;
 import com.Traderie_User.User_Service.Commands.AbstractCommand;
 import com.Traderie_User.User_Service.Commands.LoginCommand;
 import com.Traderie_User.User_Service.Configuration.JwtUtils;
+import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserService.UserService;
 import com.Traderie_User.User_Service.dto.AuthenticationRequest;
 import com.Traderie_User.User_Service.dto.LoginRequestDto;
+import com.massivelyflammableapps.shared.dto.user.UserDto;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class AuthenticationController {
     @Value("${service.queue.name}")
     private String queueName;
 
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -42,6 +45,7 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
+
 
     @PostMapping("/login")
     @PermitAll
@@ -71,9 +75,10 @@ public class AuthenticationController {
         );
 
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        if (userDetails != null) {
-            return ResponseEntity.ok(jwtUtils.generateToken(userDetails));
+        final User user =  (User)userDetailsService.loadUserByUsername(request.getUsername());
+        UserDto userDto = user.toDTO();
+        if (user != null) {
+            return ResponseEntity.ok(jwtUtils.generateToken(userDto));
         }
         return ResponseEntity.status(400).body("Some error has occurred");
     }

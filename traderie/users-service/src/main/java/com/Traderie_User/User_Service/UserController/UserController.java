@@ -1,11 +1,11 @@
 package com.Traderie_User.User_Service.UserController;
 
-
 import com.Traderie_User.User_Service.Commands.*;
 import com.Traderie_User.User_Service.Configuration.JwtUtils;
 import com.Traderie_User.User_Service.User.User;
 import com.Traderie_User.User_Service.UserRegistery.UserRepository;
 import com.Traderie_User.User_Service.dto.UserRegisterDto;
+import com.massivelyflammableapps.shared.dto.user.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import com.Traderie_User.User_Service.UserRegistery.UserRepository;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -151,6 +154,20 @@ public class UserController {
             // Error parsing token or user not found, return null
             return null;
         }
+    }
+
+
+    @GetMapping("/getUser")
+    public ResponseEntity<UserDto> test(
+            @RequestParam String username
+    ) {
+        System.out.println(username);
+        Optional<User> user =  userRepository.findByUsername("Hala Medhat");
+        UserDto userDto = null;
+        if(user.isPresent()){
+            userDto = user.get().toDTO();
+        }
+        return ResponseEntity.ok(userDto);
     }
 }
 
