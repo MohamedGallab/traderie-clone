@@ -1,7 +1,5 @@
 package com.example.review_service.Review;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 import lombok.*;

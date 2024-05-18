@@ -12,7 +12,7 @@ public class MessagesInvoker {
     private MessagesService messagesService;
 
     @RabbitListener(queues = { "hello" })
-    public <T> T execute(MessagesAbstractCommand message) {
+    public <T> T execute(MessagesAbstractCommand<T> message) {
         message.setMessagesService(messagesService);
         return message.execute();
     }

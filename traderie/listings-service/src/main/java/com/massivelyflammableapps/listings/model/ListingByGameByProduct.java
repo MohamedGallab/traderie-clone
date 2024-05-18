@@ -25,7 +25,7 @@ public class ListingByGameByProduct {
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
         @NonNull
-        private boolean buying;
+        private Boolean buying;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
         @NonNull
@@ -46,7 +46,7 @@ public class ListingByGameByProduct {
         private String productIcon;
 
         @NonNull
-        private int quantity;
+        private Integer quantity;
 
         @NonNull
         private UUID userId;

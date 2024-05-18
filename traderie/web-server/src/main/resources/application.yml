@@ -29,3 +29,7 @@ messages-service:
 users-service:
   queue:
     name: users_queue
+
+reviews-service:
+  queue:
+    name: reviews_queue

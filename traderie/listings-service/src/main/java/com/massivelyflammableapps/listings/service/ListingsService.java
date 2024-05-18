@@ -99,7 +99,7 @@ public class ListingsService {
                 request.getListingId(), request.getTimestamp(), request.getProductId(), request.isBuying());
         listingByGameByProduct.setState(request.getState());
         ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuyingAndTimestampAndListingId(
-                listingByGameByProduct.getUserId(), listingByGameByProduct.getProductId(), listingByGameByProduct.isBuying(),
+                listingByGameByProduct.getUserId(), listingByGameByProduct.getProductId(), listingByGameByProduct.getBuying(),
                 listingByGameByProduct.getTimestamp(), listingByGameByProduct.getListingId());
         listingByGameByUser.setState(request.getState());
         listingsByGameByUserRepository.save(listingByGameByUser);
