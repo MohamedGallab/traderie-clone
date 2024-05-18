@@ -11,5 +11,5 @@ import lombok.NonNull;
 public class DeleteUserRequest {
 
     @NonNull
-    String username;
+    String userId;
 }

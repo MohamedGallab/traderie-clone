@@ -8,7 +8,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetUserInfoRequest {
+public class GetUserDTORequest {
     @NonNull
-    String userId;
+    String username;
 }

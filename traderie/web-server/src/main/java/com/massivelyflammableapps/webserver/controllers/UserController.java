@@ -1,6 +1,7 @@
 package com.massivelyflammableapps.webserver.controllers;
 
 import com.massivelyflammableapps.shared.dto.users.*;
+import com.massivelyflammableapps.webserver.configuration.JwtUtils;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +32,29 @@ public class UserController {
     private String queueName;
 
     @Autowired
+    private UserDetailsService userDetailsService;
+
+    private final JwtUtils jwtUtils;
+    @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @GetMapping("/getUser")
+    public ResponseEntity<UserDto> getDTO(
+            @RequestParam String username
+    ) {
+        try {
+        System.out.println(username);
+        GetUserDTORequest command = new GetUserDTORequest(username);
+        UserDto response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<UserDto>() {
+                });
+        return ResponseEntity.ok(response);
+    } catch (Exception e)
+    {
+        e.printStackTrace();
+        return ResponseEntity.status(500).build();
+    }
+    }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,15 +74,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Object> getUserInfo(
-                @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+            @RequestHeader("UUID") String uuid
         ) {
         try {
-            String username= "test";
-            GetUserInfoRequest command = new GetUserInfoRequest(username);
+            GetUserInfoRequest command = new GetUserInfoRequest(uuid);
             Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
-            System.out.println(response+" njjjjj");
             return ResponseEntity.ok(response);
         } catch (Exception e)
         {
@@ -66,12 +89,31 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login")
+    @PermitAll
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        LoginRequest command = new LoginRequest(loginRequest);
+        Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                new ParameterizedTypeReference<Object>() {
+                });
+
+        final UserDto userDto = (UserDto) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        List<String> response = List.of(user.toString().split("="));
+        if(Objects.equals(response.get(2).substring(0,3), "404")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
+        else if( Objects.equals(response.get(2).substring(0,3), "401")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response.get(1));
+        }
+    }
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+            @RequestHeader("UUID") String uuid
     ) {
-        LogoutRequest command = new LogoutRequest("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyIsImV4cCI6MTcxNTk1OTM3NCwiaWF0IjoxNzE1ODcyOTc0LCJhdXRob3JpdGllcyI6W119.pHabTBXXXSnBFj-5r9CSaB7yvFIzWp1yoLjF7gRnA7Q");
+        LogoutRequest command = new LogoutRequest(uuid);
         Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
@@ -84,10 +126,9 @@ public class UserController {
     //send request for offers and listings to delete the offers/listings
     @DeleteMapping
     public ResponseEntity<String> deleteUser(
-
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+            @RequestHeader("UUID") String uuid
     ) {
-        DeleteUserRequest command = new DeleteUserRequest("test3");
+        DeleteUserRequest command = new DeleteUserRequest(uuid);
         Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
@@ -101,9 +142,9 @@ public class UserController {
 
     @GetMapping("/status")
     public ResponseEntity<String> getUserStatus(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+            @RequestHeader("UUID") String uuid
     ) {
-        GetUserStatusRequest command = new GetUserStatusRequest("test3");
+        GetUserStatusRequest command = new GetUserStatusRequest(uuid);
         Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });

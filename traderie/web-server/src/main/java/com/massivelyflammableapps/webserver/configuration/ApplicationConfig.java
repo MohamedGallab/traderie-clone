@@ -1,16 +1,21 @@
-package com.massivelyflammableapps.User_Service.Configuration;
+package com.massivelyflammableapps.webserver.configuration;
 
 
-import com.massivelyflammableapps.User_Service.UserRegistery.UserRepository;
+import com.massivelyflammableapps.shared.dto.users.GetUserDTORequest;
+import com.massivelyflammableapps.shared.dto.users.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,14 +23,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository repository;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${users-service.queue.name}")
+    private String queueName;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> rabbitTemplate.convertSendAndReceiveAsType("", queueName, new GetUserDTORequest(username),
+                new ParameterizedTypeReference<UserDto>() {
+                });
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

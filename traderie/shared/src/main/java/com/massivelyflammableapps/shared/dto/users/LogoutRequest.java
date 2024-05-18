@@ -11,6 +11,6 @@ import lombok.NonNull;
 public class LogoutRequest {
 
     @NonNull
-    String username;
+    String userId;
 
 }

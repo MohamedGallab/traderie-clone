@@ -1,14 +1,13 @@
 package com.massivelyflammableapps.User_Service.Commands;
 
 import com.massivelyflammableapps.User_Service.UserService.UserService;
-import com.massivelyflammableapps.User_Service.UserService.UserService;
 import lombok.*;
 
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetUserStatus extends AbstractCommand{
+public class GetUserStatusCommand extends AbstractCommand{
     private UserService userService;
 
     @NonNull
