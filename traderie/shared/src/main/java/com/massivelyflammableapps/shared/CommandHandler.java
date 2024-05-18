@@ -3,14 +3,19 @@ package com.massivelyflammableapps.shared;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -21,9 +26,33 @@ public class CommandHandler {
     String classPath = "";
 
     public boolean createCommandFile(String commandClass, String commandCode) {
-        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
+        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String jarPath = "";
+        try {
+            jarPath = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Original JAR Path: " + jarPath);
 
-        String sourcePath = jarPath.toString() + "commands/" + commandClass + ".java";
+        // Remove "nested:" prefix if it exists
+        if (jarPath.startsWith("nested:")) {
+            jarPath = jarPath.substring(7);
+        }
+
+        // Extract the directory path containing the main JAR file
+        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        Matcher matcher = pattern.matcher(jarPath);
+        if (matcher.find()) {
+            jarPath = matcher.group(1);
+        } else {
+            return false;
+        }
+        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+
+        System.out.println("Main JAR Directory Path: " + jarPath);
+
+        String sourcePath = jarPath + "/commands/" + commandClass + ".java";
 
         File sourceFile = new File(sourcePath);
         if (sourceFile.exists()) {
@@ -41,9 +70,31 @@ public class CommandHandler {
     }
 
     public boolean deleteCommandFile(String commandClass) {
-        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
+        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String jarPath = "";
+        try {
+            jarPath = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Original JAR Path: " + jarPath);
 
-        String sourcePath = jarPath.toString() + "commands/" + commandClass + ".java";
+        if (jarPath.startsWith("nested:")) {
+            jarPath = jarPath.substring(7);
+        }
+
+        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        Matcher matcher = pattern.matcher(jarPath);
+        if (matcher.find()) {
+            jarPath = matcher.group(1);
+        } else {
+            return false;
+        }
+        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+
+        System.out.println("Main JAR Directory Path: " + jarPath);
+
+        String sourcePath = jarPath.toString() + "/commands/" + commandClass + ".java";
 
         try {
             File sourceFile = new File(sourcePath);
@@ -62,7 +113,30 @@ public class CommandHandler {
     private static Map<String, Object> instanceMap = new HashMap<>();
 
     public Object runIt(String commandClass, Object paramsObj[]) {
-        String jarPath = "C:/Users/megad/Desktop/Scalable/traderie-clone/traderie/offers-service/target/";
+        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String jarPath = "";
+        try {
+            jarPath = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Original JAR Path: " + jarPath);
+
+        if (jarPath.startsWith("nested:")) {
+            jarPath = jarPath.substring(7);
+        }
+
+        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        Matcher matcher = pattern.matcher(jarPath);
+        if (matcher.find()) {
+            jarPath = matcher.group(1);
+        } else {
+            return false;
+        }
+        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+
+        System.out.println("Main JAR Directory Path: " + jarPath);
+
         try {
             @SuppressWarnings("rawtypes")
             Class params[] = new Class[paramsObj.length];
@@ -79,7 +153,7 @@ public class CommandHandler {
 
             try {
 
-                String filePath = jarPath.toString() + "commands/" + commandClass + ".java";
+                String filePath = jarPath.toString() + "/commands/" + commandClass + ".java";
                 File javaFile = new File(filePath);
 
                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
