@@ -2,6 +2,7 @@ package com.massivelyflammableapps.messages.commands.messages;
 
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
 import com.massivelyflammableapps.messages.model.Message;
+import com.massivelyflammableapps.shared.dto.messages.MessageDTO;
 import com.massivelyflammableapps.messages.service.MessagesService;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -16,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class PostMessageCommand extends MessagesAbstractCommand<Message> {
+public class PostMessageCommand extends MessagesAbstractCommand<MessageDTO> {
     private MessagesService messagesService;
 
     @NonNull
-    private Message request;
+    private MessageDTO message;
 
-    public Message execute() {
-        return messagesService.postMessage(request);
+    public MessageDTO execute() {
+        return messagesService.postMessage(message);
     }
 }

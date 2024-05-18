@@ -5,20 +5,11 @@ spring:
   application:
     name: messages
   rabbitmq:
-    host: rabbitmq
+    host: localhost
     port: 5672
     username: guest
     password: guest
-  data:
-    redis:
-      host: redis-stack-server
-      port: 6379
-  cassandra:
-    contact-points: cassandra:9042
+
 service:
   queue:
     name: messages_queue
-
-logging:
-  file:
-    name: /var/log/app.log
