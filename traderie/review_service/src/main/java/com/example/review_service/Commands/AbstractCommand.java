@@ -4,7 +4,7 @@ import com.example.review_service.ReviewService.ReviewService;
 import lombok.Data;
 
 @Data
-public abstract class AbstractCommand {
+public abstract class AbstractCommand<T> {
     private ReviewService reviewService;
-    public abstract <T> T execute();
+    public abstract T execute();
 }

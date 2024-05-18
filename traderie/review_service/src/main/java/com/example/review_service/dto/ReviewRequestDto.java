@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ public class ReviewRequestDto {
     @NotNull(message = "Receiver Id shouldn't be null")
     private UUID receiverId;
 
+    @Builder.Default
     private String timestamp = String.valueOf(new Date());
 
     @NotNull(message = "Rating shouldn't be null")

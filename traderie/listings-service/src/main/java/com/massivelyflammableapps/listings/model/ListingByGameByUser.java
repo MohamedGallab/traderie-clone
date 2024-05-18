@@ -31,7 +31,7 @@ public class ListingByGameByUser {
 
         @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
         @NonNull
-        private boolean buying;
+        private Boolean buying;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
         @NonNull
@@ -48,7 +48,7 @@ public class ListingByGameByUser {
         private String productIcon ;
 
         @NonNull
-        private int quantity ;
+        private Integer quantity ;
 
         @NonNull
         @Frozen

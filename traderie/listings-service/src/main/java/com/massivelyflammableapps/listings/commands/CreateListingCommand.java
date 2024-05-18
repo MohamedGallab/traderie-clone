@@ -5,9 +5,10 @@ import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 public class CreateListingCommand extends AbstractCommand<ListingDTO> {
     @NonNull
