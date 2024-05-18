@@ -30,8 +30,6 @@ public class OffersInvoker {
 
     private CommandHandler commandHandler = new CommandHandler();
 
-    // Class currnetCommand = null;
-
     @RabbitHandler
     public List<OfferDTO> getAllOffers(@Payload GetAllOffersRequest request) {
         GetAllOffersCommand command = new GetAllOffersCommand(offersService);

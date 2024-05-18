@@ -3,10 +3,7 @@ package com.massivelyflammableapps.listings.model;
 import com.massivelyflammableapps.shared.dto.listings.ProductAmountDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor

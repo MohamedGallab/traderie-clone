@@ -1,14 +1,9 @@
-package com.example.review_service.ReviewController;
+package com.massivelyflammableapps.webserver.controllers;
 
-
-import com.example.review_service.Commands.*;
-import com.example.review_service.Review.ReviewByReceiver;
-import com.example.review_service.Review.ReviewBySender;
-import com.example.review_service.ReviewService.ReviewService;
-import com.example.review_service.dto.EditRequestDto;
-import com.example.review_service.dto.ReviewRequestDto;
+import com.massivelyflammableapps.shared.dto.reviews.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +16,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/review")
 public class ReviewController {
 
-    @Autowired
-    private ReviewService reviewService;
+    @Value("${reviews-service.queue.name}")
+    private String queueName;
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -32,9 +28,8 @@ public class ReviewController {
     public ResponseEntity<Object> createReview(
            @RequestBody ReviewRequestDto reviewRequestDto) {
         try {
-            System.out.println(reviewRequestDto.getSenderId());
-            AbstractCommand command = new CreateReviewCommand(reviewRequestDto);
-            Object newReview = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+            CreateReviewRequest command = new CreateReviewRequest(reviewRequestDto);
+            Object newReview = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
             return ResponseEntity.ok(newReview);
@@ -46,12 +41,12 @@ public class ReviewController {
 
 
     @GetMapping("/sender")
-    public ResponseEntity<List<ReviewBySender>> getReviewBySenderId(@RequestParam UUID senderId
+    public ResponseEntity<List<ReviewRequestDto>> getReviewBySenderId(@RequestParam UUID senderId
     ) {
             try {
-                AbstractCommand command = new GetReviewsBySenderCommand(senderId);
-                List<ReviewBySender> reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
-                        new ParameterizedTypeReference<List<ReviewBySender>>() {
+                GetReviewBySenderRequest command = new GetReviewBySenderRequest(senderId);
+                List<ReviewRequestDto> reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                        new ParameterizedTypeReference<List<ReviewRequestDto>>() {
                         });
                 return ResponseEntity.ok(reviews);
             } catch (Exception e) {
@@ -61,12 +56,12 @@ public class ReviewController {
     }
 
     @GetMapping("/receiver")
-    public ResponseEntity<List<ReviewByReceiver>> getReviewByReceiverId(@RequestParam UUID receiverId
+    public ResponseEntity<List<ReviewRequestDto>> getReviewByReceiverId(@RequestParam UUID receiverId
     ) {
         try {
-            AbstractCommand command = new GetReviewsByReceiverCommand(receiverId);
-            List<ReviewByReceiver> reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
-                    new ParameterizedTypeReference<List<ReviewByReceiver>>() {
+            GetReviewByReceiverRequest command = new GetReviewByReceiverRequest(receiverId);
+            List<ReviewRequestDto> reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference<List<ReviewRequestDto>>() {
                     });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
@@ -79,8 +74,8 @@ public class ReviewController {
     @PutMapping("/reply")
     public ResponseEntity<Object> addReply(@RequestBody EditRequestDto reviewReq) {
         try {
-            AbstractCommand command = new EditReviewCommand(reviewReq);
-            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+            AddReplyReviewRequest command = new AddReplyReviewRequest(reviewReq);
+            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
             return ResponseEntity.ok(reviews);
@@ -92,8 +87,8 @@ public class ReviewController {
     @PutMapping("/edit")
     public ResponseEntity<Object> editReview(@RequestBody EditRequestDto reviewReq) {
         try {
-            AbstractCommand command = new EditReviewCommand(reviewReq);
-            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", "hello", command,
+            EditReviewRequest command = new EditReviewRequest(reviewReq);
+            Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
             return ResponseEntity.ok(reviews);
