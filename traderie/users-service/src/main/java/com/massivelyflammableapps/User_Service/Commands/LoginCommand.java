@@ -1,15 +1,15 @@
 package com.massivelyflammableapps.User_Service.Commands;
 
 import com.massivelyflammableapps.User_Service.UserService.UserService;
-import com.massivelyflammableapps.User_Service.UserService.UserService;
 import com.massivelyflammableapps.shared.dto.users.LoginRequestDto;
 import lombok.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class LoginCommand extends AbstractCommand{
+public class LoginCommand extends AbstractCommand<Object>{
 
     private UserService userService;
     @NonNull

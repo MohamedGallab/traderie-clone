@@ -6,13 +6,11 @@ import com.massivelyflammableapps.User_Service.User.User;
 import com.massivelyflammableapps.User_Service.User.UserStatus;
 import com.massivelyflammableapps.User_Service.UserRegistery.UserRepository;
 import com.massivelyflammableapps.User_Service.Validators.ObjectsValidator;
-import com.massivelyflammableapps.User_Service.UserRegistery.UserRepository;
 import com.massivelyflammableapps.shared.dto.users.LoginRequestDto;
 import com.massivelyflammableapps.shared.dto.users.UserDto;
 import com.massivelyflammableapps.shared.dto.users.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

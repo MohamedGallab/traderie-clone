@@ -1,7 +1,5 @@
 package com.massivelyflammableapps.shared.dto.users;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,8 +35,10 @@ public class UserDto implements UserDetails
 
     private String timezone;
 
+    @Builder.Default
     private String status = "ONLINE"; // Default value is ONLINE
 
+    @Builder.Default
     private LocalDateTime created_at = LocalDateTime.now();
     private String biography;
 

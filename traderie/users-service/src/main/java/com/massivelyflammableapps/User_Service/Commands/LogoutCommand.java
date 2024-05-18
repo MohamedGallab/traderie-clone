@@ -4,8 +4,9 @@ import com.massivelyflammableapps.User_Service.UserService.UserService;
 import lombok.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-public class LogoutCommand extends AbstractCommand{
+public class LogoutCommand extends AbstractCommand<Object>{
 
     @NonNull
     private UserService userService;

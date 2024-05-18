@@ -1,12 +1,9 @@
 package com.massivelyflammableapps.messages.commands.chats;
 
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
-import com.massivelyflammableapps.messages.model.ChatByInitiatorAndReceiver;
 import com.massivelyflammableapps.shared.dto.messages.ChatDTO;
 import com.massivelyflammableapps.messages.service.MessagesService;
 import com.massivelyflammableapps.shared.dto.messages.chats.ChatRequest;
-import com.massivelyflammableapps.shared.dto.messages.chats.RequestChatRequest;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

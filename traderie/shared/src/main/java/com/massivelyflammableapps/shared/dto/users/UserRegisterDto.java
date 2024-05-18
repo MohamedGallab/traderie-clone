@@ -8,15 +8,12 @@ import lombok.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class UserRegisterDto
-{
+public class UserRegisterDto {
 
     @NotNull(message = "User name shouldn't be null")
     @NotEmpty(message = "User name shouldn't be empty")
@@ -36,7 +33,6 @@ public class UserRegisterDto
     @NotNull(message = "Password shouldn't be null")
     private Date date_of_birth;
 
+    @Builder.Default
     private LocalDateTime created_at = LocalDateTime.now();
-
-
 }
