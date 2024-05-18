@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "offers-service.queue.name",
+    "type": "java.lang.String",
+    "description": "A description for 'offers-service.queue.name'"
+  },
+  {
+    "name": "listings-service.queue.name",
+    "type": "java.lang.String",
+    "description": "A description for 'listings-service.queue.name'"
+  },
+  {
+    "name": "messages-service.queue.name",
+    "type": "java.lang.String",
+    "description": "A description for 'messages-service.queue.name'"
+  },
+  {
+    "name": "users-service.queue.name",
+    "type": "java.lang.String",
+    "description": "A description for 'users-service.queue.name'"
+  },
+  {
+    "name": "admin-service.classpath",
+    "type": "java.lang.String",
+    "description": "A description for 'admin-service.classpath'"
+  }
+]}

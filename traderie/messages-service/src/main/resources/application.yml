@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: messages
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+service:
+  queue:
+    name: messages_queue

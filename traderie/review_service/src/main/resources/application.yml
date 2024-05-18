@@ -27,3 +27,6 @@ spring:
         port: 9042
         contact-points: mycassandra
         keyspace-name: traderie_cassandra
+service:
+    queue:
+        name: reviews_queue

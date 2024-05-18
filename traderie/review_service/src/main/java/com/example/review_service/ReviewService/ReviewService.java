@@ -8,15 +8,15 @@ import com.example.review_service.ReviewRepository.ReviewByReceiverRepository;
 import com.example.review_service.ReviewRepository.ReviewBySenderAndReceiverRepository;
 import com.example.review_service.ReviewRepository.ReviewBySenderRepository;
 import com.example.review_service.Validators.ObjectsValidator;
-import com.example.review_service.dto.EditRequestDto;
-import com.example.review_service.dto.ReviewRequestDto;
+import com.massivelyflammableapps.shared.dto.reviews.EditRequestDto;
+import com.massivelyflammableapps.shared.dto.reviews.ReviewRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,12 +88,22 @@ public class ReviewService {
     }
 
     @Cacheable("reviewsCache")
-    public List<ReviewBySender> getReviewBySender(UUID senderId) {
-        return reviewBySenderRepository.findBySenderId(senderId);
+    public List<ReviewRequestDto> getReviewBySender(UUID senderId) {
+        var reviews =reviewBySenderRepository.findBySenderId(senderId);
+        List<ReviewRequestDto> reviewRequestDtos = new ArrayList<>();
+        for (ReviewBySender review : reviews) {
+            reviewRequestDtos.add(review.toDTO());
+        }
+        return reviewRequestDtos;
     }
     @Cacheable("reviewsCache")
-    public List<ReviewByReceiver> getReviewByReceiver(UUID receiverId) {
-        return reviewByReceiverRepository.findByReceiverId(receiverId);
+    public List<ReviewRequestDto> getReviewByReceiver(UUID receiverId) {
+        var reviews =reviewByReceiverRepository.findByReceiverId(receiverId);
+        List<ReviewRequestDto> reviewRequestDtos = new ArrayList<>();
+        for (ReviewByReceiver review : reviews) {
+            reviewRequestDtos.add(review.toDTO());
+        }
+        return  reviewRequestDtos;
     }
 
     @CacheEvict(value = "reviewsCache", key = "#review.senderId")
