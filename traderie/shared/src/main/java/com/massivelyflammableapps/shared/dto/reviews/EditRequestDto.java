@@ -23,6 +23,7 @@ public class EditRequestDto {
     @NotNull(message = "Receiver Id shouldn't be null")
     private UUID receiverId;
 
+    @Builder.Default
     private String timestamp = new Date().toString();
 
     @NotNull(message = "Rating shouldn't be null")

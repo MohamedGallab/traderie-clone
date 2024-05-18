@@ -1,6 +1,5 @@
 package com.massivelyflammableapps.shared.dto.reviews;
 
-import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 import io.micrometer.common.lang.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

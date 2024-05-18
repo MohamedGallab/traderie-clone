@@ -14,7 +14,6 @@ import com.massivelyflammableapps.offers.model.OfferByBuyer;
 import com.massivelyflammableapps.offers.model.OfferByListing;
 import com.massivelyflammableapps.offers.model.OfferBySeller;
 import com.massivelyflammableapps.offers.model.OfferBySellerAndBuyer;
-import com.massivelyflammableapps.offers.model.OfferedProduct;
 import com.massivelyflammableapps.offers.repository.OffersByBuyerRepository;
 import com.massivelyflammableapps.offers.repository.OffersByListingRepository;
 import com.massivelyflammableapps.offers.repository.OffersBySellerAndBuyerRepository;

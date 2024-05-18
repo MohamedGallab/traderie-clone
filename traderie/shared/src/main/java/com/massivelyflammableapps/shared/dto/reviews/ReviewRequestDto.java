@@ -23,6 +23,7 @@ public class ReviewRequestDto {
     @NotNull(message = "Receiver Id shouldn't be null")
     private UUID receiverId;
 
+    @Builder.Default
     private String timestamp = String.valueOf(new Date());
 
     @NotNull(message = "Rating shouldn't be null")

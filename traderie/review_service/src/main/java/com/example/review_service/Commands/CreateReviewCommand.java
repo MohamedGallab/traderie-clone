@@ -4,9 +4,10 @@ import com.massivelyflammableapps.shared.dto.reviews.ReviewRequestDto;
 import lombok.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class CreateReviewCommand extends AbstractCommand{
+public class CreateReviewCommand extends AbstractCommand<Object>{
     @NonNull
     private ReviewService reviewService;
 
