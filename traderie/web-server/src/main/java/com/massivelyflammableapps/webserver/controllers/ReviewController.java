@@ -33,7 +33,6 @@ public class ReviewController {
                     });
             return ResponseEntity.ok(newReview);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
@@ -49,7 +48,6 @@ public class ReviewController {
                         });
                 return ResponseEntity.ok(reviews);
             } catch (Exception e) {
-                e.printStackTrace();
                 return ResponseEntity.status(500).build();
             }
     }
@@ -64,7 +62,6 @@ public class ReviewController {
                     });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
@@ -79,7 +76,6 @@ public class ReviewController {
                     });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
@@ -92,7 +88,6 @@ public class ReviewController {
                     });
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }

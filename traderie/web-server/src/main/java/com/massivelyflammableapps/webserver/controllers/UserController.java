@@ -141,18 +141,6 @@ public class UserController {
             return ResponseEntity.ok(response.toString());
         }
     }
-//    private Optional<User> getUserDetailsFromToken(String token) {
-//        try {
-//            Claims claims = Jwts.parser().setSigningKey(base64SecretBytes).parseClaimsJws(token).getBody();
-//            String username = claims.getSubject();
-//            // Assuming you have a method to load UserDetails from your user repository
-//            Optional<User> userDetails = userRepository.findByUsername(username);
-//            return userDetails;
-//        } catch (Exception e) {
-//            // Error parsing token or user not found, return null
-//            return null;
-//        }
-//    }
 }
 
 

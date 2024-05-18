@@ -27,7 +27,7 @@ public class SpringSecurityConfig{
                 .authorizeHttpRequests(authorize-> authorize.
                                 requestMatchers("api/v1/user/login/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST,"api/v1/user/register")
+                                .requestMatchers("api/v1/user/register")
                                 .permitAll()
 //                                .requestMatchers("api/v1/user/**")
 //                                .permitAll()
