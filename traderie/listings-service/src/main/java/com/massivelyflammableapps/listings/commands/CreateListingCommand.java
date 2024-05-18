@@ -15,7 +15,7 @@ public class CreateListingCommand extends AbstractCommand<ListingDTO> {
     private ListingsService listingsService;
     @NonNull
     private ListingDTO createListingDTO;
-    
+
     @Override
     public ListingDTO execute() {
         return listingsService.createListing(createListingDTO);
