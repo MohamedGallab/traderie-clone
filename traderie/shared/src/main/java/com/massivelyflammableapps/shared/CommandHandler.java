@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
-import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,31 +25,33 @@ public class CommandHandler {
     String classPath = "";
 
     public boolean createCommandFile(String commandClass, String commandCode) {
-        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        String jarPath = "";
-        try {
-            jarPath = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Original JAR Path: " + jarPath);
+        // String path =
+        // CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        // String jarPath = "";
+        // System.out.println("Current Directory: " + currentDir);
+        // try {
+        // jarPath = URLDecoder.decode(path, "UTF-8");
+        // } catch (UnsupportedEncodingException e) {
+        // e.printStackTrace();
+        // }
+        // System.out.println("Original JAR Path: " + jarPath);
 
-        // Remove "nested:" prefix if it exists
-        if (jarPath.startsWith("nested:")) {
-            jarPath = jarPath.substring(7);
-        }
+        // if (jarPath.startsWith("nested:")) {
+        // jarPath = jarPath.substring(7);
+        // }
 
-        // Extract the directory path containing the main JAR file
-        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
-        Matcher matcher = pattern.matcher(jarPath);
-        if (matcher.find()) {
-            jarPath = matcher.group(1);
-        } else {
-            return false;
-        }
-        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+        // Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        // Matcher matcher = pattern.matcher(jarPath);
+        // if (matcher.find()) {
+        // jarPath = matcher.group(1);
+        // } else {
+        // return false;
+        // }
+        // jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
 
-        System.out.println("Main JAR Directory Path: " + jarPath);
+        // System.out.println("Main JAR Directory Path: " + jarPath);
+        String jarPath = System.getProperty("user.dir");
+        jarPath = jarPath.replace("\\", "/");
 
         String sourcePath = jarPath + "/commands/" + commandClass + ".java";
 
@@ -70,30 +71,32 @@ public class CommandHandler {
     }
 
     public boolean deleteCommandFile(String commandClass) {
-        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        String jarPath = "";
-        try {
-            jarPath = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Original JAR Path: " + jarPath);
+        // String path =
+        // CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        // String jarPath = "";
+        // try {
+        // jarPath = URLDecoder.decode(path, "UTF-8");
+        // } catch (UnsupportedEncodingException e) {
+        // e.printStackTrace();
+        // }
+        // System.out.println("Original JAR Path: " + jarPath);
 
-        if (jarPath.startsWith("nested:")) {
-            jarPath = jarPath.substring(7);
-        }
+        // if (jarPath.startsWith("nested:")) {
+        // jarPath = jarPath.substring(7);
+        // }
 
-        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
-        Matcher matcher = pattern.matcher(jarPath);
-        if (matcher.find()) {
-            jarPath = matcher.group(1);
-        } else {
-            return false;
-        }
-        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+        // Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        // Matcher matcher = pattern.matcher(jarPath);
+        // if (matcher.find()) {
+        // jarPath = matcher.group(1);
+        // } else {
+        // return false;
+        // }
+        // jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
 
-        System.out.println("Main JAR Directory Path: " + jarPath);
-
+        // System.out.println("Main JAR Directory Path: " + jarPath);
+        String jarPath = System.getProperty("user.dir");
+        jarPath = jarPath.replace("\\", "/");
         String sourcePath = jarPath.toString() + "/commands/" + commandClass + ".java";
 
         try {
@@ -113,30 +116,32 @@ public class CommandHandler {
     private static Map<String, Object> instanceMap = new HashMap<>();
 
     public Object runIt(String commandClass, Object paramsObj[]) {
-        String path = CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        String jarPath = "";
-        try {
-            jarPath = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Original JAR Path: " + jarPath);
+        // String path =
+        // CommandHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        // String jarPath = "";
+        // try {
+        // jarPath = URLDecoder.decode(path, "UTF-8");
+        // } catch (UnsupportedEncodingException e) {
+        // e.printStackTrace();
+        // }
+        // System.out.println("Original JAR Path: " + jarPath);
 
-        if (jarPath.startsWith("nested:")) {
-            jarPath = jarPath.substring(7);
-        }
+        // if (jarPath.startsWith("nested:")) {
+        // jarPath = jarPath.substring(7);
+        // }
 
-        Pattern pattern = Pattern.compile("(.+?\\.jar)/");
-        Matcher matcher = pattern.matcher(jarPath);
-        if (matcher.find()) {
-            jarPath = matcher.group(1);
-        } else {
-            return false;
-        }
-        jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
+        // Pattern pattern = Pattern.compile("(.+?\\.jar)/");
+        // Matcher matcher = pattern.matcher(jarPath);
+        // if (matcher.find()) {
+        // jarPath = matcher.group(1);
+        // } else {
+        // return false;
+        // }
+        // jarPath = jarPath.replaceFirst("/[^/]+\\.jar$", "");
 
-        System.out.println("Main JAR Directory Path: " + jarPath);
-
+        // System.out.println("Main JAR Directory Path: " + jarPath);
+        String jarPath = System.getProperty("user.dir");
+        jarPath = jarPath.replace("\\", "/");
         try {
             @SuppressWarnings("rawtypes")
             Class params[] = new Class[paramsObj.length];
