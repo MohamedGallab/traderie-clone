@@ -1,11 +1,10 @@
 package com.massivelyflammableapps.offers.commands;
 
-import java.util.List;
-
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.offers.service.OffersService;
@@ -22,75 +21,94 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerReq
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 @Service
-@RabbitListener(queues = {"${service.queue.name}"})
+@RabbitListener(queues = { "${service.queue.name}" })
 public class OffersInvoker {
+
     @Autowired
     private OffersService offersService;
 
     private CommandHandler commandHandler = new CommandHandler();
 
+    @Async
     @RabbitHandler
-    public List<OfferDTO> getAllOffers(@Payload GetAllOffersRequest request) {
-        GetAllOffersCommand command = new GetAllOffersCommand(offersService);
-        return command.execute();
+    public CompletableFuture<List<OfferDTO>> getAllOffers(@Payload GetAllOffersRequest request) {
+        return CompletableFuture.completedFuture(
+                new GetAllOffersCommand(offersService).execute());
     }
 
+    @Async
     @RabbitHandler
-    public OfferDTO createOffer(@Payload CreateOfferRequest request) {
-        CreateOfferCommand command = new CreateOfferCommand(offersService, request.getOffer());
-        return command.execute();
+    public CompletableFuture<OfferDTO> createOffer(@Payload CreateOfferRequest request) {
+        return CompletableFuture.completedFuture(
+                new CreateOfferCommand(offersService, request.getOffer()).execute());
     }
 
+    @Async
     @RabbitHandler
-    public List<OfferDTO> getOffersByListing(@Payload GetOffersByListingRequest request) {
-        GetOffersByListingCommand command = new GetOffersByListingCommand(offersService,request.getListingId());
-        return command.execute();
+    public CompletableFuture<List<OfferDTO>> getOffersByListing(@Payload GetOffersByListingRequest request) {
+        return CompletableFuture.completedFuture(
+                new GetOffersByListingCommand(offersService, request.getListingId()).execute());
     }
 
+    @Async
     @RabbitHandler
-    public List<OfferDTO> getOffersByBuyer(@Payload GetOffersByBuyerRequest request) {
-        GetOffersByBuyerCommand command = new GetOffersByBuyerCommand(offersService,request.getBuyerId());
-        return command.execute();
+    public CompletableFuture<List<OfferDTO>> getOffersByBuyer(@Payload GetOffersByBuyerRequest request) {
+        return CompletableFuture.completedFuture(
+                new GetOffersByBuyerCommand(offersService, request.getBuyerId()).execute());
     }
 
+    @Async
     @RabbitHandler
-    public List<OfferDTO> getOffersBySeller(@Payload GetOffersBySellerRequest request) {
-        GetOffersBySellerCommand command = new GetOffersBySellerCommand(offersService,request.getSellerId());
-        return command.execute();
+    public CompletableFuture<List<OfferDTO>> getOffersBySeller(@Payload GetOffersBySellerRequest request) {
+        return CompletableFuture.completedFuture(
+                new GetOffersBySellerCommand(offersService, request.getSellerId()).execute());
     }
 
+    @Async
     @RabbitHandler
-    public List<OfferDTO> getOffersBySellerAndBuyer(@Payload GetOffersBySellerAndBuyerRequest request) {
-        GetOffersBySellerAndBuyerCommand command = new GetOffersBySellerAndBuyerCommand(offersService,request.getSellerId(),request.getBuyerId());
-        return command.execute();
+    public CompletableFuture<List<OfferDTO>> getOffersBySellerAndBuyer(
+            @Payload GetOffersBySellerAndBuyerRequest request) {
+        return CompletableFuture.completedFuture(
+                new GetOffersBySellerAndBuyerCommand(offersService, request.getSellerId(), request.getBuyerId())
+                        .execute());
     }
 
+    @Async
     @RabbitHandler
-    public Boolean addCommand(@Payload AddCommandRequest request) {
-        return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+    public CompletableFuture<Boolean> addCommand(@Payload AddCommandRequest request) {
+        return CompletableFuture.completedFuture(
+                commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode()));
     }
 
+    @Async
     @RabbitHandler
-    public Boolean deleteCommand(@Payload DeleteCommandRequest request) {
-        return commandHandler.deleteCommandFile(request.getCommandClass());
+    public CompletableFuture<Boolean> deleteCommand(@Payload DeleteCommandRequest request) {
+        return CompletableFuture.completedFuture(
+                commandHandler.deleteCommandFile(request.getCommandClass()));
     }
 
+    @Async
     @RabbitHandler
-    public Boolean updateCommand(@Payload UpdateCommandRequest request) {
+    public CompletableFuture<Boolean> updateCommand(@Payload UpdateCommandRequest request) {
         boolean deleteResult = commandHandler.deleteCommandFile(request.getCommandClass());
         if (!deleteResult) {
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
-        return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+        return CompletableFuture.completedFuture(
+                commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode()));
     }
-    
+
+    @Async
     @RabbitHandler
-    public Object executeCommand(@Payload ExecuteCommandRequest request) {
-        var result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());
+    public CompletableFuture<Object> executeCommand(@Payload ExecuteCommandRequest request) {
+        Object result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());
         if (result == null) {
-            return "void";
+            return CompletableFuture.completedFuture("void");
         }
-        return result;
+        return CompletableFuture.completedFuture(result);
     }
 }
