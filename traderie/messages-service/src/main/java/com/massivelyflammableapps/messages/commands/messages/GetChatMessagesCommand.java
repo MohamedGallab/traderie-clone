@@ -3,7 +3,6 @@ package com.massivelyflammableapps.messages.commands.messages;
 import java.util.List;
 
 import com.massivelyflammableapps.messages.commands.MessagesAbstractCommand;
-import com.massivelyflammableapps.messages.model.Message;
 import com.massivelyflammableapps.shared.dto.messages.MessageDTO;
 import com.massivelyflammableapps.messages.service.MessagesService;
 
