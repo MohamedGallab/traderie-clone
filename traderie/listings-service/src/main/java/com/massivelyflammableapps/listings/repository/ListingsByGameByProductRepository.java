@@ -10,13 +10,10 @@ import org.springframework.data.cassandra.repository.MapIdCassandraRepository;
 import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
 
 @Repository
-public interface ListingsByGameByProductRepository extends MapIdCassandraRepository<ListingByGameByProduct>{
-    ListingByGameByProduct findByListingIdAndTimestampAndProductIdAndBuying(UUID listingId, String timestamp, UUID productId, boolean buying);
+public interface ListingsByGameByProductRepository extends MapIdCassandraRepository<ListingByGameByProduct> {
+    ListingByGameByProduct findByListingIdAndGameIdAndProductIdAndBuying(UUID listingId, UUID gameId, UUID productId,
+            boolean buying);
 
     List<ListingByGameByProduct> findByGameIdAndProductIdAndBuying(UUID gameId, UUID productId, boolean buying);
 
-
 }
-
-
-
