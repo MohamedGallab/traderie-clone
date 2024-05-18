@@ -23,6 +23,7 @@ import javax.tools.ToolProvider;
 
 public class CommandHandler {
     String classPath = "";
+    private static Map<String, Object> instanceMap = new HashMap<>();
 
     public boolean createCommandFile(String commandClass, String commandCode) {
         // String path =
@@ -104,7 +105,6 @@ public class CommandHandler {
             if (!sourceFile.exists()) {
                 return false;
             }
-
             instanceMap.remove(commandClass);
             return sourceFile.delete();
         } catch (Exception e) {
@@ -112,8 +112,6 @@ public class CommandHandler {
             return false;
         }
     }
-
-    private static Map<String, Object> instanceMap = new HashMap<>();
 
     public Object runIt(String commandClass, Object paramsObj[]) {
         // String path =
