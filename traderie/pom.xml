@@ -17,8 +17,8 @@
 		<module>offers-service</module>
 		<module>listings-service</module>
 		<module>messages-service</module>
-		<!-- <module>users-service</module>
-		<module>review_service</module> -->
+		 <module>users-service</module>
+		<module>review_service</module>
 		<module>shared</module>
 		<module>web-server</module>
 		<module>admin-service</module>

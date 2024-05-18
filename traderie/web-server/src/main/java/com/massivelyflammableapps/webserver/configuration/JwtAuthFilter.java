@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,13 +29,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     protected void doFilterInternal(
             HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader(AUTHORIZATION);
         final String username;
         final String jwtToken;
 
-        System.out.println(authHeader+"ffffffffff");
         if(authHeader == null || !authHeader.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;

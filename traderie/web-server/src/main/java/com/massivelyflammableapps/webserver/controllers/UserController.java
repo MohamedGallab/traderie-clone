@@ -1,7 +1,6 @@
 package com.massivelyflammableapps.webserver.controllers;
 
 import com.massivelyflammableapps.shared.dto.users.*;
-import com.massivelyflammableapps.webserver.configuration.JwtUtils;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,16 +20,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 
 public class UserController {
-    @Value("${jwt.secret}")
-    private String base64SecretBytes;
-
     @Value("${users-service.queue.name}")
     private String queueName;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    private final JwtUtils jwtUtils;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -48,7 +38,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     } catch (Exception e)
     {
-        e.printStackTrace();
         return ResponseEntity.status(500).build();
     }
     }
@@ -62,6 +51,7 @@ public class UserController {
         Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
+        assert user != null;
         List<String> response = List.of(user.toString().split("="));
         if(Objects.equals(response.get(3).substring(0,3), "400")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
@@ -81,7 +71,6 @@ public class UserController {
             return ResponseEntity.ok(response);
         } catch (Exception e)
         {
-        e.printStackTrace();
         return ResponseEntity.status(500).build();
         }
     }
@@ -95,7 +84,7 @@ public class UserController {
                 new ParameterizedTypeReference<Object>() {
                 });
 
-        final UserDto userDto = (UserDto) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        assert user != null;
         List<String> response = List.of(user.toString().split("="));
         if(Objects.equals(response.get(2).substring(0,3), "404")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
@@ -129,6 +118,7 @@ public class UserController {
         Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
+        assert response != null;
         List<String> res = List.of(response.toString().split("="));
         if(Objects.equals(res.get(3).substring(0,3), "404")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res.get(1));
