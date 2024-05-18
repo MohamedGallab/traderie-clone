@@ -6,13 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "MakeTodayClass",
-            "request": "launch",
-            "mainClass": "com.massivelyflammableapps.admin.MakeTodayClass",
-            "projectName": "admin-service"
-        },
-        {
-            "type": "java",
             "name": "AdminApplication",
             "request": "launch",
             "mainClass": "com.massivelyflammableapps.admin.AdminApplication",
@@ -27,30 +20,9 @@
         },
         {
             "type": "java",
-            "name": "ControllerApplication",
-            "request": "launch",
-            "mainClass": "com.massivelyflammableapps.ControllerApplication",
-            "projectName": "controller"
-        },
-        {
-            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "com.massivelyflammableapps.Main",
-            "projectName": "listings-service"
-        },
-        {
-            "type": "java",
-            "name": "Main(1)",
-            "request": "launch",
-            "mainClass": "com.massivelyflammableapps.Main",
-            "projectName": "messages-service"
         },
         {
             "type": "java",
@@ -58,13 +30,6 @@
             "request": "launch",
             "mainClass": "com.massivelyflammableapps.offers.OffersApplication",
             "projectName": "offers-service"
-        },
-        {
-            "type": "java",
-            "name": "Main(2)",
-            "request": "launch",
-            "mainClass": "com.massivelyflammableapps.Main",
-            "projectName": "users-service"
         }
     ]
 }
