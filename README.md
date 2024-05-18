@@ -8,7 +8,7 @@
 1. Run `docker run -d --name cassandra -p 9042:9042 cassandra:latest`
 
 ### RabbitMQ
-1. use docker `docker run -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
+1. use docker `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
 
 ### Media Server
 1. pull CouchDB `docker pull couchdb`

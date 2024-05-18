@@ -7,23 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="shared" />
-        <module name="controller" />
         <module name="offers-service" />
         <module name="users-service" />
         <module name="User_Service" />
         <module name="messages-service" />
+        <module name="listings-service" />
         <module name="web-server" />
+        <module name="admin-service" />
         <module name="review_service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="listings-service" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="User_Service" options="-parameters" />
-      <module name="controller" options="-parameters" />
+      <module name="admin-service" options="-parameters" />
       <module name="listings-service" options="-parameters" />
       <module name="messages-service" options="-parameters" />
       <module name="offers-service" options="-parameters" />

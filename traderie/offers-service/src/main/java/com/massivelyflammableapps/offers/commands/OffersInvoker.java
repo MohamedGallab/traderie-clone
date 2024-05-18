@@ -9,6 +9,11 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.offers.service.OffersService;
+import com.massivelyflammableapps.shared.CommandHandler;
+import com.massivelyflammableapps.shared.dto.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.offers.CreateOfferRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetAllOffersRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersByBuyerRequest;
@@ -22,6 +27,8 @@ import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 public class OffersInvoker {
     @Autowired
     private OffersService offersService;
+
+    private CommandHandler commandHandler = new CommandHandler();
 
     @RabbitHandler
     public List<OfferDTO> getAllOffers(@Payload GetAllOffersRequest request) {
@@ -59,8 +66,31 @@ public class OffersInvoker {
         return command.execute();
     }
 
-    // public <T> T execute(AbstractCommand message) {
-    //     message.setOffersService(offersService);
-    //     return message.execute();
-    // }
+    @RabbitHandler
+    public Boolean addCommand(@Payload AddCommandRequest request) {
+        return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+    }
+
+    @RabbitHandler
+    public Boolean deleteCommand(@Payload DeleteCommandRequest request) {
+        return commandHandler.deleteCommandFile(request.getCommandClass());
+    }
+
+    @RabbitHandler
+    public Boolean updateCommand(@Payload UpdateCommandRequest request) {
+        boolean deleteResult = commandHandler.deleteCommandFile(request.getCommandClass());
+        if (!deleteResult) {
+            return false;
+        }
+        return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+    }
+    
+    @RabbitHandler
+    public Object executeCommand(@Payload ExecuteCommandRequest request) {
+        var result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());
+        if (result == null) {
+            return "void";
+        }
+        return result;
+    }
 }

@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MakeTodayClass",
+            "request": "launch",
+            "mainClass": "com.massivelyflammableapps.admin.MakeTodayClass",
+            "projectName": "admin-service"
+        },
+        {
+            "type": "java",
+            "name": "AdminApplication",
+            "request": "launch",
+            "mainClass": "com.massivelyflammableapps.admin.AdminApplication",
+            "projectName": "admin-service"
+        },
+        {
+            "type": "java",
+            "name": "WebServerApplication",
+            "request": "launch",
+            "mainClass": "com.massivelyflammableapps.webserver.WebServerApplication",
+            "projectName": "web-server"
+        },
+        {
+            "type": "java",
             "name": "ControllerApplication",
             "request": "launch",
             "mainClass": "com.massivelyflammableapps.ControllerApplication",
