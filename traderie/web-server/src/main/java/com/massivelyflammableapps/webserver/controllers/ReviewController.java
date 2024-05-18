@@ -15,7 +15,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/review")
 public class ReviewController {
-
     @Value("${reviews-service.queue.name}")
     private String queueName;
 
