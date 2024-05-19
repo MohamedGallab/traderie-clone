@@ -5,14 +5,17 @@ spring:
   application:
     name: offers
   rabbitmq:
-    host: localhost
+    host: rabbit-mq-service
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: localhost
+      host: redis-service
       port: 6379
+  cassandra:
+    contact-points: cassandra-service
+    port: 9042
 
 service:
   queue:

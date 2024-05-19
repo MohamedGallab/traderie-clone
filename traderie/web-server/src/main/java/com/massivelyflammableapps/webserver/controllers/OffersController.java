@@ -33,17 +33,18 @@ public class OffersController {
     private RabbitTemplate rabbitTemplate;
 
     @GetMapping
-    public ResponseEntity<List<OfferDTO>> getAllOffers() {
-        try {
-            GetAllOffersRequest command = new GetAllOffersRequest();
-            List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
-                    new ParameterizedTypeReference<List<OfferDTO>>() {
-                    });
-            return ResponseEntity.ok(offers);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity<String> getAllOffers() {
+        return ResponseEntity.ok("YAAAAAYAYAYA");
+        // try {
+        //     GetAllOffersRequest command = new GetAllOffersRequest();
+        //     List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
+        //             new ParameterizedTypeReference<List<OfferDTO>>() {
+        //             });
+        //     return ResponseEntity.ok(offers);
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        //     return ResponseEntity.status(500).build();
+        // }
     }
 
     @PostMapping

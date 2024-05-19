@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+        - name: cassandra
+          image: cassandra:latest
+          ports:
+            - containerPort: 9042
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra-service
+spec:
+  type: NodePort
+  selector:
+    app: cassandra
+  ports:
+    - protocol: TCP
+      port: 9042        # Expose port 9042
+      targetPort: 9042  # Forward to container port 9042
+      nodePort: 30005   # Optional: specify a node port

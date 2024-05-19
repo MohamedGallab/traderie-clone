@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: offers-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: offers-service
+  template:
+    metadata:
+      labels:
+        app: offers-service
+    spec:
+      containers:
+        - name: offers-service
+          image: offers-service:latest
+          ports:
+            - containerPort: 8081
+          imagePullPolicy: Never  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: offers-service-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: offers-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30006
