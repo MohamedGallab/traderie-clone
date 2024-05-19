@@ -1,6 +1,5 @@
 package com.massivelyflammableapps.webserver.controllers;
 
-
 import com.massivelyflammableapps.shared.dto.listings.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,8 @@ public class ListingsController {
     private String listingsQueueName;
 
     @GetMapping
-    public ResponseEntity<List<ListingDTO>> getAllListingsByGameByProduct(@RequestBody GetListingsByGameByProductDTO request){
+    public ResponseEntity<List<ListingDTO>> getAllListingsByGameByProduct(
+            @RequestBody GetListingsByGameByProductDTO request) {
         try {
 
             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
@@ -33,34 +33,33 @@ public class ListingsController {
         }
     }
 
-    // @GetMapping
-    // public ResponseEntity<List<ListingDTO>> getAllListingsByGameByUser(@RequestBody GetListingsByGameByUserDTO request){
-    //     try {
+    @GetMapping("/userListings")
+    public ResponseEntity<List<ListingDTO>> getAllListingsByGameByUser(
+            @RequestBody GetListingsByGameByUserDTO request) {
+        try {
+            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
+                    new ParameterizedTypeReference<List<ListingDTO>>() {
+                    });
+            return ResponseEntity.ok(listings);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
-    //         List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("",listingsQueueName, request,
-    //                 new ParameterizedTypeReference<List<ListingDTO>>() {
-    //                 });
-    //         return ResponseEntity.ok(listings);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping("/myListings")
+    public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetMyListingsByGameDTO request) {
+        try {
 
-    // figure out how to route based on body
-    // @GetMapping
-    // public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetListingsByGameByUserDTO request){
-    //     try {
-
-    //         List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
-    //                 new ParameterizedTypeReference<List<ListingDTO>>() {
-    //                 });
-    //         return ResponseEntity.ok(listings);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+            List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
+                    new ParameterizedTypeReference<List<ListingDTO>>() {
+                    });
+            return ResponseEntity.ok(listings);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {

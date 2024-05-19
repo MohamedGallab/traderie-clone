@@ -1,18 +1,18 @@
 server:
-    port: 8080
+  port: 8082
 spring:
-    application:
-        name: listings
-rabbitmq:
+  application:
+    name: listings
+  rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-    data:
-        redis:
-            host: localhost
-            port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 service:
-    queue:
-        name: listings_queue
+  queue:
+    name: listings_queue
