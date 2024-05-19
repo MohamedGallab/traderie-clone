@@ -17,7 +17,10 @@ spec:
           image: offers-service:latest
           ports:
             - containerPort: 8081
-          imagePullPolicy: Never  
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_CASSANDRA_CONTACT_POINTS
+              value: cassandra-service
 ---
 apiVersion: v1
 kind: Service

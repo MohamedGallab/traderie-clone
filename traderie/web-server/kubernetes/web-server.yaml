@@ -14,15 +14,6 @@ spec:
     spec:
       containers:
         - name: web-server
-          env:
-            - name: SPRING_RABBITMQ_HOST
-              value: rabbit-mq-service
-            - name: SPRING_RABBITMQ_PORT
-              value: "5672"
-            - name: SPRING_CASSANDRA_CONTACT_POINTS
-              value: cassandra-service
-            - name: SPRING_CASSANDRA_PORT
-              value: "9042"
           image: web-server:latest
           ports:
             - containerPort: 8080

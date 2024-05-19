@@ -3,6 +3,7 @@ package com.massivelyflammableapps.offers.configuration;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.SchemaAction;
@@ -13,14 +14,22 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 @Configuration
 @EnableCassandraRepositories
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
+	@Value("${spring.cassandra.contactpoints}")
+	private String contactPoint;
+
 	@Override
-    public SchemaAction getSchemaAction() {
-        return SchemaAction.CREATE_IF_NOT_EXISTS;
-    }
+	public SchemaAction getSchemaAction() {
+		return SchemaAction.CREATE_IF_NOT_EXISTS;
+	}
+
+	@Override
+	protected String getContactPoints() {
+		return contactPoint;
+	}
 
 	@Override
 	public String[] getEntityBasePackages() {
-		return new String[]{"com.massivelyflammableapps.offers.model"};
+		return new String[] { "com.massivelyflammableapps.offers.model" };
 	}
 
 	@Override
@@ -29,10 +38,10 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 	}
 
 	@Override
-    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-        CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
-                .createKeyspace("traderie_cassandra").ifNotExists()
-                .with(KeyspaceOption.DURABLE_WRITES, true).withSimpleReplication();
-        return Arrays.asList(specification);
-    }
+	protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+		CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
+				.createKeyspace("traderie_cassandra").ifNotExists()
+				.with(KeyspaceOption.DURABLE_WRITES, true).withSimpleReplication();
+		return Arrays.asList(specification);
+	}
 }

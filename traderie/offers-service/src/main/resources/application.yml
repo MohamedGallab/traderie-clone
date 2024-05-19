@@ -1,21 +1,21 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
     name: offers
   rabbitmq:
-    host: rabbit-mq-service
+    host: localhost
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: redis-service
+      host: localhost
       port: 6379
+
   cassandra:
-    contact-points: cassandra-service
-    port: 9042
+    contact-points: localhost:9042
 
 service:
   queue:
