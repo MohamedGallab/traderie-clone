@@ -16,9 +16,6 @@
         <module name="review_service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="listings-service" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

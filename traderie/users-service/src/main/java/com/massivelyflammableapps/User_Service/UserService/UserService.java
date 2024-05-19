@@ -67,12 +67,10 @@ public class UserService {
 
     public UserDto getDTO(String username){
         Optional<User> user = userRepository.findByUsername(username);
-        System.out.println(user+ username);
         UserDto userDto = null;
         if(user.isPresent()){
             userDto = user.get().toDTO();
         }
-        System.out.println(userDto+"gggggggggggg");
         return userDto;
     }
 
@@ -82,20 +80,18 @@ public class UserService {
         if(user.isEmpty()){
             return new ResponseMessage("User not found, Try Sign Up=","404");
         }
-        System.out.println(!passwordEncoder.matches(loginRequestDto.getPassword(), user.get().getPassword())+"ffffff");
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.get().getPassword())){
             return new ResponseMessage("Wrong password=","401");
         }
             UserDto userDto= user.get().toDTO();
         String token= jwtUtils.generateToken(userDto);
-        System.out.println(token+" token");
         return new ResponseMessage("Login successfully, Token: "+ token+"=","200");
     }
         return new ResponseMessage("User not found, Try Sign Up=","404");
     }
 
-    public Object logout(String token) {
-        //jwtUtils.invalidateToken(token);
+    public Object logout(String uuid) {
+        System.out.println(uuid);
         return new ResponseMessage("Logout successful","200");
     }
 
