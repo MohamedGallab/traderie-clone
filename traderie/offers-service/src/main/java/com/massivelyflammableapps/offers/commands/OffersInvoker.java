@@ -21,6 +21,7 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerReq
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -36,79 +37,130 @@ public class OffersInvoker {
     @Async
     @RabbitHandler
     public CompletableFuture<List<OfferDTO>> getAllOffers(@Payload GetAllOffersRequest request) {
-        return CompletableFuture.completedFuture(
-                new GetAllOffersCommand(offersService).execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new GetAllOffersCommand(offersService).execute();
+            } catch (Exception e) {
+                return new ArrayList<>();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<OfferDTO> createOffer(@Payload CreateOfferRequest request) {
-        return CompletableFuture.completedFuture(
-                new CreateOfferCommand(offersService, request.getOffer()).execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new CreateOfferCommand(offersService, request.getOffer()).execute();
+            } catch (Exception e) {
+                return new OfferDTO();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<List<OfferDTO>> getOffersByListing(@Payload GetOffersByListingRequest request) {
-        return CompletableFuture.completedFuture(
-                new GetOffersByListingCommand(offersService, request.getListingId()).execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new GetOffersByListingCommand(offersService, request.getListingId()).execute();
+            } catch (Exception e) {
+                return new ArrayList<>();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<List<OfferDTO>> getOffersByBuyer(@Payload GetOffersByBuyerRequest request) {
-        return CompletableFuture.completedFuture(
-                new GetOffersByBuyerCommand(offersService, request.getBuyerId()).execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new GetOffersByBuyerCommand(offersService, request.getBuyerId()).execute();
+            } catch (Exception e) {
+                return new ArrayList<>();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<List<OfferDTO>> getOffersBySeller(@Payload GetOffersBySellerRequest request) {
-        return CompletableFuture.completedFuture(
-                new GetOffersBySellerCommand(offersService, request.getSellerId()).execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new GetOffersBySellerCommand(offersService, request.getSellerId()).execute();
+            } catch (Exception e) {
+                return new ArrayList<>();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<List<OfferDTO>> getOffersBySellerAndBuyer(
             @Payload GetOffersBySellerAndBuyerRequest request) {
-        return CompletableFuture.completedFuture(
-                new GetOffersBySellerAndBuyerCommand(offersService, request.getSellerId(), request.getBuyerId())
-                        .execute());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new GetOffersBySellerAndBuyerCommand(offersService, request.getSellerId(), request.getBuyerId())
+                        .execute();
+            } catch (Exception e) {
+                return new ArrayList<>();
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<Boolean> addCommand(@Payload AddCommandRequest request) {
-        return CompletableFuture.completedFuture(
-                commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode()));
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<Boolean> deleteCommand(@Payload DeleteCommandRequest request) {
-        return CompletableFuture.completedFuture(
-                commandHandler.deleteCommandFile(request.getCommandClass()));
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return commandHandler.deleteCommandFile(request.getCommandClass());
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<Boolean> updateCommand(@Payload UpdateCommandRequest request) {
-        boolean deleteResult = commandHandler.deleteCommandFile(request.getCommandClass());
-        if (!deleteResult) {
-            return CompletableFuture.completedFuture(false);
-        }
-        return CompletableFuture.completedFuture(
-                commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode()));
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                boolean deleteResult = commandHandler.deleteCommandFile(request.getCommandClass());
+                if (!deleteResult) {
+                    return false;
+                }
+                return commandHandler.createCommandFile(request.getCommandClass(), request.getCommandCode());
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 
     @Async
     @RabbitHandler
     public CompletableFuture<Object> executeCommand(@Payload ExecuteCommandRequest request) {
-        Object result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());
-        if (result == null) {
-            return CompletableFuture.completedFuture("void");
-        }
-        return CompletableFuture.completedFuture(result);
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Object result = commandHandler.runIt(request.getCommandClass(), request.getParamsObj());
+                if (result == null) {
+                    return "void";
+                }
+                return result;
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 }

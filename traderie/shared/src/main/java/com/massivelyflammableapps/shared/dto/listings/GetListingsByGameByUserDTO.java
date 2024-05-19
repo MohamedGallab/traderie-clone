@@ -8,7 +8,7 @@ import java.util.UUID;
 @Getter
 @ToString
 
-public class GetListingsByGameByUserDTO extends TokenWrapper {
+public class GetListingsByGameByUserDTO {
     private UUID userId;
     private UUID gameId;
     private boolean buying;

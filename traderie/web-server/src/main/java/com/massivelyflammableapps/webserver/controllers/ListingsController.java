@@ -82,9 +82,6 @@ public class ListingsController {
             ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });
-            if (response == null) {
-                return ResponseEntity.status(400).build();
-            }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

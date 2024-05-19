@@ -35,11 +35,11 @@ public class ListingByGameByUser {
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
         @NonNull
-        private final String timestamp = new Date().toString();
+        private UUID listingId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
         @NonNull
-        private UUID listingId;
+        private String timestamp = new Date().toString();
 
         @NonNull
         private String productName;
@@ -56,6 +56,9 @@ public class ListingByGameByUser {
 
         @NonNull
         private STATE state = STATE.ACTIVE;
+
+        @NonNull
+        private UUID productId;
 
         public ListingByGameByUser(ListingDTO listingDTO) {
                 this.userId = listingDTO.getUserId();
@@ -87,7 +90,7 @@ public class ListingByGameByUser {
                         desiredOfferDTO.add(productAmountListDTO);
 
                 }
-                return new ListingDTO(userId, gameId, null, buying, timestamp, listingId, productName, productIcon,
+                return new ListingDTO(userId, gameId, productId, buying, timestamp, listingId, productName, productIcon,
                                 quantity, desiredOfferDTO, state);
         }
 }

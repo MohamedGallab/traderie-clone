@@ -11,8 +11,8 @@ import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
 
 @Repository
 public interface ListingsByGameByProductRepository extends MapIdCassandraRepository<ListingByGameByProduct> {
-    ListingByGameByProduct findByListingIdAndGameIdAndProductIdAndBuying(UUID listingId, UUID gameId, UUID productId,
-            boolean buying);
+    ListingByGameByProduct findByGameIdAndProductIdAndBuyingAndListingId(UUID gameId, UUID productId,
+            boolean buying, UUID listingId);
 
     List<ListingByGameByProduct> findByGameIdAndProductIdAndBuying(UUID gameId, UUID productId, boolean buying);
 

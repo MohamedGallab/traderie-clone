@@ -9,7 +9,7 @@ import com.massivelyflammableapps.shared.resources.STATE;
 
 @Getter
 @ToString
-public class ListingUpdateDTO extends TokenWrapper {
+public class ListingUpdateDTO {
     private UUID listingId;
 
     private String timestamp;
@@ -22,5 +22,4 @@ public class ListingUpdateDTO extends TokenWrapper {
 
     private STATE state;
 
-    UUID userId;
 }

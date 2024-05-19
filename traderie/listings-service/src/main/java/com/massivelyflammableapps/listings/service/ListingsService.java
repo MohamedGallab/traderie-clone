@@ -53,8 +53,10 @@ public class ListingsService {
     @Cacheable("listingsCache")
     public List<ListingDTO> getAllMyListingsByGame(GetMyListingsByGameDTO request) {
 
-        // TODO Decode token from the cache
-        UUID userId = UUID.fromString("TOKEN DECODE PLS");
+        // TODO Decode token from the cache(USER SERVICE)
+        // UUID userId = UUID.fromString("TOKEN DECODE PLS");
+        // this is hard coded for testing !!!!!!!!!!!!!!!!
+        UUID userId = UUID.fromString("c2bc283c-9684-4974-99b8-1ef072ebb0ec");
 
         List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
                 userId, request.getGameId(), request.isBuying());
@@ -73,7 +75,7 @@ public class ListingsService {
 
     @CacheEvict(value = "listingsCache", allEntries = true)
     public ListingDTO createListing(ListingDTO request) {
-        // TODO Decode token from the cache
+        // TODO Decode token from the cache(USER SERVICE)
         // request.setUserId(UUID.fromString("TOKEN DECODE PLS"));
 
         ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(request);
@@ -87,28 +89,31 @@ public class ListingsService {
                 newListingByGameByProduct.getProductName(),
                 newListingByGameByProduct.getProductIcon(),
                 newListingByGameByProduct.getQuantity(),
-                newListingByGameByProduct.getDesiredOffer());
+                newListingByGameByProduct.getDesiredOffer(),
+                newListingByGameByProduct.getProductId());
         listingsByGameByUserRepository.save(newListingByGameByUser);
         return newListingByGameByProduct.toDTO();
     }
 
     @CacheEvict(value = "listingsCache", allEntries = true)
     public ListingDTO updateListingState(ListingUpdateDTO request) throws UnauthorizedException {
-        // TODO Decode token from the cache
+
+        ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
+                .findByGameIdAndProductIdAndBuyingAndListingId(
+                        request.getGameId(), request.getProductId(), request.isBuying(), request.getListingId());
+        // TODO Decode token from the cache(USER SERVICE)
         // UUID userId = UUID.fromString("TOKEN DECODE PLS");
         // // TODO I dont know what deez is
         // if (userId != request.getUserId()) {
         // throw new UnauthorizedException();
         // }
-        ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
-                .findByListingIdAndGameIdAndProductIdAndBuying(
-                        request.getListingId(), request.getGameId(), request.getProductId(), request.isBuying());
+
         listingByGameByProduct.setState(request.getState());
         ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository
-                .findByUserIdAndGameIdAndBuyingAndTimestampAndListingId(
-                        listingByGameByProduct.getUserId(), listingByGameByProduct.getProductId(),
+                .findByUserIdAndGameIdAndBuyingAndListingId(
+                        listingByGameByProduct.getUserId(), listingByGameByProduct.getGameId(),
                         listingByGameByProduct.getBuying(),
-                        listingByGameByProduct.getTimestamp(), listingByGameByProduct.getListingId());
+                        listingByGameByProduct.getListingId());
         listingByGameByUser.setState(request.getState());
         listingsByGameByUserRepository.save(listingByGameByUser);
         return listingsByGameByProductRepository.save(listingByGameByProduct).toDTO();
