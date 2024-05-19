@@ -9,12 +9,10 @@ import java.util.UUID;
 import org.springframework.data.cassandra.repository.MapIdCassandraRepository;
 
 @Repository
-public interface ListingsByGameByUserRepository extends MapIdCassandraRepository<ListingByGameByUser>{
+public interface ListingsByGameByUserRepository extends MapIdCassandraRepository<ListingByGameByUser> {
 
-    ListingByGameByUser findByUserIdAndGameIdAndBuyingAndTimestampAndListingId (UUID userId, UUID gameId, boolean buying, String timestamp, UUID listingId);
+    ListingByGameByUser findByUserIdAndGameIdAndBuyingAndListingId(UUID userId, UUID gameId, boolean buying,
+            UUID listingId);
 
     List<ListingByGameByUser> findByUserIdAndGameIdAndBuying(UUID userId, UUID gameId, boolean buying);
 }
-
-
-

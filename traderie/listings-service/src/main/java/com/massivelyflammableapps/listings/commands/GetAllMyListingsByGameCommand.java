@@ -1,6 +1,6 @@
 package com.massivelyflammableapps.listings.commands;
 
-import com.massivelyflammableapps.shared.dto.listings.GetListingsByGameByUserDTO;
+import com.massivelyflammableapps.shared.dto.listings.GetMyListingsByGameDTO;
 import com.massivelyflammableapps.listings.service.ListingsService;
 import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -17,9 +17,9 @@ public class GetAllMyListingsByGameCommand extends AbstractCommand<List<ListingD
     @NonNull
     private ListingsService listingsService;
     @NonNull
-    private GetListingsByGameByUserDTO GetListingsByGameByUserDTO;
+    private GetMyListingsByGameDTO GetMyListingsByGameDTO;
 
     public List<ListingDTO> execute() {
-        return listingsService.getAllMyListingsByGame(GetListingsByGameByUserDTO);
+        return listingsService.getAllMyListingsByGame(GetMyListingsByGameDTO);
     }
 }

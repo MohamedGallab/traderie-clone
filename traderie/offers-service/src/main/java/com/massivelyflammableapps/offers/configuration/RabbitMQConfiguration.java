@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfiguration {
     @Value("${service.queue.name}")
     private String queueName;
-    
+
     @Bean
     public Queue serviceQueue() {
         return new Queue(queueName);

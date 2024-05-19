@@ -1,13 +1,16 @@
 package com.massivelyflammableapps.shared.dto.listings;
 
-import com.massivelyflammableapps.resources.STATE;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
+import com.massivelyflammableapps.shared.resources.STATE;
+
 @Getter
-public class ListingUpdateDTO extends TokenWrapper{
-    private UUID listingId ;
+@ToString
+public class ListingUpdateDTO {
+    private UUID listingId;
 
     private String timestamp;
 
@@ -19,5 +22,4 @@ public class ListingUpdateDTO extends TokenWrapper{
 
     private STATE state;
 
-    UUID userId;
 }
