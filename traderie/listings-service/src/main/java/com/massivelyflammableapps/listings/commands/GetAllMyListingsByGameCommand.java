@@ -1,6 +1,5 @@
 package com.massivelyflammableapps.listings.commands;
 
-import com.massivelyflammableapps.shared.dto.listings.GetListingsByGameByUserDTO;
 import com.massivelyflammableapps.shared.dto.listings.GetMyListingsByGameDTO;
 import com.massivelyflammableapps.listings.service.ListingsService;
 import com.massivelyflammableapps.shared.dto.listings.ListingDTO;

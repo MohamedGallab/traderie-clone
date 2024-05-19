@@ -3,11 +3,11 @@ server:
 spring:
   application:
     name: listings
-rabbitmq:
-  host: localhost
-  port: 5672
-  username: guest
-  password: guest
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   data:
     redis:
       host: localhost
