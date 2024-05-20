@@ -70,10 +70,9 @@ public class MessagesService {
 
                 List<Chat> userChats = new ArrayList<>(chatsInitiator);
                 userChats.addAll(chatsReceiver);
-                //convert to DTO
+                // convert to DTO
                 List<ChatDTO> userChatsDTO = new ArrayList<>();
                 userChats.forEach(chat -> userChatsDTO.add(chat.toDTO()));
-
 
                 return userChatsDTO;
         }
@@ -186,6 +185,7 @@ public class MessagesService {
                                                 request.getMessageContent(),
                                                 newChat.getChatId())).toDTO());
                         }
+                        return newChat.toDTO();
                 } else {
                         // not the first interaction
                         foundedChatByInitiatorAndReceiver.setArchived(false);
@@ -205,8 +205,8 @@ public class MessagesService {
 
                         Chat foundedChat = chatRepository.findByChatId(foundedChatByInitiatorAndReceiver.getChatId());
                         chatRepository.save(foundedChat);
+                        return foundedChatByInitiatorAndReceiver.toDTO();
                 }
 
-                return foundedChatByInitiatorAndReceiver.toDTO();
         }
 }
