@@ -16,3 +16,7 @@
 
 ### Reddis
 1. `docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest`
+
+### Minikube
+1. download minkube
+2. `minikube addons enable metrics-server`
