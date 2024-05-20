@@ -5,16 +5,16 @@ spring:
   application:
     name: reviews
   rabbitmq:
-    host: rabbit-mq-service
+    host: localhost
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: redis-service
+      host: localhost
       port: 6379
   cassandra:
-    contact-points: cassandra-service
+    contact-points: localhost
     port: 9042
     keyspace-name: traderie_cassandra
 
