@@ -50,5 +50,13 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 				.with(KeyspaceOption.DURABLE_WRITES, true).withSimpleReplication();
 		return Arrays.asList(specification);
 	}
+
+	@Override
+	protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+		CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
+				.createKeyspace("traderie_cassandra").ifNotExists()
+				.with(KeyspaceOption.DURABLE_WRITES, true).withSimpleReplication();
+		return Arrays.asList(specification);
+	}
 }
 
