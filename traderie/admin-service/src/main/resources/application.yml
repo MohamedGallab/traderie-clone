@@ -5,13 +5,13 @@ spring:
   application:
     name: web-server
   rabbitmq:
-    host: localhost
+    host: rabbit-mq-service
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: localhost
+      host: redis-service
       port: 6379
 
 offers-service:
