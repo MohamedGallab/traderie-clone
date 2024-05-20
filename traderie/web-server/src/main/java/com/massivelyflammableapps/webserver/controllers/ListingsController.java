@@ -89,4 +89,15 @@ public class ListingsController {
         }
     }
 
+    @PutMapping("controller/setMQ")
+    public ResponseEntity<String> setMQ(@RequestBody String mqName) {
+        try {
+            listingsQueueName = mqName;
+            return ResponseEntity.ok("MQ set to " + mqName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
 }
