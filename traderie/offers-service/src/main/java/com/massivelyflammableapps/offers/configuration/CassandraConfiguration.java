@@ -14,8 +14,6 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 @Configuration
 @EnableCassandraRepositories
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
-	@Value("${spring.cassandra.contactpoints}")
-	private String contactPoint;
 
 	@Override
 	public SchemaAction getSchemaAction() {
@@ -24,7 +22,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Override
 	protected String getContactPoints() {
-		return contactPoint;
+		return "cassandra-service:9042";
 	}
 
 	@Override
