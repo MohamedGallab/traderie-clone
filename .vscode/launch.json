@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ReviewServiceApplication",
+      "request": "launch",
+      "mainClass": "com.massivelyflammableapps.reviews.ReviewServiceApplication",
+      "projectName": "reviews-service"
+    },
+    {
+      "type": "java",
       "name": "ListingsApplication",
       "request": "launch",
       "mainClass": "com.massivelyflammableapps.listings.ListingsApplication",

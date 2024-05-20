@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: offers-service
+  name: users-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: offers-service
+      app: users-service
   template:
     metadata:
       labels:
-        app: offers-service
+        app: users-service
     spec:
       containers:
-        - name: offers-service
-          image: offers-service:latest
+        - name: users-service
+          image: users-service:latest
           ports:
-            - containerPort: 8084
+            - containerPort: 8086
           imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: offers-service-service
+  name: users-service-service
 spec:
   selector:
-    app: offers-service
+    app: users-service
   ports:
     - protocol: TCP
-      port: 8084
-      targetPort: 8084
+      port: 8086
+      targetPort: 8086

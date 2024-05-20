@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: offers-service
+  name: reviews-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: offers-service
+      app: reviews-service
   template:
     metadata:
       labels:
-        app: offers-service
+        app: reviews-service
     spec:
       containers:
-        - name: offers-service
-          image: offers-service:latest
+        - name: reviews-service
+          image: reviews-service:latest
           ports:
-            - containerPort: 8084
+            - containerPort: 8085
           imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: offers-service-service
+  name: reviews-service-service
 spec:
   selector:
-    app: offers-service
+    app: reviews-service
   ports:
     - protocol: TCP
-      port: 8084
-      targetPort: 8084
+      port: 8085
+      targetPort: 8085

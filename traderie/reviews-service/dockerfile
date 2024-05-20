@@ -1,0 +1,4 @@
+FROM openjdk:21-jdk
+WORKDIR /usr/app
+COPY ./reviews-service/target/reviews-service-1.0-SNAPSHOT-exec.jar .
+CMD ["java", "-jar", "reviews-service-1.0-SNAPSHOT-exec.jar"]
