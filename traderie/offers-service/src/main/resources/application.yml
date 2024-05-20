@@ -11,11 +11,12 @@ spring:
     password: guest
   data:
     redis:
-      host: redis
+      host: redis-service
       port: 6379
-
   cassandra:
-    contact-points: localhost:9042
+    contact-points: cassandra-service
+    port: 9042
+    keyspace-name: traderie_cassandra
 
 service:
   queue:

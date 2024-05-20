@@ -17,7 +17,6 @@ spec:
           image: cassandra:latest
           ports:
             - containerPort: 9042
-            - containerPort: 16672 # Management UI port
 
 ---
 apiVersion: v1
@@ -25,16 +24,9 @@ kind: Service
 metadata:
   name: cassandra-service
 spec:
-  type: LoadBalancer
   selector:
     app: cassandra
   ports:
-    - name: hehe
-      protocol: TCP
+    - protocol: TCP
       port: 9042
       targetPort: 9042
-    - name: hehe2
-      protocol: TCP
-      port: 16672 # Expose port 15672
-      targetPort: 16672 # Forward to container port 15672
-      nodePort: 30003 # Optional: specify a node port

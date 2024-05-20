@@ -14,6 +14,14 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 @Configuration
 @EnableCassandraRepositories
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
+	@Value("${spring.cassandra.keyspace-name}")
+	private String keyspaceName;
+
+	@Value("${spring.cassandra.contact-points}")
+	private String contactPoints;
+	
+	@Value("${spring.cassandra.port}")
+	private int port;
 
 	@Override
 	public SchemaAction getSchemaAction() {
@@ -22,7 +30,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Override
 	protected String getContactPoints() {
-		return "cassandra-service:9042";
+		return contactPoints + ":" + port;
 	}
 
 	@Override
@@ -32,13 +40,13 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Override
 	public String getKeyspaceName() {
-		return "traderie_cassandra";
+		return keyspaceName;
 	}
 
 	@Override
 	protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
 		CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
-				.createKeyspace("traderie_cassandra").ifNotExists()
+				.createKeyspace(keyspaceName).ifNotExists()
 				.with(KeyspaceOption.DURABLE_WRITES, true).withSimpleReplication();
 		return Arrays.asList(specification);
 	}
