@@ -117,4 +117,28 @@ public class ListingsService {
         listingsByGameByUserRepository.save(listingByGameByUser);
         return listingsByGameByProductRepository.save(listingByGameByProduct).toDTO();
     }
+
+    @CacheEvict(value = "listingsCache", allEntries = true)
+    public ListingDTO markListingDTO(ListingUpdateDTO request) {
+
+        ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
+                .findByGameIdAndProductIdAndBuyingAndListingId(
+                        request.getGameId(), request.getProductId(), request.isBuying(), request.getListingId());
+        // TODO Decode token from the cache(USER SERVICE)
+        // UUID userId = UUID.fromString("TOKEN DECODE PLS");
+        // // TODO I dont know what deez is
+        // if (userId != request.getUserId()) {
+        // throw new UnauthorizedException();
+        // }
+
+        listingByGameByProduct.setState(request.getState());
+        ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository
+                .findByUserIdAndGameIdAndBuyingAndListingId(
+                        listingByGameByProduct.getUserId(), listingByGameByProduct.getGameId(),
+                        listingByGameByProduct.getBuying(),
+                        listingByGameByProduct.getListingId());
+        listingByGameByUser.setState(request.getState());
+        listingsByGameByUserRepository.save(listingByGameByUser);
+        return listingsByGameByProductRepository.save(listingByGameByProduct).toDTO();
+    }
 }
