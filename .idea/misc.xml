@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/traderie/pom.xml" />
         <option value="$PROJECT_DIR$/traderie/review_service/pom.xml" />
         <option value="$PROJECT_DIR$/traderie/users-service/pom.xml" />
+        <option value="$PROJECT_DIR$/traderie/media-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
