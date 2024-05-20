@@ -1,0 +1,4 @@
+FROM openjdk:21-jdk
+WORKDIR /usr/app
+COPY ./listings-service/target/listings-service-1.0-SNAPSHOT-exec.jar .
+CMD ["java", "-jar", "listings-service-1.0-SNAPSHOT-exec.jar"]

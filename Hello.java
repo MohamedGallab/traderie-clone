@@ -1,0 +1,1 @@
+package com.massivelyflammableapps.shared;public class Hello {public String execute(int i, String s) {return s + i;}}

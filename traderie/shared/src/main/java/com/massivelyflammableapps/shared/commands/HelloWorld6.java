@@ -1,1 +1,0 @@
-package com.massivelyflammableapps.shared.commands;public class HelloWorld6 {public String execute() {return "Try programiz.prosss";}}

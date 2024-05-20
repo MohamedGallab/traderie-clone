@@ -36,4 +36,4 @@ spec:
       protocol: TCP
       port: 15672       # Expose port 15672
       targetPort: 15672 # Forward to container port 15672
-      nodePort: 30001   # Optional: specify a node port
+      nodePort: 30672   # Optional: specify a node port
