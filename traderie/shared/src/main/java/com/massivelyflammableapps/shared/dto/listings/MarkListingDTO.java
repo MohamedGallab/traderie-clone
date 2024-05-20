@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SoldListingRequest {
+public class MarkListingDTO {
     @NonNull
     UUID listingId;
     @NonNull
