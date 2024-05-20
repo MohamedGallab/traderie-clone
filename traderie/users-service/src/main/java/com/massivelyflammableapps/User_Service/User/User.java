@@ -45,9 +45,11 @@ public class User implements UserDetails
 
     private String timezone;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING) // Map enum as a String
     private UserStatus status = UserStatus.ONLINE; // Default value is ONLINE
 
+    @Builder.Default
     private LocalDateTime created_at = LocalDateTime.now();
     private String biography;
 

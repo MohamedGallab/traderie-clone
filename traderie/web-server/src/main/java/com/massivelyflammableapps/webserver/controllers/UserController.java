@@ -27,51 +27,50 @@ public class UserController {
 
     @GetMapping("/getUser")
     public ResponseEntity<UserDto> getDTO(
-            @RequestParam String username
-    ) {
+            @RequestParam String username) {
         try {
-        System.out.println(username);
-        GetUserDTORequest command = new GetUserDTORequest(username);
-        UserDto response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
-                new ParameterizedTypeReference<UserDto>() {
-                });
-        return ResponseEntity.ok(response);
-    } catch (Exception e)
-    {
-        return ResponseEntity.status(500).build();
-    }
+            System.out.println(username);
+            GetUserDTORequest command = new GetUserDTORequest(username);
+            UserDto response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+                    new ParameterizedTypeReference<UserDto>() {
+                    });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
 
     public ResponseEntity<String> registerUser(
-           @RequestBody UserRegisterDto userRegister) {
+            @RequestBody UserRegisterDto userRegister) {
         RegisterRequest command = new RegisterRequest(userRegister);
         Object user = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
-        assert user != null;
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         List<String> response = List.of(user.toString().split("="));
-        if(Objects.equals(response.get(3).substring(0,3), "400")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
-        else
+        if (Objects.equals(response.get(3).substring(0, 3), "400")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
+        } else
             return ResponseEntity.status(HttpStatus.CREATED).body("Sign Up Successful");
     }
 
     @GetMapping
     public ResponseEntity<Object> getUserInfo(
-            @RequestHeader("UUID") String uuid
-        ) {
+            @RequestHeader("UUID") String uuid) {
         try {
             GetUserInfoRequest command = new GetUserInfoRequest(uuid);
-            Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+            Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
             return ResponseEntity.ok(response);
-        } catch (Exception e)
-        {
-        return ResponseEntity.status(500).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -84,66 +83,63 @@ public class UserController {
                 new ParameterizedTypeReference<Object>() {
                 });
 
-        assert user != null;
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         List<String> response = List.of(user.toString().split("="));
-        if(Objects.equals(response.get(2).substring(0,3), "404")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
-        else if( Objects.equals(response.get(2).substring(0,3), "401")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));}
-        else {
+        if (Objects.equals(response.get(2).substring(0, 3), "404")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
+        } else if (Objects.equals(response.get(2).substring(0, 3), "401")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body(response.get(1));
         }
     }
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(
-            @RequestHeader("UUID") String uuid
-    ) {
+            @RequestHeader("UUID") String uuid) {
         LogoutRequest command = new LogoutRequest(uuid);
         Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
-        if (response==null) {
+        if (response == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok("Logout successful");
         }
     }
-    //send request for offers and listings to delete the offers/listings
+
+    // send request for offers and listings to delete the offers/listings
     @DeleteMapping
     public ResponseEntity<String> deleteUser(
-            @RequestHeader("UUID") String uuid
-    ) {
+            @RequestHeader("UUID") String uuid) {
         DeleteUserRequest command = new DeleteUserRequest(uuid);
         Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
-        assert response != null;
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
         List<String> res = List.of(response.toString().split("="));
-        if(Objects.equals(res.get(3).substring(0,3), "404")) {
+        if (Objects.equals(res.get(3).substring(0, 3), "404")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res.get(1));
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body(res.get(1));
         }
     }
 
     @GetMapping("/status")
     public ResponseEntity<String> getUserStatus(
-            @RequestHeader("UUID") String uuid
-    ) {
+            @RequestHeader("UUID") String uuid) {
         GetUserStatusRequest command = new GetUserStatusRequest(uuid);
-        Object response =rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
+        Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                 new ParameterizedTypeReference<Object>() {
                 });
-        if (response==null) {
+        if (response == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(response.toString());
         }
     }
 }
-
-
-
-
-

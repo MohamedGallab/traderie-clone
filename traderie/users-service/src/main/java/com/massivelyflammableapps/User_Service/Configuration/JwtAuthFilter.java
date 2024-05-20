@@ -1,6 +1,5 @@
 package com.massivelyflammableapps.User_Service.Configuration;
 
-import com.massivelyflammableapps.User_Service.UserService.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
