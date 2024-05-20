@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis/redis-stack:latest
+          ports:
+            - containerPort: 6379  # cache port
+            - containerPort: 8001 # Management UI port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: redis
+  ports:
+    - name: cache
+      protocol: TCP
+      port: 6379        # Expose port 6379
+      targetPort: 6379  # Forward to container port 6379
+    - name: management
+      protocol: TCP
+      port: 8001       # Expose port 8001
+      targetPort: 8001 # Forward to container port 8001
+      nodePort: 30379   # Optional: specify a node port

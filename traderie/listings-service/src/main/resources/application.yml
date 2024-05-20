@@ -1,17 +1,22 @@
 server:
   port: 8082
+
 spring:
   application:
     name: listings
   rabbitmq:
-    host: localhost
+    host: rabbit-mq-service
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: localhost
+      host: redis-service
       port: 6379
+  cassandra:
+    contact-points: cassandra-service
+    port: 9042
+    keyspace-name: traderie_cassandra
 
 service:
   queue:

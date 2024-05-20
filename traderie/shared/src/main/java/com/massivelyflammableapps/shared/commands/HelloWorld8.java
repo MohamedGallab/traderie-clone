@@ -1,1 +1,0 @@
-package com.massivelyflammableapps.shared.commands;public class HelloWorld8 {public String execute(Integer i, String s) {return s + i;}}

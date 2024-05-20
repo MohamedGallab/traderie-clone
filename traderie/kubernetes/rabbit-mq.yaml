@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-mq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbit-mq
+  template:
+    metadata:
+      labels:
+        app: rabbit-mq
+    spec:
+      containers:
+        - name: rabbit-mq
+          image: rabbitmq:3.13-management
+          ports:
+            - containerPort: 5672  # AMQP port
+            - containerPort: 15672 # Management UI port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-mq-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: rabbit-mq
+  ports:
+    - name: amqp
+      protocol: TCP
+      port: 5672        # Expose port 5672
+      targetPort: 5672  # Forward to container port 5672
+    - name: management
+      protocol: TCP
+      port: 15672       # Expose port 15672
+      targetPort: 15672 # Forward to container port 15672
+      nodePort: 30672   # Optional: specify a node port

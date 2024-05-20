@@ -1,20 +1,23 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
   application:
     name: messages
   rabbitmq:
-    host: rabbitmq
+    host: rabbit-mq-service
     port: 5672
     username: guest
     password: guest
   data:
     redis:
-      host: redis-stack-server
+      host: redis-service
       port: 6379
   cassandra:
-    contact-points: cassandra:9042
+    contact-points: cassandra-service
+    port: 9042
+    keyspace-name: traderie_cassandra
+
 service:
   queue:
     name: messages_queue

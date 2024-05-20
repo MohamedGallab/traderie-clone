@@ -54,7 +54,7 @@ public class CommandHandler {
         String jarPath = System.getProperty("user.dir");
         jarPath = jarPath.replace("\\", "/");
 
-        String sourcePath = jarPath + "/commands/" + commandClass + ".java";
+        String sourcePath = jarPath + "/" + commandClass + ".java";
 
         File sourceFile = new File(sourcePath);
         if (sourceFile.exists()) {
@@ -98,7 +98,7 @@ public class CommandHandler {
         // System.out.println("Main JAR Directory Path: " + jarPath);
         String jarPath = System.getProperty("user.dir");
         jarPath = jarPath.replace("\\", "/");
-        String sourcePath = jarPath.toString() + "/commands/" + commandClass + ".java";
+        String sourcePath = jarPath.toString() + "/" + commandClass + ".java";
 
         try {
             File sourceFile = new File(sourcePath);
@@ -156,7 +156,7 @@ public class CommandHandler {
 
             try {
 
-                String filePath = jarPath.toString() + "/commands/" + commandClass + ".java";
+                String filePath = jarPath.toString() + "/" + commandClass + ".java";
                 File javaFile = new File(filePath);
 
                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

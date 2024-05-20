@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messages-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messages-service
+  template:
+    metadata:
+      labels:
+        app: messages-service
+    spec:
+      containers:
+        - name: messages-service
+          image: messages-service:latest
+          ports:
+            - containerPort: 8083
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: messages-service-service
+spec:
+  selector:
+    app: messages-service
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
