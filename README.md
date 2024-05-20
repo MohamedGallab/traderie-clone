@@ -5,13 +5,13 @@
 
 ## Set up
 ### Cassandra
-1. Run `docker run -d --name cassandra -p 9042:9042 cassandra:latest`
+1. `docker run -d --name cassandra -p 9042:9042 cassandra:latest`
 
 ### RabbitMQ
-1. use docker `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
+1. `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management`
 
 ### Media Server
-1. `docker run -d --name couchdb -p 5984:5984 couchdb:latest`
+1. `docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password couchdb:latest`
 2. install xfs? `apt install xfsprogs`
 
 ### Reddis
