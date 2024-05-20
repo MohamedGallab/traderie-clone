@@ -9,9 +9,6 @@ spring:
     port: 5672
     username: guest
     password: guest
-  cassandra:
-    contact-points: cassandra-service
-    port: 9042
 
 offers-service:
   queue:
