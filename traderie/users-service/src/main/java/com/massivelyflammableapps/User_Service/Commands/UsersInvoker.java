@@ -1,6 +1,11 @@
 package com.massivelyflammableapps.User_Service.Commands;
 
 import com.massivelyflammableapps.User_Service.UserService.UserService;
+import com.massivelyflammableapps.shared.CommandHandler;
+import com.massivelyflammableapps.shared.dto.admin.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.users.*;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -10,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.ArrayList;
 
 @Service
 @RabbitListener(queues = {"${service.queue.name}"})
