@@ -19,6 +19,11 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
+    public Queue serviceQueue2() {
+        return new Queue("testQueue");
+    }
+
+    @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());

@@ -101,13 +101,4 @@ public class AdminController {
         }
     }
 
-    @PostMapping("queue")
-    public ResponseEntity<String> postMethodName2(@RequestBody String entity) {
-        try {
-            return ResponseEntity.ok(entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
-        }
-    }
 }
