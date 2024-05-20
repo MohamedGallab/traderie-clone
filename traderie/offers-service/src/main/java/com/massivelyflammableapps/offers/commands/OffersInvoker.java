@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.offers.service.OffersService;
 import com.massivelyflammableapps.shared.CommandHandler;
-import com.massivelyflammableapps.shared.dto.AddCommandRequest;
-import com.massivelyflammableapps.shared.dto.DeleteCommandRequest;
-import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
-import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.offers.CreateOfferRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetAllOffersRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersByBuyerRequest;

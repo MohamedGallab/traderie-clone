@@ -1,4 +1,4 @@
-package com.massivelyflammableapps.shared.dto;
+package com.massivelyflammableapps.shared.dto.admin;
 
 import lombok.Data;
 

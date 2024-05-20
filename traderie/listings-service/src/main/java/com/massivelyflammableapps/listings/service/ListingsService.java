@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.massivelyflammableapps.shared.dto.listings.*;
-import com.massivelyflammableapps.shared.exceptions.UnauthorizedException;
 import com.massivelyflammableapps.shared.resources.STATE;
 import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
 import com.massivelyflammableapps.listings.model.ListingByGameByUser;
@@ -96,7 +95,7 @@ public class ListingsService {
     }
 
     @CacheEvict(value = "listingsCache", allEntries = true)
-    public ListingDTO updateListingState(ListingUpdateDTO request) throws UnauthorizedException {
+    public ListingDTO updateListingState(ListingUpdateDTO request) {
 
         ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
                 .findByGameIdAndProductIdAndBuyingAndListingId(

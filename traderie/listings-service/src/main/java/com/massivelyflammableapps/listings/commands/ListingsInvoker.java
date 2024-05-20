@@ -2,10 +2,10 @@ package com.massivelyflammableapps.listings.commands;
 
 import com.massivelyflammableapps.listings.service.ListingsService;
 import com.massivelyflammableapps.shared.CommandHandler;
-import com.massivelyflammableapps.shared.dto.AddCommandRequest;
-import com.massivelyflammableapps.shared.dto.DeleteCommandRequest;
-import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
-import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.listings.GetListingsByGameByProductDTO;
 import com.massivelyflammableapps.shared.dto.listings.GetListingsByGameByUserDTO;
 import com.massivelyflammableapps.shared.dto.listings.GetMyListingsByGameDTO;
