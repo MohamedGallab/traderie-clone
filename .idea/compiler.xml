@@ -13,9 +13,14 @@
         <module name="messages-service" />
         <module name="web-server" />
         <module name="admin-service" />
-        <module name="review_service" />
+        <module name="reviews-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="controller" target="21" />
+      <module name="listings-service" target="17" />
+      <module name="review_service" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -24,6 +29,7 @@
       <module name="messages-service" options="-parameters" />
       <module name="offers-service" options="-parameters" />
       <module name="review_service" options="-parameters" />
+      <module name="reviews-service" options="-parameters" />
       <module name="shared" options="-parameters" />
       <module name="users-service" options="-parameters" />
       <module name="web-server" options="-parameters" />
