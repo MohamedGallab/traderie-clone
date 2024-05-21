@@ -35,7 +35,7 @@ public class ReviewService {
 
     private final ObjectsValidator<EditRequestDto> editRequestDtoObjectsValidator;
 
-    @CacheEvict(value = "reviewsCache", key = "#review.senderId")
+    @CacheEvict(value = "reviewsCache", key = "#review.senderId+'sender'")
     public Object createReview(ReviewRequestDto review) {
         var violations  = reviewRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){
@@ -106,7 +106,7 @@ public class ReviewService {
         return  reviewRequestDtos;
     }
 
-    @CacheEvict(value = "reviewsCache", key = "#review.timestamp")
+    @CacheEvict(value = "reviewsCache",  key="#review.senderId+'sender'")
     public Object editReview(EditRequestDto review){
         var violations  = editRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){
