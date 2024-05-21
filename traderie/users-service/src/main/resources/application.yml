@@ -31,3 +31,6 @@ service:
   queue:
     name: users_queue
 
+logging:
+  file:
+    name: /var/log/users-service/app.log

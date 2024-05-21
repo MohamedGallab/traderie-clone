@@ -34,7 +34,5 @@ jwt:
   secret: UDU6td/lppU8wmSexAWL+cxKP3IKmGxM4E9Cov4I0HE=
 
 logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
+  file:
+    name: /var/log/web-server/app.log

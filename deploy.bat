@@ -16,6 +16,10 @@ kubectl delete service web-server-service
 kubectl delete service admin-service-service
 kubectl delete service users-service-service
 kubectl delete service reviews-service-service
+kubectl delete service reviews-service-service
+kubectl delete service reviews-service-service
+kubectl delete service loki-service
+kubectl delete service grafana-service
 
 docker builder prune --all -f
 

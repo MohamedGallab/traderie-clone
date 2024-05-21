@@ -12,12 +12,19 @@ spec:
       labels:
         app: users-service
     spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: users-service
           image: users-service:latest
           ports:
             - containerPort: 8086
           imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
           resources:
             requests:
               cpu: 100m
