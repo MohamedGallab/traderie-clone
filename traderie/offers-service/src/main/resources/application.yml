@@ -21,3 +21,8 @@ spring:
 service:
   queue:
     name: offers_queue
+
+listings:
+  service:
+    queue:
+      name: listings_queue
