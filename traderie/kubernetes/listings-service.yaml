@@ -12,12 +12,19 @@ spec:
       labels:
         app: listings-service
     spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: listings-service
           image: listings-service:latest
           ports:
             - containerPort: 8082
           imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
 ---
 apiVersion: v1
 kind: Service
