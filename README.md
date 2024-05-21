@@ -22,3 +22,4 @@
 2. `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
 3. run deploy.bat
 4. `minikube addons enable metrics-server`
+5. generate load on web server `kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://web-server-service:8080/api/v1/offers; done"`
