@@ -1,11 +1,5 @@
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
 server:
-  port: 8081
-
+  port: 8086
 
 spring:
   application:

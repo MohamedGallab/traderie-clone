@@ -35,7 +35,7 @@ public class ReviewService {
 
     private final ObjectsValidator<EditRequestDto> editRequestDtoObjectsValidator;
 
-    @CacheEvict(value = "reviewsCache", key = "#review.senderId")
+    @CacheEvict(value = "reviewsCache", key = "#review.senderId+'sender'")
     public Object createReview(ReviewRequestDto review) {
         var violations  = reviewRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){
@@ -87,7 +87,7 @@ public class ReviewService {
         return result;
     }
 
-    @Cacheable("reviewsCache")
+    @Cacheable(value="reviewsCache", key="#senderId+'sender'")
     public List<ReviewRequestDto> getReviewBySender(UUID senderId) {
         var reviews =reviewBySenderRepository.findBySenderId(senderId);
         List<ReviewRequestDto> reviewRequestDtos = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ReviewService {
         }
         return reviewRequestDtos;
     }
-    @Cacheable("reviewsCache")
+    @Cacheable(value="reviewsCache", key="#receiverId+'reciever'")
     public List<ReviewRequestDto> getReviewByReceiver(UUID receiverId) {
         var reviews =reviewByReceiverRepository.findByReceiverId(receiverId);
         List<ReviewRequestDto> reviewRequestDtos = new ArrayList<>();
@@ -106,7 +106,7 @@ public class ReviewService {
         return  reviewRequestDtos;
     }
 
-    @CacheEvict(value = "reviewsCache", key = "#review.senderId")
+    @CacheEvict(value = "reviewsCache",  key="#review.senderId+'sender'")
     public Object editReview(EditRequestDto review){
         var violations  = editRequestDtoObjectsValidator.validate(review);
         if(!violations.isEmpty()){

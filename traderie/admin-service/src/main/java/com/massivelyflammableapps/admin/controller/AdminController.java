@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.massivelyflammableapps.shared.dto.AddCommandRequest;
-import com.massivelyflammableapps.shared.dto.DeleteCommandRequest;
-import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
-import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

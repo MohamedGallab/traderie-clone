@@ -17,7 +17,6 @@ spec:
           image: cassandra:latest
           ports:
             - containerPort: 9042
-
 ---
 apiVersion: v1
 kind: Service

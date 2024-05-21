@@ -25,3 +25,12 @@ service:
 logging:
   file:
     name: /var/log/offers-service/app.log
+
+listings:
+  service:
+    queue:
+      name: listings_queue
+
+messages-service:
+  queue:
+    name: messages_queue

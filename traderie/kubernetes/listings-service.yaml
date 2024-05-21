@@ -25,6 +25,11 @@ spec:
           volumeMounts:
             - mountPath: "/var/log"
               name: task-pv-storage
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 200m
 ---
 apiVersion: v1
 kind: Service
@@ -37,3 +42,22 @@ spec:
     - protocol: TCP
       port: 8082
       targetPort: 8082
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: listings-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: listings-service
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

@@ -19,7 +19,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Value("${spring.cassandra.contact-points}")
 	private String contactPoints;
-	
+
 	@Value("${spring.cassandra.port}")
 	private int port;
 

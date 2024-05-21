@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.massivelyflammableapps.offers.service.OffersService;
 import com.massivelyflammableapps.shared.CommandHandler;
-import com.massivelyflammableapps.shared.dto.AddCommandRequest;
-import com.massivelyflammableapps.shared.dto.DeleteCommandRequest;
-import com.massivelyflammableapps.shared.dto.ExecuteCommandRequest;
-import com.massivelyflammableapps.shared.dto.UpdateCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.AddCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
+import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 import com.massivelyflammableapps.shared.dto.offers.CreateOfferRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetAllOffersRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersByBuyerRequest;
@@ -20,13 +20,14 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersByListingRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
+import com.massivelyflammableapps.shared.dto.offers.UpdateOfferRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RabbitListener(queues = { "${service.queue.name}" })
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class OffersInvoker {
 
     @Autowired
@@ -57,6 +58,19 @@ public class OffersInvoker {
             }
         });
     }
+
+    @Async
+    @RabbitHandler
+    public CompletableFuture<OfferDTO> updateOfferStatus(@Payload UpdateOfferRequest request) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new UpdateOfferCommand(offersService,request.getOfferId(), request.getStatus()).execute();
+            } catch (Exception e) {
+                return new OfferDTO();
+            }
+        });
+    }
+
 
     @Async
     @RabbitHandler
@@ -163,4 +177,6 @@ public class OffersInvoker {
             }
         });
     }
+
+    
 }

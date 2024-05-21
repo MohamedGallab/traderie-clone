@@ -1,8 +1,9 @@
 package com.massivelyflammableapps.listings.commands;
 
-import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
-import com.massivelyflammableapps.shared.dto.listings.ListingUpdateDTO;
 import com.massivelyflammableapps.listings.service.ListingsService;
+
+import com.massivelyflammableapps.shared.dto.listings.MarkListingDTO;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,13 +14,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateListingStateCommand extends AbstractCommand<ListingDTO> {
+public class MarkListingCommand extends AbstractCommand<Boolean> {
     @NonNull
     private ListingsService listingsService;
     @NonNull
-    private ListingUpdateDTO listingUpdateDTO;
+    private MarkListingDTO markListingDTO;
 
-    public ListingDTO execute() {
-        return listingsService.updateListingState(listingUpdateDTO);
+    public Boolean execute() {
+        return listingsService.markListing(markListingDTO);
     }
 }
