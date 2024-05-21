@@ -55,6 +55,49 @@ public class OffersService {
         return response.toDTO();
     }
 
+    @CacheEvict(value = "offers_cache", allEntries = true)
+    public OfferDTO updateOfferStatus(UUID offerId, String status) {
+        Offer offer = offersRepository.findById(offerId)
+                       .orElseThrow(() -> new RuntimeException("Offer not found"));
+        offer.setStatus(status);
+        offersRepository.save(offer);
+
+        updateRelatedOfferStatus(offer);
+    
+        return offer.toDTO();
+    }
+    
+    private void updateRelatedOfferStatus(Offer offer) {
+        UUID listingId = offer.getListingId();
+        UUID sellerId = offer.getSellerId();
+        UUID buyerId = offer.getBuyerId();
+        String status = offer.getStatus();
+    
+        List<OfferByListing> offerByListings = offersByListingRepository.findByListingId(listingId);
+        offerByListings.forEach(offerByListing -> {
+            offerByListing.setStatus(status);
+            offersByListingRepository.save(offerByListing);
+        });
+    
+        List<OfferBySeller> offerBySellers = offersBySellerRepository.findBySellerId(sellerId);
+        offerBySellers.forEach(offerBySeller -> {
+            offerBySeller.setStatus(status);
+            offersBySellerRepository.save(offerBySeller);
+        });
+    
+        List<OfferByBuyer> offerByBuyers = offersByBuyerRepository.findByBuyerId(buyerId);
+        offerByBuyers.forEach(offerByBuyer -> {
+            offerByBuyer.setStatus(status);
+            offersByBuyerRepository.save(offerByBuyer);
+        });
+    
+        List<OfferBySellerAndBuyer> offerBySellerAndBuyers = offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
+        offerBySellerAndBuyers.forEach(offerBySellerAndBuyer -> {
+            offerBySellerAndBuyer.setStatus(status);
+            offersBySellerAndBuyerRepository.save(offerBySellerAndBuyer);
+        });
+    }
+
     @Cacheable("offers_cache")
     public List<OfferDTO> getAllOffers() {
         var offers = offersRepository.findAll();
