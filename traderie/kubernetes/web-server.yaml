@@ -12,12 +12,24 @@ spec:
       labels:
         app: web-server
     spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: web-server
           image: web-server:latest
           ports:
             - containerPort: 8080
           imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 500m
 ---
 apiVersion: v1
 kind: Service
@@ -32,3 +44,22 @@ spec:
       port: 8080
       targetPort: 8080
       nodePort: 30000
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-server-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-server
+  minReplicas: 5
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

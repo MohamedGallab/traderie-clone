@@ -12,12 +12,24 @@ spec:
       labels:
         app: offers-service
     spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: offers-service
           image: offers-service:latest
           ports:
             - containerPort: 8084
           imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 500m
 ---
 apiVersion: v1
 kind: Service
@@ -30,3 +42,22 @@ spec:
     - protocol: TCP
       port: 8084
       targetPort: 8084
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: offers-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: offers-service
+  minReplicas: 5
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

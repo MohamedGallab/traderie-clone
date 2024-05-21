@@ -16,19 +16,27 @@ spring:
 
 offers-service:
   queue:
-    name: offers_queue
+    name: offers_queue_admin
 
 listings-service:
   queue:
-    name: listings_queue
+    name: listings_queue_admin
 
 messages-service:
   queue:
-    name: messages_queue
+    name: messages_queue_admin
 
 users-service:
   queue:
-    name: users_queue
+    name: users_queue_admin
+
+reviews-service:
+  queue:
+    name: reviews_queue_admin
 
 admin-service:
   classpath: admin-service/src/main/java/com/massivelyflammableapps/admin/
+
+logging:
+  file:
+    name: /var/log/admin-service/app.log

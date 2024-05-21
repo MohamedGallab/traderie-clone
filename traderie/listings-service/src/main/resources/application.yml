@@ -21,3 +21,7 @@ spring:
 service:
   queue:
     name: listings_queue
+
+logging:
+  file:
+    name: /var/log/listings-service/app.log

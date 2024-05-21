@@ -20,13 +20,14 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersByListingRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
+import com.massivelyflammableapps.shared.dto.offers.UpdateOfferRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RabbitListener(queues = { "${service.queue.name}" })
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class OffersInvoker {
 
     @Autowired
@@ -57,6 +58,19 @@ public class OffersInvoker {
             }
         });
     }
+
+    @Async
+    @RabbitHandler
+    public CompletableFuture<OfferDTO> updateOfferStatus(@Payload UpdateOfferRequest request) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new UpdateOfferCommand(offersService,request.getOfferId(), request.getStatus()).execute();
+            } catch (Exception e) {
+                return new OfferDTO();
+            }
+        });
+    }
+
 
     @Async
     @RabbitHandler
@@ -163,4 +177,6 @@ public class OffersInvoker {
             }
         });
     }
+
+    
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.ArrayList;
 
 @Service
-@RabbitListener(queues = {"${service.queue.name}"})
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class ReviewsInvoker {
     @Autowired
     private ReviewService reviewService;
@@ -56,7 +56,8 @@ public class ReviewsInvoker {
     public CompletableFuture<Object> getReviewByReceiver(@Payload GetReviewByReceiverRequest request) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                GetReviewsByReceiverCommand command = new GetReviewsByReceiverCommand(reviewService, request.getReceiverId());
+                GetReviewsByReceiverCommand command = new GetReviewsByReceiverCommand(reviewService,
+                        request.getReceiverId());
                 return command.execute();
             } catch (Exception e) {
                 return new ArrayList<>();
@@ -90,7 +91,6 @@ public class ReviewsInvoker {
         });
     }
 
-    
     @Async
     @RabbitHandler
     public CompletableFuture<Boolean> addCommand(@Payload AddCommandRequest request) {
