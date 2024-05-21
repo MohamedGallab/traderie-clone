@@ -1,0 +1,23 @@
+logging:
+  level:
+    org.springframework: DEBUG
+    # If you want to enable debug logging for all packages, you can use:
+    root: DEBUG
+server:
+  port: 8089
+
+spring:
+  application:
+    name: media-service
+    mvc:
+      path match:
+        matching-strategy: ant_path_matcher
+service:
+  queue:
+    name: media_queue
+
+couchdb:
+  url: http://localhost:5984
+  database: media_metadata
+  username: admin
+  password: admin_password
