@@ -35,7 +35,7 @@ public class ListingByGameByProduct {
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
         @NonNull
-        private UUID listingId = UUID.randomUUID();
+        private UUID listingId;
 
         @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
         @NonNull
@@ -69,6 +69,7 @@ public class ListingByGameByProduct {
                 this.quantity = listingDTO.getQuantity();
                 this.userId = listingDTO.getUserId();
                 this.desiredOffer = new ArrayList<>();
+                this.listingId = listingDTO.getListingId();
                 List<List<ProductAmount>> desiredOffer = new ArrayList<>();
                 for (List<ProductAmountDTO> productAmountListDTO : listingDTO.getDesiredOffer()) {
                         List<ProductAmount> productAmountList = new ArrayList<>();
