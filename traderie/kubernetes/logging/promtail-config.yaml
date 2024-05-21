@@ -21,4 +21,4 @@ data:
               - messages-service
             labels:
               job: hehe
-              __path__: /var/log/*log
+              __path__: /var/log/messages-service/*log

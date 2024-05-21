@@ -14,6 +14,10 @@ kubectl delete service web-server-service
 kubectl delete service admin-service
 kubectl delete service users-service-service
 kubectl delete service reviews-service-service
+kubectl delete service reviews-service-service
+kubectl delete service reviews-service-service
+kubectl delete service loki-service
+kubectl delete service grafana-service
 
 docker builder prune --all -f
 
@@ -24,4 +28,5 @@ docker build -f admin-service\Dockerfile -t admin-service:latest .
 docker build -f reviews-service\Dockerfile -t reviews-service:latest .
 docker build -f users-service\Dockerfile -t users-service:latest .
 docker build -f web-server\Dockerfile -t web-server:latest .
+
 kubectl apply -f ./kubernetes -R

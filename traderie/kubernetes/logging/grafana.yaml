@@ -17,6 +17,16 @@ spec:
           image: grafana/grafana:latest
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - mountPath: "/etc/grafana/provisioning/datasources/"
+              name: config-volume
+       volumes:
+        - name: config-volume
+          configMap:
+            name: grafana-config
+            items:
+              - key: datasources.yaml
+                path: datasources.yaml
 ---
 apiVersion: v1
 kind: Service
