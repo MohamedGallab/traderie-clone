@@ -6,10 +6,13 @@ import java.util.UUID;
 
 import com.massivelyflammableapps.shared.dto.listings.*;
 import com.massivelyflammableapps.shared.resources.STATE;
+import com.massivelyflammableapps.listings.model.Listing;
 import com.massivelyflammableapps.listings.model.ListingByGameByProduct;
 import com.massivelyflammableapps.listings.model.ListingByGameByUser;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByProductRepository;
 import com.massivelyflammableapps.listings.repository.ListingsByGameByUserRepository;
+import com.massivelyflammableapps.listings.repository.ListingsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,6 +24,8 @@ public class ListingsService {
     private ListingsByGameByProductRepository listingsByGameByProductRepository;
     @Autowired
     private ListingsByGameByUserRepository listingsByGameByUserRepository;
+    @Autowired
+    private ListingsRepository listingsRepository;
 
     @Cacheable("listingsCache")
     public List<ListingDTO> getAllListingsByGameByProduct(GetListingsByGameByProductDTO request) {
@@ -76,6 +81,9 @@ public class ListingsService {
     public ListingDTO createListing(ListingDTO request) {
         // TODO Decode token from the cache(USER SERVICE)
         // request.setUserId(UUID.fromString("TOKEN DECODE PLS"));
+        Listing newListing = new Listing(request);
+
+        request.setListingId(newListing.getListingId());
 
         ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(request);
         listingsByGameByProductRepository.save(newListingByGameByProduct);
@@ -116,5 +124,27 @@ public class ListingsService {
         listingByGameByUser.setState(request.getState());
         listingsByGameByUserRepository.save(listingByGameByUser);
         return listingsByGameByProductRepository.save(listingByGameByProduct).toDTO();
+    }
+
+    @CacheEvict(value = "listingsCache", allEntries = true)
+    public boolean markListing(MarkListingDTO request) {
+        try {
+            Listing listing = listingsRepository.findByListingId(request.getListingId());
+            ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
+                    .findByGameIdAndProductIdAndBuyingAndListingId(
+                            listing.getGameId(), listing.getProductId(), listing.isBuying(), listing.getListingId());
+
+            listingByGameByProduct.setState(request.getState());
+            ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository
+                    .findByUserIdAndGameIdAndBuyingAndListingId(
+                            listingByGameByProduct.getUserId(), listingByGameByProduct.getGameId(),
+                            listingByGameByProduct.getBuying(),
+                            listingByGameByProduct.getListingId());
+            listingByGameByUser.setState(request.getState());
+            listingsByGameByUserRepository.save(listingByGameByUser);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

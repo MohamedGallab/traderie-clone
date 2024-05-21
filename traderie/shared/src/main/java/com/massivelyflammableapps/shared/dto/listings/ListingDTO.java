@@ -3,6 +3,7 @@ package com.massivelyflammableapps.shared.dto.listings;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 import java.io.Serializable;
