@@ -22,7 +22,7 @@ spec:
             requests:
               cpu: 100m
             limits:
-              cpu: 200m
+              cpu: 500m
 ---
 apiVersion: v1
 kind: Service
@@ -47,8 +47,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: web-server
-  minReplicas: 1
-  maxReplicas: 2
+  minReplicas: 5
+  maxReplicas: 10
   metrics:
   - type: Resource
     resource:
