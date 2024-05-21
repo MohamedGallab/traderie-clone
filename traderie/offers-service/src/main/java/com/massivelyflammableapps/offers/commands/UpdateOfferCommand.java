@@ -1,15 +1,12 @@
 
 package com.massivelyflammableapps.offers.commands;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.service.OffersService;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

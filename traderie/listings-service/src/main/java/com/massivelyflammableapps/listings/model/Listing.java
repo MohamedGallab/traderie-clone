@@ -2,8 +2,6 @@ package com.massivelyflammableapps.listings.model;
 
 import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import com.massivelyflammableapps.shared.dto.listings.ProductAmountDTO;
-import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
-import com.massivelyflammableapps.shared.dto.offers.OfferedProductDTO;
 import com.massivelyflammableapps.shared.resources.STATE;
 
 import lombok.*;
