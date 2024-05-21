@@ -5,7 +5,8 @@ import com.massivelyflammableapps.shared.dto.listings.ProductAmountDTO;
 import com.massivelyflammableapps.shared.resources.STATE;
 
 import lombok.*;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Table
 public class Listing {
-        @PrimaryKeyColumn
+        @PrimaryKey
         private UUID listingId = UUID.randomUUID();
         @NonNull
         private UUID userId;
