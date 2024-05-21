@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ import com.massivelyflammableapps.shared.dto.messages.MessageDTO;
 
 @Service
 public class MessagesService {
+        private static final Logger logger = LoggerFactory.getLogger(MessagesService.class);
+
         @Autowired
         MessageRepository messageRepository;
 
@@ -78,6 +83,10 @@ public class MessagesService {
         }
 
         public ChatDTO postChat(ChatRequest request) {
+                logger.debug("A DEBUG Message");
+                logger.info("An INFO Message");
+                logger.warn("A WARN Message");
+                logger.error("An ERROR Message");
                 Chat newChat = new Chat(
                                 request.getInitiatorId(),
                                 request.getReceiverId(),

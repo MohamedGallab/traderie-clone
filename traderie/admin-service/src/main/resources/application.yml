@@ -36,3 +36,7 @@ reviews-service:
 
 admin-service:
   classpath: admin-service/src/main/java/com/massivelyflammableapps/admin/
+
+logging:
+  file:
+    name: /var/log/admin-service/app.log

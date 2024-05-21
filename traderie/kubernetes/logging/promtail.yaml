@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promtail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promtail
+  template:
+    metadata:
+      labels:
+        app: promtail
+    spec:
+      containers:
+        - name: promtail
+          image: grafana/promtail
+          args: ["-config.file=/etc/promtail/promtail-config.yaml"]
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
+            - mountPath: "/etc/promtail"
+              name: config-volume
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+        - name: config-volume
+          configMap:
+            name: promtail-config
+            items:
+              - key: promtail-config.yaml
+                path: promtail-config.yaml

@@ -20,9 +20,15 @@ import com.massivelyflammableapps.shared.dto.messages.chats.*;
 import com.massivelyflammableapps.shared.dto.messages.messages.*;
 import com.massivelyflammableapps.shared.dto.messages.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("api/v1/messages")
 public class MessagesController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
+
     @Value("${messages-service.queue.name}")
     private String messagesQueueName;
 
@@ -60,6 +66,9 @@ public class MessagesController {
     @GetMapping(value = "/getUserChats", params = { "userId" })
     public ResponseEntity<List<ChatDTO>> getUserChats(@RequestParam UUID userId) {
         try {
+            logger.info("An INFO Message");
+            logger.warn("A WARN Message");
+            logger.error("An ERROR Message");
             GetUserChatsRequest command = new GetUserChatsRequest(userId);
             List<ChatDTO> chats = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName,
                     command,

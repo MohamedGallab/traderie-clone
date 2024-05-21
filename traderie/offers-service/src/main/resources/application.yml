@@ -22,6 +22,10 @@ service:
   queue:
     name: offers_queue
 
+logging:
+  file:
+    name: /var/log/offers-service/app.log
+
 listings:
   service:
     queue:
