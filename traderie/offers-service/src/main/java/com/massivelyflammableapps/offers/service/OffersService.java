@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.massivelyflammableapps.offers.model.Offer;
 import com.massivelyflammableapps.offers.model.OfferByBuyer;
@@ -55,6 +56,7 @@ public class OffersService {
         return response.toDTO();
     }
 
+    @Transactional
     @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO updateOfferStatus(UUID offerId, String status) {
         Offer offer = offersRepository.findById(offerId)
@@ -63,6 +65,10 @@ public class OffersService {
         offersRepository.save(offer);
 
         updateRelatedOfferStatus(offer);
+
+        if ("Accepted".equalsIgnoreCase(status)) {
+            //sendListingUpdateMessage(offer);
+        }
     
         return offer.toDTO();
     }
