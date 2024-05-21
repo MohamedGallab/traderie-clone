@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,11 @@ import com.massivelyflammableapps.offers.repository.OffersByListingRepository;
 import com.massivelyflammableapps.offers.repository.OffersBySellerAndBuyerRepository;
 import com.massivelyflammableapps.offers.repository.OffersBySellerRepository;
 import com.massivelyflammableapps.offers.repository.OffersRepository;
+import com.massivelyflammableapps.shared.dto.listings.MarkListingDTO;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
+import com.massivelyflammableapps.shared.resources.STATE;
+
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class OffersService {
@@ -34,6 +40,11 @@ public class OffersService {
     private OffersByBuyerRepository offersByBuyerRepository;
     @Autowired
     private OffersBySellerAndBuyerRepository offersBySellerAndBuyerRepository;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${listings.service.queue.name}")
+    private String listingsQueueName;
 
     @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO createOffer(OfferDTO request) {
@@ -67,7 +78,7 @@ public class OffersService {
         updateRelatedOfferStatus(offer);
 
         if ("Accepted".equalsIgnoreCase(status)) {
-            //sendListingUpdateMessage(offer);
+            sendListingUpdateMessage(offer);
         }
     
         return offer.toDTO();
@@ -102,6 +113,11 @@ public class OffersService {
             offerBySellerAndBuyer.setStatus(status);
             offersBySellerAndBuyerRepository.save(offerBySellerAndBuyer);
         });
+    }
+
+    private void sendListingUpdateMessage(Offer offer) {
+        MarkListingDTO markListingDTO = new MarkListingDTO(offer.getListingId(), STATE.SOLD);
+        rabbitTemplate.convertAndSend(listingsQueueName, markListingDTO);
     }
 
     @Cacheable("offers_cache")

@@ -10,6 +10,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersByListingRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerAndBuyerRequest;
 import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
+import com.massivelyflammableapps.shared.dto.offers.UpdateOfferRequest;
 
 @RestController
 @RequestMapping("api/v1/offers")
@@ -53,6 +55,19 @@ public class OffersController {
             OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<OfferDTO>() {
                     });
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    
+    @PutMapping(params= {"offerId", "status"})
+    public ResponseEntity<OfferDTO> updateOfferStatus(@RequestParam UUID offerId, @RequestParam String status) {
+        try {
+            UpdateOfferRequest command = new UpdateOfferRequest(offerId, status);
+            OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
+                    new ParameterizedTypeReference<OfferDTO>() {});
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
