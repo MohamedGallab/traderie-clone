@@ -22,4 +22,5 @@
 2. Start minikube `minikube start --driver=docker --cpus 8 --memory 15920`
 3. `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
 4. run deploy.bat
+5. to access through postman `minikube tunnel`
 6. generate load on web server `kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://web-server-service:8080/api/v1/offers; done"`
