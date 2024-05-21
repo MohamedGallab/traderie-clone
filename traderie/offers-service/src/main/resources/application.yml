@@ -26,3 +26,7 @@ listings:
   service:
     queue:
       name: listings_queue
+
+messages-service:
+  queue:
+    name: messages_queue
