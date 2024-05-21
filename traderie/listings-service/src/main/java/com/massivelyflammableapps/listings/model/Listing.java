@@ -28,14 +28,14 @@ public class Listing {
         @NonNull
         private UUID productId;
         @NonNull
-        private boolean buying;
+        private Boolean buying;
         private String timestamp = new Date().toString();
         @NonNull
         private String productName;
         @NonNull
         private String productIcon;
         @NonNull
-        private int quantity;
+        private Integer quantity;
         @NonNull
         private List<List<ProductAmountDTO>> desiredOffer;
         @NonNull
