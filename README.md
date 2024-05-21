@@ -18,7 +18,7 @@
 1. `docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest`
 
 ### Minikube
-1. install [minikube](https://minikube.sigs.k8s.io/docs/start/)
+1. install [minikube](https://minikube.sigs.k8s.io/docs/start/) (Use the docker driver `minikube start --driver=docker`)
 2. `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
 3. run deploy.bat
 4. `minikube addons enable metrics-server`
