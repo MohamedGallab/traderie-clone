@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      containers:
+        - name: loki
+          image: grafana/loki
+          args: ["-config.file=/etc/loki/loki-config.yaml"]
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
+            - mountPath: "/etc/loki"
+              name: config-volume
+          ports:
+            - containerPort: 3100
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+        - name: config-volume
+          configMap:
+            name: loki-config
+            items:
+              - key: loki-config.yaml
+                path: loki-config.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-service
+spec:
+  selector:
+    app: loki
+  ports:
+    - protocol: TCP
+      port: 3100
+      targetPort: 3100
