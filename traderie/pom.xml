@@ -19,6 +19,7 @@
 		<module>messages-service</module>
 		<module>users-service</module>
 		<module>reviews-service</module>
+		<module>media-managment-service</module>
 		<module>shared</module>
 		<module>web-server</module>
 		<module>admin-service</module>
