@@ -84,17 +84,11 @@ public class ListingsService {
         Listing newListing = new Listing(request);
 
         request.setListingId(newListing.getListingId());
-        System.out.println("Fukcer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-        System.out.println("newListing: " + newListing);
 
         listingsRepository.save(newListing);
-        System.out.println("NoError!");
 
         ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(request);
         listingsByGameByProductRepository.save(newListingByGameByProduct);
-
-        System.out.println("newListingByGameByProduct: " + newListingByGameByProduct);
 
         ListingByGameByUser newListingByGameByUser = new ListingByGameByUser(
                 request.getUserId(),
@@ -107,10 +101,6 @@ public class ListingsService {
                 newListingByGameByProduct.getDesiredOffer(),
                 newListingByGameByProduct.getProductId());
         listingsByGameByUserRepository.save(newListingByGameByUser);
-
-        System.out.println("newListingByGameByUser: " + newListingByGameByUser);
-
-        System.out.println("newListingByGameByProductDTO: " + newListingByGameByProduct.toDTO());
         return newListingByGameByProduct.toDTO();
     }
 
