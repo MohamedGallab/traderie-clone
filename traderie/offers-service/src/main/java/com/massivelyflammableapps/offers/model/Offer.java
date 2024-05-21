@@ -42,11 +42,9 @@ public class Offer {
     private List<List<OfferedProduct>> offeredProducts;
 
     public Offer(OfferDTO offerDTO) {
-        this.id = offerDTO.getId();
         this.listingId = offerDTO.getListingId();
         this.buyerId = offerDTO.getBuyerId();
         this.sellerId = offerDTO.getSellerId();
-        this.timestamp = offerDTO.getTimestamp();
         this.status = offerDTO.getStatus();
         List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
         for (List<OfferedProductDTO> offeredProductDTOList : offerDTO.getOfferedProducts()) {

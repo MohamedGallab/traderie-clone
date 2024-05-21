@@ -37,6 +37,8 @@ public class OffersService {
     @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO createOffer(OfferDTO request) {
         Offer newOffer = new Offer(request);
+        
+        request.setId(newOffer.getId());
 
         OfferByListing newOfferByListing = new OfferByListing(request);
 
