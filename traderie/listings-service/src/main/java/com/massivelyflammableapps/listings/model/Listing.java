@@ -6,6 +6,7 @@ import com.massivelyflammableapps.shared.resources.STATE;
 
 import lombok.*;
 
+import org.springframework.data.cassandra.core.mapping.Frozen;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -38,13 +39,13 @@ public class Listing {
         @NonNull
         private Integer quantity;
         @NonNull
-        private List<List<ProductAmountDTO>> desiredOffer;
+        @Frozen
+        private List<List<ProductAmount>> desiredOffer;
         @NonNull
         private STATE state;
 
         public Listing(ListingDTO listingDTO) {
                 this.listingId = UUID.randomUUID();
-                this.listingId = listingDTO.getListingId();
                 this.userId = listingDTO.getUserId();
                 this.gameId = listingDTO.getGameId();
                 this.productId = listingDTO.getProductId();
@@ -53,11 +54,11 @@ public class Listing {
                 this.productName = listingDTO.getProductName();
                 this.productIcon = listingDTO.getProductIcon();
                 this.quantity = listingDTO.getQuantity();
-                List<List<ProductAmountDTO>> desiredOffer = new ArrayList<>();
+                List<List<ProductAmount>> desiredOffer = new ArrayList<>();
                 for (List<ProductAmountDTO> productAmountDTOList : listingDTO.getDesiredOffer()) {
-                        List<ProductAmountDTO> productAmountList = new ArrayList<>();
+                        List<ProductAmount> productAmountList = new ArrayList<>();
                         for (ProductAmountDTO productAmountDTO : productAmountDTOList) {
-                                productAmountList.add(productAmountDTO);
+                                productAmountList.add(new ProductAmount(productAmountDTO));
                         }
                         desiredOffer.add(productAmountList);
                 }
@@ -67,15 +68,16 @@ public class Listing {
         }
 
         public ListingDTO toDTO() {
-                List<List<ProductAmountDTO>> desiredOffer = new ArrayList<>();
-                for (List<ProductAmountDTO> productAmountList : this.desiredOffer) {
-                        List<ProductAmountDTO> productAmountDTOList = new ArrayList<>();
-                        for (ProductAmountDTO productAmount : productAmountList) {
-                                productAmountDTOList.add(productAmount);
+                List<List<ProductAmountDTO>> desiredOfferDTO = new ArrayList<>();
+                for (List<ProductAmount> productAmountList : desiredOffer) {
+                        List<ProductAmountDTO> productAmountListDTO = new ArrayList<>();
+                        for (ProductAmount productAmount : productAmountList) {
+                                productAmountListDTO.add(productAmount.toDTO());
                         }
-                        desiredOffer.add(productAmountDTOList);
+                        desiredOfferDTO.add(productAmountListDTO);
+
                 }
                 return new ListingDTO(userId, gameId, productId, buying, timestamp, listingId, productName, productIcon,
-                                quantity, desiredOffer, state);
+                                quantity, desiredOfferDTO, state);
         }
 }
