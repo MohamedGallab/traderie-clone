@@ -132,7 +132,7 @@ public class ListingsService {
             Listing listing = listingsRepository.findByListingId(request.getListingId());
             ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
                     .findByGameIdAndProductIdAndBuyingAndListingId(
-                            listing.getGameId(), listing.getProductId(), listing.isBuying(), listing.getListingId());
+                            listing.getGameId(), listing.getProductId(), listing.getBuying(), listing.getListingId());
 
             listingByGameByProduct.setState(request.getState());
             ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository

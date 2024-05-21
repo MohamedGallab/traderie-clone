@@ -2,8 +2,6 @@ package com.massivelyflammableapps.listings.model;
 
 import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import com.massivelyflammableapps.shared.dto.listings.ProductAmountDTO;
-import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
-import com.massivelyflammableapps.shared.dto.offers.OfferedProductDTO;
 import com.massivelyflammableapps.shared.resources.STATE;
 
 import lombok.*;
@@ -30,14 +28,14 @@ public class Listing {
         @NonNull
         private UUID productId;
         @NonNull
-        private boolean buying;
+        private Boolean buying;
         private String timestamp = new Date().toString();
         @NonNull
         private String productName;
         @NonNull
         private String productIcon;
         @NonNull
-        private int quantity;
+        private Integer quantity;
         @NonNull
         private List<List<ProductAmountDTO>> desiredOffer;
         @NonNull
