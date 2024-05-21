@@ -2,13 +2,15 @@ package com.massivelyflammableapps.offers.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.cassandra.core.mapping.BasicMapId;
+import org.springframework.data.cassandra.core.mapping.MapId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,31 +87,34 @@ public class OffersService {
     }
     
     private void updateRelatedOfferStatus(Offer offer) {
-        UUID listingId = offer.getListingId();
-        UUID sellerId = offer.getSellerId();
-        UUID buyerId = offer.getBuyerId();
         String status = offer.getStatus();
     
-        List<OfferByListing> offerByListings = offersByListingRepository.findByListingId(listingId);
-        offerByListings.forEach(offerByListing -> {
+        MapId idForOfferByListing = BasicMapId.id("listingId", offer.getListingId()).with("id", offer.getId());
+        Optional<OfferByListing> offerByListings = offersByListingRepository.findById(idForOfferByListing);
+        offerByListings.ifPresent(offerByListing -> {
             offerByListing.setStatus(status);
             offersByListingRepository.save(offerByListing);
         });
-    
-        List<OfferBySeller> offerBySellers = offersBySellerRepository.findBySellerId(sellerId);
-        offerBySellers.forEach(offerBySeller -> {
+
+        MapId idForOfferBySeller = BasicMapId.id("sellerId", offer.getSellerId()).with("id", offer.getId());
+        Optional<OfferBySeller> offerBySellers = offersBySellerRepository.findById(idForOfferBySeller);
+        offerBySellers.ifPresent(offerBySeller -> {
             offerBySeller.setStatus(status);
             offersBySellerRepository.save(offerBySeller);
         });
     
-        List<OfferByBuyer> offerByBuyers = offersByBuyerRepository.findByBuyerId(buyerId);
-        offerByBuyers.forEach(offerByBuyer -> {
+        MapId idForOfferByBuyer = BasicMapId.id("buyerId", offer.getBuyerId()).with("id", offer.getId());
+        Optional<OfferByBuyer> offerByBuyers = offersByBuyerRepository.findById(idForOfferByBuyer);
+        offerByBuyers.ifPresent(offerByBuyer -> {
             offerByBuyer.setStatus(status);
             offersByBuyerRepository.save(offerByBuyer);
         });
     
-        List<OfferBySellerAndBuyer> offerBySellerAndBuyers = offersBySellerAndBuyerRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
-        offerBySellerAndBuyers.forEach(offerBySellerAndBuyer -> {
+        MapId idForOfferBySellerAndBuyer = BasicMapId.id("sellerId", offer.getSellerId())
+                                             .with("buyerId", offer.getBuyerId())
+                                             .with("id", offer.getId());
+        Optional<OfferBySellerAndBuyer> offerBySellerAndBuyers = offersBySellerAndBuyerRepository.findById(idForOfferBySellerAndBuyer);
+        offerBySellerAndBuyers.ifPresent(offerBySellerAndBuyer -> {
             offerBySellerAndBuyer.setStatus(status);
             offersBySellerAndBuyerRepository.save(offerBySellerAndBuyer);
         });
