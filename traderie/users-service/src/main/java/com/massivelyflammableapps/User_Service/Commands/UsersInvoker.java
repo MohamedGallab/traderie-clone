@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RabbitListener(queues = {"${service.queue.name}"})
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class UsersInvoker {
 
     @Autowired

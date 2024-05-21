@@ -85,6 +85,8 @@ public class ListingsService {
 
         request.setListingId(newListing.getListingId());
 
+        listingsRepository.save(newListing);
+
         ListingByGameByProduct newListingByGameByProduct = new ListingByGameByProduct(request);
         listingsByGameByProductRepository.save(newListingByGameByProduct);
 

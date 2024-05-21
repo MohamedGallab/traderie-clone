@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RabbitListener(queues = { "${service.queue.name}" })
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class OffersInvoker {
 
     @Autowired

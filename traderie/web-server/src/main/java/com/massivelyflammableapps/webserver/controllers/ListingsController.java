@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("api/v1/listings")
@@ -22,7 +23,6 @@ public class ListingsController {
     public ResponseEntity<List<ListingDTO>> getAllListingsByGameByProduct(
             @RequestBody GetListingsByGameByProductDTO request) {
         try {
-
             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
@@ -64,7 +64,6 @@ public class ListingsController {
     @PostMapping
     public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {
         try {
-
             ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });

@@ -29,7 +29,7 @@ import com.massivelyflammableapps.shared.dto.messages.chats.*;
 import com.massivelyflammableapps.shared.dto.messages.messages.*;
 
 @Service
-@RabbitListener(queues = { "${service.queue.name}" })
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin" })
 public class MessagesInvoker {
     @Autowired
     private MessagesService messagesService;
