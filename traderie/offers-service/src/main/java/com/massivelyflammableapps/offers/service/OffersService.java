@@ -2,13 +2,13 @@ package com.massivelyflammableapps.offers.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.cassandra.core.mapping.BasicMapId;
 import org.springframework.data.cassandra.core.mapping.MapId;
 import org.springframework.stereotype.Service;
@@ -80,7 +80,10 @@ public class OffersService {
         updateRelatedOfferStatus(offer);
 
         if ("Accepted".equalsIgnoreCase(status)) {
-            sendListingUpdateMessage(offer);
+            boolean result = sendListingUpdateMessage(offer);
+            if(!result){
+                throw new RuntimeException("Failed to send listing update message");
+            }
         }
     
         return offer.toDTO();
@@ -88,41 +91,41 @@ public class OffersService {
     
     private void updateRelatedOfferStatus(Offer offer) {
         String status = offer.getStatus();
-    
+
         MapId idForOfferByListing = BasicMapId.id("listingId", offer.getListingId()).with("id", offer.getId());
-        Optional<OfferByListing> offerByListings = offersByListingRepository.findById(idForOfferByListing);
-        offerByListings.ifPresent(offerByListing -> {
-            offerByListing.setStatus(status);
-            offersByListingRepository.save(offerByListing);
-        });
+        OfferByListing offerByListing = offersByListingRepository.findById(idForOfferByListing)
+            .orElseThrow(() -> new IllegalStateException("No OfferByListing found with id: " + idForOfferByListing));
+        offerByListing.setStatus(status);
+        offersByListingRepository.save(offerByListing);
 
         MapId idForOfferBySeller = BasicMapId.id("sellerId", offer.getSellerId()).with("id", offer.getId());
-        Optional<OfferBySeller> offerBySellers = offersBySellerRepository.findById(idForOfferBySeller);
-        offerBySellers.ifPresent(offerBySeller -> {
-            offerBySeller.setStatus(status);
-            offersBySellerRepository.save(offerBySeller);
-        });
+        OfferBySeller offerBySeller = offersBySellerRepository.findById(idForOfferBySeller)
+            .orElseThrow(() -> new IllegalStateException("No OfferBySeller found with id: " + idForOfferBySeller));
+        offerBySeller.setStatus(status);
+        offersBySellerRepository.save(offerBySeller);
     
         MapId idForOfferByBuyer = BasicMapId.id("buyerId", offer.getBuyerId()).with("id", offer.getId());
-        Optional<OfferByBuyer> offerByBuyers = offersByBuyerRepository.findById(idForOfferByBuyer);
-        offerByBuyers.ifPresent(offerByBuyer -> {
-            offerByBuyer.setStatus(status);
-            offersByBuyerRepository.save(offerByBuyer);
-        });
+        OfferByBuyer offerByBuyer = offersByBuyerRepository.findById(idForOfferByBuyer)
+            .orElseThrow(() -> new IllegalStateException("No OfferByBuyer found with id: " + idForOfferByBuyer));
+        offerByBuyer.setStatus(status);
+        offersByBuyerRepository.save(offerByBuyer);
     
         MapId idForOfferBySellerAndBuyer = BasicMapId.id("sellerId", offer.getSellerId())
-                                             .with("buyerId", offer.getBuyerId())
-                                             .with("id", offer.getId());
-        Optional<OfferBySellerAndBuyer> offerBySellerAndBuyers = offersBySellerAndBuyerRepository.findById(idForOfferBySellerAndBuyer);
-        offerBySellerAndBuyers.ifPresent(offerBySellerAndBuyer -> {
-            offerBySellerAndBuyer.setStatus(status);
-            offersBySellerAndBuyerRepository.save(offerBySellerAndBuyer);
-        });
+            .with("buyerId", offer.getBuyerId())
+            .with("id", offer.getId());
+        OfferBySellerAndBuyer offerBySellerAndBuyer = offersBySellerAndBuyerRepository.findById(idForOfferBySellerAndBuyer)
+            .orElseThrow(() -> new IllegalStateException("No OfferBySellerAndBuyer found with id: " + idForOfferBySellerAndBuyer));
+        offerBySellerAndBuyer.setStatus(status);
+        offersBySellerAndBuyerRepository.save(offerBySellerAndBuyer);
     }
 
-    private void sendListingUpdateMessage(Offer offer) {
+    private boolean sendListingUpdateMessage(Offer offer) {
         MarkListingDTO markListingDTO = new MarkListingDTO(offer.getListingId(), STATE.SOLD);
-        rabbitTemplate.convertAndSend(listingsQueueName, markListingDTO);
+        rabbitTemplate.convertAndSend(listingsQueueName,  markListingDTO);
+        boolean response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, markListingDTO,
+                    new ParameterizedTypeReference<Boolean>() {
+                    });
+        return response;
     }
 
     @Cacheable("offers_cache")
