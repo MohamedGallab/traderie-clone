@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Frozen;
@@ -15,7 +14,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 import com.massivelyflammableapps.shared.dto.offers.OfferedProductDTO;
 
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -23,13 +21,13 @@ import com.massivelyflammableapps.shared.dto.offers.OfferedProductDTO;
 @Table
 
 public class OfferBySellerAndBuyer {
-    
-    @PrimaryKeyColumn( type = PrimaryKeyType.CLUSTERED) 
+
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
     private UUID id;
 
     @NonNull
-    private UUID listingId; 
-    
+    private UUID listingId;
+
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID buyerId;
 
@@ -46,12 +44,12 @@ public class OfferBySellerAndBuyer {
     @Frozen
     private List<List<OfferedProduct>> offeredProducts;
 
-        public OfferBySellerAndBuyer(OfferDTO offerDTO) {
-        this.id = UUID.randomUUID();
+    public OfferBySellerAndBuyer(OfferDTO offerDTO) {
+        this.id = offerDTO.getId();
         this.listingId = offerDTO.getListingId();
         this.buyerId = offerDTO.getBuyerId();
         this.sellerId = offerDTO.getSellerId();
-        this.timestamp = new Date().toString();
+        this.timestamp = offerDTO.getTimestamp();
         this.status = offerDTO.getStatus();
         List<List<OfferedProduct>> offeredProducts = new ArrayList<>();
         for (List<OfferedProductDTO> offeredProductDTOList : offerDTO.getOfferedProducts()) {
