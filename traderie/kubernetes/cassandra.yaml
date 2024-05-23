@@ -12,18 +12,18 @@ spec:
       labels:
         app: cassandra
     spec:
-      volumes:
-        - name: cassandra-pv-storage
-          persistentVolumeClaim:
-            claimName: cassandra-pv-claim
       containers:
         - name: cassandra
           image: cassandra:latest
           ports:
             - containerPort: 9042
           volumeMounts:
-            - mountPath: "/var/lib/cassandra"
-              name: cassandra-pv-storage
+            - name: cassandra-storage
+              mountPath: /var/lib/cassandra
+      volumes:
+        - name: cassandra-storage
+          persistentVolumeClaim:
+            claimName: cassandra-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -38,13 +38,27 @@ spec:
       targetPort: 9042
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cassandra-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /mnt/data/cassandra
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: cassandra-pv-claim
+  name: cassandra-pvc
 spec:
-  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 4Gi
+      storage: 2Gi
+  storageClassName: manual

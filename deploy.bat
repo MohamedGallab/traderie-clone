@@ -2,9 +2,9 @@ cd traderie
 
 call mvn package -f pom.xml
 
-kubectl delete --all deployments
+kubectl delete deployments --all
 
-kubectl delete --all hpa
+kubectl delete hpa --all
 
 kubectl delete service cassandra-service 
 kubectl delete service redis-service 
