@@ -13,9 +13,9 @@ spec:
         app: offers-service
     spec:
       volumes:
-        - name: task-pv-storage
+        - name: log-pv-storage
           persistentVolumeClaim:
-            claimName: task-pv-claim
+            claimName: log-pv-claim
       containers:
         - name: offers-service
           image: offers-service:latest
@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Never
           volumeMounts:
             - mountPath: "/var/log"
-              name: task-pv-storage
+              name: log-pv-storage
           resources:
             requests:
               cpu: 100m

@@ -18,13 +18,13 @@ spec:
           args: ["-config.file=/etc/promtail/promtail-config.yaml"]
           volumeMounts:
             - mountPath: "/var/log"
-              name: task-pv-storage
+              name: log-pv-storage
             - mountPath: "/etc/promtail"
               name: config-volume
       volumes:
-        - name: task-pv-storage
+        - name: log-pv-storage
           persistentVolumeClaim:
-            claimName: task-pv-claim
+            claimName: log-pv-claim
         - name: config-volume
           configMap:
             name: promtail-config

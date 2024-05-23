@@ -18,15 +18,15 @@ spec:
           args: ["-config.file=/etc/loki/loki-config.yaml"]
           volumeMounts:
             - mountPath: "/var/log"
-              name: task-pv-storage
+              name: log-pv-storage
             - mountPath: "/etc/loki"
               name: config-volume
           ports:
             - containerPort: 3100
       volumes:
-        - name: task-pv-storage
+        - name: log-pv-storage
           persistentVolumeClaim:
-            claimName: task-pv-claim
+            claimName: log-pv-claim
         - name: config-volume
           configMap:
             name: loki-config

@@ -13,9 +13,9 @@ spec:
         app: listings-service
     spec:
       volumes:
-        - name: task-pv-storage
+        - name: log-pv-storage
           persistentVolumeClaim:
-            claimName: task-pv-claim
+            claimName: log-pv-claim
       containers:
         - name: listings-service
           image: listings-service:latest
@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Never
           volumeMounts:
             - mountPath: "/var/log"
-              name: task-pv-storage
+              name: log-pv-storage
           resources:
             requests:
               cpu: 100m
@@ -55,9 +55,9 @@ spec:
   minReplicas: 1
   maxReplicas: 2
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 50
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
