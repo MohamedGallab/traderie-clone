@@ -91,6 +91,7 @@ public class OffersService {
     @Transactional
     @CacheEvict(value = "offers_cache", allEntries = true)
     public OfferDTO updateOfferStatus(UUID offerId, String status) {
+        // status can be open, accepted, declined, cancelled, completed
         Offer offer = offersRepository.findById(offerId)
                 .orElseThrow(() -> new RuntimeException("Offer not found"));
         offer.setStatus(status);

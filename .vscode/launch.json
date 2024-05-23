@@ -6,9 +6,9 @@
   "configurations": [
     {
       "type": "java",
-      "name": "ReviewServiceApplication",
+      "name": "ReviewApplication",
       "request": "launch",
-      "mainClass": "com.massivelyflammableapps.reviews.ReviewServiceApplication",
+      "mainClass": "com.massivelyflammableapps.reviews.ReviewApplication",
       "projectName": "reviews-service"
     },
     {

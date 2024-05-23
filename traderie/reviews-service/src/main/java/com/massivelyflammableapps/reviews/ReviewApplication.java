@@ -6,10 +6,8 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @EnableCaching
 @SpringBootApplication
-public class ReviewServiceApplication {
-
+public class ReviewApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ReviewServiceApplication.class, args);
+        SpringApplication.run(ReviewApplication.class, args);
     }
-
 }
