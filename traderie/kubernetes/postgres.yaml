@@ -24,10 +24,24 @@ spec:
       storage: 1Gi
 
 ---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-initdb
+data:
+  init-db.sh: |
+    #!/bin/bash
+    set -e
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+      CREATE DATABASE traderie_postgres;
+    EOSQL
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: postgres-deployment
 spec:
   replicas: 1
   selector:
@@ -50,13 +64,20 @@ spec:
               value: "password"
             - name: PGDATA
               value: "/var/lib/postgresql/data"
+            - name: POSTGRES_DB
+              value: "traderie_postgres"
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pvc
+        - name: initdb
+          configMap:
+            name: postgres-initdb
 
 ---
 apiVersion: v1
@@ -64,7 +85,6 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
-  type: ClusterIP
   ports:
     - port: 5432
       targetPort: 5432

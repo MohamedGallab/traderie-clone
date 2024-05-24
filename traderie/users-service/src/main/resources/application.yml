@@ -16,8 +16,8 @@ spring:
 
   datasource:
     password: password
-    url: jdbc:postgresql://localhost:5432/traderie_user
-    username: traderie_user
+    url: jdbc:postgresql://postgres-service:5432/traderie_postgres
+    username: traderie_postgres
   jpa:
     hibernate:
       ddl-auto: update
