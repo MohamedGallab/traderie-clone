@@ -22,7 +22,6 @@ public class ListingsController {
     public ResponseEntity<List<ListingDTO>> getAllListingsByGameByProduct(
             @RequestBody GetListingsByGameByProductDTO request) {
         try {
-
             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
@@ -64,7 +63,6 @@ public class ListingsController {
     @PostMapping
     public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {
         try {
-
             ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });

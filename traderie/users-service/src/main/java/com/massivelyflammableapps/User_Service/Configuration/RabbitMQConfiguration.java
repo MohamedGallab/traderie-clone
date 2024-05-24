@@ -19,6 +19,11 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
+    Queue serviceAdminQueue() {
+        return new Queue(queueName + "_admin");
+    }
+
+    @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());

@@ -11,6 +11,7 @@ import com.massivelyflammableapps.shared.dto.listings.GetListingsByGameByUserDTO
 import com.massivelyflammableapps.shared.dto.listings.GetMyListingsByGameDTO;
 import com.massivelyflammableapps.shared.dto.listings.ListingDTO;
 import com.massivelyflammableapps.shared.dto.listings.ListingUpdateDTO;
+import com.massivelyflammableapps.shared.dto.listings.MarkListingDTO;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RabbitListener(queues = { "${service.queue.name}", "testQueue" })
+@RabbitListener(queues = { "${service.queue.name}", "${service.queue.name}" + "_admin", "testQueue" })
 public class ListingsInvoker {
     @Autowired
     private ListingsService listingsService;
@@ -95,6 +96,19 @@ public class ListingsInvoker {
                 return command.execute();
             } catch (Exception e) {
                 return new ListingDTO();
+            }
+        });
+    }
+
+    @Async
+    @RabbitHandler
+    public CompletableFuture<Boolean> markListing(@Payload MarkListingDTO request) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                MarkListingCommand command = new MarkListingCommand(listingsService, request);
+                return command.execute();
+            } catch (Exception e) {
+                return false;
             }
         });
     }

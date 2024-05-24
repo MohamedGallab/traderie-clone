@@ -12,12 +12,24 @@ spec:
       labels:
         app: reviews-service
     spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: reviews-service
           image: reviews-service:latest
           ports:
             - containerPort: 8085
           imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: "/var/log"
+              name: task-pv-storage
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 200m
 ---
 apiVersion: v1
 kind: Service
@@ -30,3 +42,22 @@ spec:
     - protocol: TCP
       port: 8085
       targetPort: 8085
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: reviews-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: reviews-service
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

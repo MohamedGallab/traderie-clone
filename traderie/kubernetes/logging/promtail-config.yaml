@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+data:
+  promtail-config.yaml: |
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+
+    positions:
+      filename: /tmp/positions.yaml
+
+    clients:
+      - url: http://loki-service:3100/loki/api/v1/push
+
+    scrape_configs:
+      - job_name: admin-service
+        static_configs:
+          - targets:
+              - admin-service
+            labels:
+              job: admin-service
+              __path__: /var/log/admin-service/*log
+      - job_name: listings-service
+        static_configs:
+          - targets:
+              - listings-service
+            labels:
+              job: listings-service
+              __path__: /var/log/listings-service/*log
+      - job_name: messages-service
+        static_configs:
+          - targets:
+              - messages-service
+            labels:
+              job: messages-service
+              __path__: /var/log/messages-service/*log
+      - job_name: offers-service
+        static_configs:
+          - targets:
+              - offers-service
+            labels:
+              job: offers-service
+              __path__: /var/log/offers-service/*log
+      - job_name: reviews-service
+        static_configs:
+          - targets:
+              - reviews-service
+            labels:
+              job: reviews-service
+              __path__: /var/log/reviews-service/*log
+      - job_name: users-service
+        static_configs:
+          - targets:
+              - users-service
+            labels:
+              job: users-service
+              __path__: /var/log/users-service/*log
+      - job_name: web-server
+        static_configs:
+          - targets:
+              - web-server
+            labels:
+              job: web-server
+              __path__: /var/log/web-server/*log

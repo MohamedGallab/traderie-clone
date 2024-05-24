@@ -15,5 +15,4 @@ public interface ListingsByGameByProductRepository extends MapIdCassandraReposit
             boolean buying, UUID listingId);
 
     List<ListingByGameByProduct> findByGameIdAndProductIdAndBuying(UUID gameId, UUID productId, boolean buying);
-
 }

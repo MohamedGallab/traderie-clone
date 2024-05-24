@@ -11,7 +11,7 @@
 
     <groupId>com.massivelyflammableapps</groupId>
     <artifactId>reviews-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>reviews-service</name>
     <description>reviews-service</description>
     <properties>
