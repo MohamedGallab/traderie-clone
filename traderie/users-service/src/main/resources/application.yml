@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: traderie_user
+  rabbitmq:
+    host: rabbit-mq-service
+    port: 5672
+    username: guest
+    password: guest
   mvc:
     path match:
       matching-strategy: ant_path_matcher
