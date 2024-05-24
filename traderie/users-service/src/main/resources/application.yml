@@ -4,14 +4,19 @@ server:
 spring:
   application:
     name: traderie_user
+  rabbitmq:
+    host: rabbit-mq-service
+    port: 5672
+    username: guest
+    password: guest
   mvc:
     path match:
       matching-strategy: ant_path_matcher
 
   datasource:
     password: password
-    url: jdbc:postgresql://localhost:5432/traderie_user
-    username: traderie_user
+    url: jdbc:postgresql://postgres-service:5432/traderie_postgres
+    username: traderie_postgres
   jpa:
     hibernate:
       ddl-auto: update
