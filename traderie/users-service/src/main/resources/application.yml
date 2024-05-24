@@ -9,9 +9,6 @@ spring:
     port: 5672
     username: guest
     password: guest
-  mvc:
-    path match:
-      matching-strategy: ant_path_matcher
 
   datasource:
     password: password
@@ -23,9 +20,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format-sql: true
         id:
-          new_generator_mappings: false
+          new-generator-mappings: false
           type: uuid-char
     show-sql: true
 
