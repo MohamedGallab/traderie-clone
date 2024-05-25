@@ -57,13 +57,8 @@ public class ListingsService {
     @Cacheable("listingsCache")
     public List<ListingDTO> getAllMyListingsByGame(GetMyListingsByGameDTO request) {
 
-        // TODO Decode token from the cache(USER SERVICE)
-        // UUID userId = UUID.fromString("TOKEN DECODE PLS");
-        // this is hard coded for testing !!!!!!!!!!!!!!!!
-        UUID userId = UUID.fromString("c2bc283c-9684-4974-99b8-1ef072ebb0ec");
-
         List<ListingByGameByUser> listingsByUserByGame = listingsByGameByUserRepository.findByUserIdAndGameIdAndBuying(
-                userId, request.getGameId(), request.isBuying());
+                request.getUserId(), request.getGameId(), request.isBuying());
         List<ListingDTO> listingsByGameByProductDTO = new ArrayList<ListingDTO>();
         for (int i = 0; i < listingsByUserByGame.size(); i++) {
             if (request.isHistory() && listingsByUserByGame.get(i).getState() == STATE.ACTIVE) {
@@ -79,8 +74,6 @@ public class ListingsService {
 
     @CacheEvict(value = "listingsCache", allEntries = true)
     public ListingDTO createListing(ListingDTO request) {
-        // TODO Decode token from the cache(USER SERVICE)
-        // request.setUserId(UUID.fromString("TOKEN DECODE PLS"));
         Listing newListing = new Listing(request);
 
         request.setListingId(newListing.getListingId());
@@ -110,12 +103,9 @@ public class ListingsService {
         ListingByGameByProduct listingByGameByProduct = listingsByGameByProductRepository
                 .findByGameIdAndProductIdAndBuyingAndListingId(
                         request.getGameId(), request.getProductId(), request.isBuying(), request.getListingId());
-        // TODO Decode token from the cache(USER SERVICE)
-        // UUID userId = UUID.fromString("TOKEN DECODE PLS");
-        // // TODO I dont know what deez is
-        // if (userId != request.getUserId()) {
-        // throw new UnauthorizedException();
-        // }
+        if (listingByGameByProduct.getUserId() != request.getUserId()) {
+            return new ListingDTO();
+        }
 
         listingByGameByProduct.setState(request.getState());
         ListingByGameByUser listingByGameByUser = listingsByGameByUserRepository

@@ -1,6 +1,7 @@
 package com.massivelyflammableapps.webserver.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,8 +67,10 @@ public class ListingsController {
     }
 
     @GetMapping("/myListings")
-    public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetMyListingsByGameDTO request) {
+    public ResponseEntity<List<ListingDTO>> getAllMyListingsByGame(@RequestBody GetMyListingsByGameDTO request,
+            @RequestHeader("UUID") String uuid) {
         try {
+            request.setUserId(UUID.fromString(uuid));
             List<ListingDTO> listings = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<List<ListingDTO>>() {
                     });
@@ -80,8 +84,10 @@ public class ListingsController {
     }
 
     @PostMapping
-    public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request) {
+    public ResponseEntity<ListingDTO> createListing(@RequestBody ListingDTO request,
+            @RequestHeader("UUID") String uuid) {
         try {
+            request.setUserId(UUID.fromString(uuid));
             ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });
@@ -95,8 +101,10 @@ public class ListingsController {
     }
 
     @PutMapping
-    public ResponseEntity<ListingDTO> updateListingState(@RequestBody ListingUpdateDTO request) {
+    public ResponseEntity<ListingDTO> updateListingState(@RequestBody ListingUpdateDTO request,
+            @RequestHeader("UUID") String uuid) {
         try {
+            request.setUserId(UUID.fromString(uuid));
             ListingDTO response = rabbitTemplate.convertSendAndReceiveAsType("", listingsQueueName, request,
                     new ParameterizedTypeReference<ListingDTO>() {
                     });
