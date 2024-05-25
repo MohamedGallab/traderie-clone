@@ -20,7 +20,7 @@ public class OffersApplication {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(10);
         executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(1000);
+        executor.setQueueCapacity(10000);
         executor.setThreadNamePrefix("Async-");
         executor.initialize();
         return executor;

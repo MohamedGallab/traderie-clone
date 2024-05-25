@@ -60,6 +60,7 @@ public class OffersService {
         Offer newOffer = new Offer(request);
         
         request.setId(newOffer.getId());
+        request.setTimestamp(newOffer.getTimestamp());
 
         OfferByListing newOfferByListing = new OfferByListing(request);
 

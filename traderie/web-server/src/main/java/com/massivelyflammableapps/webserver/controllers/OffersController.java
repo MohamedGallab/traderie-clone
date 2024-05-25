@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,8 +50,9 @@ public class OffersController {
     }
 
     @PostMapping
-    public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO request) {
+    public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO request, @RequestHeader("UUID") String uuid) {
         try {
+            request.setBuyerId(UUID.fromString(uuid));
             CreateOfferRequest command = new CreateOfferRequest(request);
             OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<OfferDTO>() {

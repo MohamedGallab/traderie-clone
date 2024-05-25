@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,7 @@ public class MessagesService {
                 return chatMessagesDTO;
         }
 
+        @CacheEvict(value = {"chats", "messages"}, allEntries = true)
         public MessageDTO postMessage(MessageDTO request) {
                 Message newMessage = new Message(request.getSenderId(), request.getReceiverId(),
                                 request.getMessageText(),
@@ -82,6 +84,7 @@ public class MessagesService {
                 return userChatsDTO;
         }
 
+        @CacheEvict(value = {"chats", "messages"}, allEntries = true)
         public ChatDTO postChat(ChatRequest request) {
                 logger.debug("A DEBUG Message");
                 logger.info("An INFO Message");
@@ -124,7 +127,8 @@ public class MessagesService {
 
                 return savedChat.toDTO();
         }
-
+        
+        @CacheEvict(value = {"chats", "messages"}, allEntries = true)
         public ChatDTO changeArchiveStatus(UUID chatId) {
                 Chat chatData = chatRepository.findByChatId(chatId);
                 ChatByInitiator chatByInitiatorData = chatByInitiatorRepository
@@ -148,6 +152,7 @@ public class MessagesService {
                 return chatData.toDTO();
         }
 
+        @CacheEvict(value = {"chats", "messages"}, allEntries = true)
         public ChatDTO changeAcceptStatus(UUID chatId) {
 
                 Chat chatData = chatRepository.findByChatId(chatId);
@@ -172,6 +177,7 @@ public class MessagesService {
                 return chatData.toDTO();
         }
 
+        @CacheEvict(value = {"chats", "messages"}, allEntries = true)
         public ChatDTO requestChat(ChatRequest request) {
                 ChatByInitiatorAndReceiver foundedChatByInitiatorAndReceiver = chatByInitiatorAndReceiverRepository
                                 .findByInitiatorIdAndReceiverId(
