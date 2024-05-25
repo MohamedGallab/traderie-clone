@@ -15,6 +15,8 @@ import com.massivelyflammableapps.shared.dto.admin.DeleteCommandRequest;
 import com.massivelyflammableapps.shared.dto.admin.ExecuteCommandRequest;
 import com.massivelyflammableapps.shared.dto.admin.UpdateCommandRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api/v1/controller")
+@Slf4j
 public class AdminController {
     @Autowired
     private Environment environment;
@@ -40,9 +43,11 @@ public class AdminController {
             Object result = rabbitTemplate.convertSendAndReceiveAsType("", queueName, request,
                     new ParameterizedTypeReference<Object>() {
                     });
+            log.info("Command executed successfully.");
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
+            log.info(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -58,9 +63,12 @@ public class AdminController {
             Boolean result = rabbitTemplate.convertSendAndReceiveAsType("", queueName, request,
                     new ParameterizedTypeReference<Boolean>() {
                     });
+            log.info("Command added successfully.");
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
+            log.info(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -76,9 +84,14 @@ public class AdminController {
             Boolean result = rabbitTemplate.convertSendAndReceiveAsType("", queueName, request,
                     new ParameterizedTypeReference<Boolean>() {
                     });
+
+            log.info("Command updated successfully.");
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
+            log.info(e.getMessage());
+
             return ResponseEntity.status(500).build();
         }
     }
@@ -94,9 +107,12 @@ public class AdminController {
             Boolean result = rabbitTemplate.convertSendAndReceiveAsType("", queueName, request,
                     new ParameterizedTypeReference<Boolean>() {
                     });
+            log.info("Command deleted successfully.");
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
+            log.info(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
