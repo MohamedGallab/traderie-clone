@@ -29,7 +29,7 @@ public class SpringSecurityConfig {
                         // .requestMatchers("api/v1/user/**")
                         // .permitAll()
                         .anyRequest()
-                        .permitAll())
+                        .authenticated())
 
                 .sessionManagement(s -> s
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

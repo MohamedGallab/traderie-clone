@@ -27,10 +27,10 @@ public class ReviewController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-
     public ResponseEntity<Object> createReview(
-            @RequestBody ReviewRequestDto reviewRequestDto) {
+            @RequestBody ReviewRequestDto reviewRequestDto, @RequestHeader("UUID") String uuid) {
         try {
+            reviewRequestDto.setSenderId(UUID.fromString(uuid));
             CreateReviewRequest command = new CreateReviewRequest(reviewRequestDto);
             Object newReview = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
@@ -74,8 +74,9 @@ public class ReviewController {
     }
 
     @PutMapping("/reply")
-    public ResponseEntity<Object> addReply(@RequestBody EditRequestDto reviewReq) {
+    public ResponseEntity<Object> addReply(@RequestBody EditRequestDto reviewReq, @RequestHeader("UUID") String uuid) {
         try {
+            reviewReq.setSenderId(UUID.fromString(uuid));
             AddReplyReviewRequest command = new AddReplyReviewRequest(reviewReq);
             Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
@@ -89,8 +90,9 @@ public class ReviewController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Object> editReview(@RequestBody EditRequestDto reviewReq) {
+    public ResponseEntity<Object> editReview(@RequestBody EditRequestDto reviewReq, @RequestHeader("UUID") String uuid) {
         try {
+            reviewReq.setSenderId(UUID.fromString(uuid));
             EditReviewRequest command = new EditReviewRequest(reviewReq);
             Object reviews = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
