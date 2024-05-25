@@ -41,9 +41,11 @@ public class MessagesController {
             List<MessageDTO> messages = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName, command,
                     new ParameterizedTypeReference<List<MessageDTO>>() {
                     });
+            log.info("getChatMessages executed successfully.");
             return ResponseEntity.ok(messages);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -55,9 +57,11 @@ public class MessagesController {
             MessageDTO message = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName, command,
                     new ParameterizedTypeReference<MessageDTO>() {
                     });
+            log.info("postMessage executed successfully.");
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -65,17 +69,16 @@ public class MessagesController {
     @GetMapping(value = "/getUserChats", params = { "userId" })
     public ResponseEntity<List<ChatDTO>> getUserChats(@RequestParam UUID userId) {
         try {
-            log.info("An INFO Message");
-            log.warn("A WARN Message");
-            log.error("An ERROR Message");
             GetUserChatsRequest command = new GetUserChatsRequest(userId);
             List<ChatDTO> chats = rabbitTemplate.convertSendAndReceiveAsType("", messagesQueueName,
-                    command,
-                    new ParameterizedTypeReference<List<ChatDTO>>() {
-                    });
+            command,
+            new ParameterizedTypeReference<List<ChatDTO>>() {
+            });
+            log.info("getUserChats executed successfully.");
             return ResponseEntity.ok(chats);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -88,9 +91,11 @@ public class MessagesController {
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
+            log.info("postChat executed successfully.");
             return ResponseEntity.ok(chat);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -104,9 +109,11 @@ public class MessagesController {
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
+            log.info("requestChat executed successfully.");
             return ResponseEntity.ok(chat);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -120,9 +127,11 @@ public class MessagesController {
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
+                log.info("changeArchiveStatus executed successfully.");
             return ResponseEntity.ok(chat);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -136,9 +145,11 @@ public class MessagesController {
                     command,
                     new ParameterizedTypeReference<ChatDTO>() {
                     });
+            log.info("changeAcceptStatus executed successfully.");
             return ResponseEntity.ok(chat);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
