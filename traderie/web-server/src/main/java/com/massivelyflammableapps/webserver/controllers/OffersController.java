@@ -26,8 +26,11 @@ import com.massivelyflammableapps.shared.dto.offers.GetOffersBySellerRequest;
 import com.massivelyflammableapps.shared.dto.offers.OfferDTO;
 import com.massivelyflammableapps.shared.dto.offers.UpdateOfferRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("api/v1/offers")
+@Slf4j
 public class OffersController {
     @Value("${offers-service.queue.name}")
     private String offersQueueName;
@@ -42,9 +45,12 @@ public class OffersController {
             List<OfferDTO> offers = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            log.info("getAllOffers executed successfully.");
+
             return ResponseEntity.ok(offers);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -57,22 +63,28 @@ public class OffersController {
             OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<OfferDTO>() {
                     });
+            log.info("createOffer executed successfully.");
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
-    
-    @PutMapping(params= {"offerId", "status"})
+
+    @PutMapping(params = { "offerId", "status" })
     public ResponseEntity<OfferDTO> updateOfferStatus(@RequestParam UUID offerId, @RequestParam String status) {
         try {
             UpdateOfferRequest command = new UpdateOfferRequest(offerId, status);
             OfferDTO response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
-                    new ParameterizedTypeReference<OfferDTO>() {});
+                    new ParameterizedTypeReference<OfferDTO>() {
+                    });
+            log.info("updateOfferStatus executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -84,9 +96,11 @@ public class OffersController {
             List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            log.info("getOfferByListing executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -98,9 +112,11 @@ public class OffersController {
             List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            log.info("getOfferBySeller executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -112,9 +128,11 @@ public class OffersController {
             List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            log.info("getOfferByBuyer executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -127,9 +145,11 @@ public class OffersController {
             List<OfferDTO> response = rabbitTemplate.convertSendAndReceiveAsType("", offersQueueName, command,
                     new ParameterizedTypeReference<List<OfferDTO>>() {
                     });
+            log.info("getOfferBySellerAndBuyer executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
