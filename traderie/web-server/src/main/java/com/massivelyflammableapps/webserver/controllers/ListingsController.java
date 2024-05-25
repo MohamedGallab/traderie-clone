@@ -43,7 +43,7 @@ public class ListingsController {
             return ResponseEntity.ok(listings);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -59,7 +59,7 @@ public class ListingsController {
             return ResponseEntity.ok(listings);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -74,7 +74,7 @@ public class ListingsController {
             return ResponseEntity.ok(listings);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -89,7 +89,7 @@ public class ListingsController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -104,7 +104,7 @@ public class ListingsController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -117,7 +117,7 @@ public class ListingsController {
             return ResponseEntity.ok("MQ set to " + mqName);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }

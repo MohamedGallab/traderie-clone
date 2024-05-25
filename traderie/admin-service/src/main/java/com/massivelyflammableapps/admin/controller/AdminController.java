@@ -47,7 +47,7 @@ public class AdminController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -68,7 +68,7 @@ public class AdminController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -90,7 +90,7 @@ public class AdminController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
 
             return ResponseEntity.status(500).build();
         }
@@ -112,7 +112,7 @@ public class AdminController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }

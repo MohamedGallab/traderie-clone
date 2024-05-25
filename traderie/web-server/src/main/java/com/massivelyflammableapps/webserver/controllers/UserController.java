@@ -4,6 +4,8 @@ import com.massivelyflammableapps.shared.dto.users.*;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-
+@Slf4j
 public class UserController {
     @Value("${users-service.queue.name}")
     private String queueName;
@@ -34,8 +36,10 @@ public class UserController {
             UserDto response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<UserDto>() {
                     });
+            log.info("getDTO executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -55,9 +59,12 @@ public class UserController {
         }
         List<String> response = List.of(user.toString().split("="));
         if (Objects.equals(response.get(3).substring(0, 3), "400")) {
+            log.error("User already exists");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
-        } else
+        } else {
+            log.info("User registered successfully");
             return ResponseEntity.status(HttpStatus.CREATED).body("Sign Up Successful");
+        }
     }
 
     @GetMapping
@@ -68,8 +75,10 @@ public class UserController {
             Object response = rabbitTemplate.convertSendAndReceiveAsType("", queueName, command,
                     new ParameterizedTypeReference<Object>() {
                     });
+            log.info("getUserInfo executed successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -88,10 +97,13 @@ public class UserController {
         }
         List<String> response = List.of(user.toString().split("="));
         if (Objects.equals(response.get(2).substring(0, 3), "404")) {
+            log.error("User not found");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
         } else if (Objects.equals(response.get(2).substring(0, 3), "401")) {
+            log.error("Invalid credentials");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.get(1));
         } else {
+            log.info("User logged in successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response.get(1));
         }
     }
@@ -104,8 +116,10 @@ public class UserController {
                 new ParameterizedTypeReference<Object>() {
                 });
         if (response == null) {
+            log.error("User not found");
             return ResponseEntity.notFound().build();
         } else {
+            log.info("User logged out successfully");
             return ResponseEntity.ok("Logout successful");
         }
     }
@@ -119,12 +133,15 @@ public class UserController {
                 new ParameterizedTypeReference<Object>() {
                 });
         if (response == null) {
+            log.error("User not found");
             return ResponseEntity.notFound().build();
         }
         List<String> res = List.of(response.toString().split("="));
         if (Objects.equals(res.get(3).substring(0, 3), "404")) {
+            log.error("User not found");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res.get(1));
         } else {
+            log.info("User deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(res.get(1));
         }
     }
@@ -137,8 +154,10 @@ public class UserController {
                 new ParameterizedTypeReference<Object>() {
                 });
         if (response == null) {
+            log.error("User not found");
             return ResponseEntity.notFound().build();
         } else {
+            log.info("User status retrieved successfully");
             return ResponseEntity.ok(response.toString());
         }
     }
