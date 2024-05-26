@@ -24,3 +24,9 @@
 4. run deploy.bat
 5. to access through postman `minikube tunnel`
 6. generate load on web server `kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://web-server-service:8080/api/v1/offers; done"`
+
+
+## Benchmarks
+
+![image](https://github.com/MohamedGallab/traderie-clone/assets/74183135/f7910967-0712-406f-bd60-b3dca98db546)
+![image](https://github.com/MohamedGallab/traderie-clone/assets/74183135/ee37cdd1-6bc2-4af8-a7bf-61c2ef749f4f)
