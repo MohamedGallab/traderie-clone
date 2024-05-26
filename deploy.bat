@@ -20,6 +20,7 @@ kubectl delete service reviews-service-service
 kubectl delete service reviews-service-service
 kubectl delete service loki-service
 kubectl delete service grafana-service
+kubectl delete service postgres-service
 
 docker builder prune --all -f
 
